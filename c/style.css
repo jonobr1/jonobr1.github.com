@@ -108,7 +108,7 @@ p a:active {
 }
 
 ::selection {
-	
+	background: #FBB03B !important;
 }
 ::-moz-selection {
 	background: #FBB03B !important;
