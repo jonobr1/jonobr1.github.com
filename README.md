@@ -8,5 +8,6 @@ The folder structure is mostly for web, but worth describing for those intereste
 + `a/`: is for assets. All things that comprise the process of coming up with public facing, well, assets. Logos, audio files, videos, images, whatever.
 + `c/`: all css documents
 + `i/`: all images in their final format
++ `j/`: all external javascript files
 
 Enjoy :)

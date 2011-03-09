@@ -27,13 +27,37 @@ h4 {
 	letter-spacing: -1px;
 }
 
-p {
+p, input {
 	font-size:	 25px;
 	line-height: 75px;
 	text-align: center;
 	text-shadow: 0 0 0 #efefef !important;
 /*	font-style: italic;*/
 	letter-spacing: -1px;
+}
+
+.validation * {
+	opacity: 0.6;
+}
+.validation:hover .allow {
+	opacity: 1.0;
+}
+.allow {
+	cursor: pointer;
+}
+
+img { border: 0; }
+
+input {
+	font-family: "Lekton", monospace;
+	color: #333;
+
+	outline: none;
+	text-decoration: underline;
+
+	background: none;
+	border: none;
+	width: 100%;
 }
 
 h4 a:link {
@@ -72,17 +96,20 @@ p a:active {
 	border-bottom: 2px dotted #333;
 }
 
-.container_8, .grid_1 {
+.container_8, .grid_1, .grid_3 {
 	border-left: 1px solid #efefef;
 	border-right: 1px solid #efefef;
 }
 .grid_1 {
 	width: 98px !important;
 }
+.grid_3 {
+	width: 348px !important;
+}
 
 ::selection {
-        background: #FBB03B; /* Safari */
-        }
+	
+}
 ::-moz-selection {
-        background: #FBB03B; /* Firefox */
+	background: #FBB03B !important;
 }
