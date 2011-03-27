@@ -60,6 +60,10 @@ input {
 	width: 100%;
 }
 
+input:focus, input:hover {
+	outline: none;
+}
+
 h4 a:link {
 	color: #333;
 	text-decoration: none;
