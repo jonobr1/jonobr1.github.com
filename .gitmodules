@@ -1,0 +1,9 @@
+[submodule "third-party/backbone"]
+	path = third-party/backbone
+	url = https://github.com/documentcloud/backbone.git
+[submodule "third-party/require"]
+	path = third-party/require
+	url = https://github.com/jrburke/requirejs.git
+[submodule "third-party/underscore"]
+	path = third-party/underscore
+	url = https://github.com/documentcloud/underscore.git
