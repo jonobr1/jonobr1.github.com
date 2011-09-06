@@ -15,13 +15,14 @@ require([
   'jonobr1/Router',
   'jonobr1/Collection',
   'jonobr1/query',
+  'jonobr1/View',
   'backbone',
   'underscore',
   'jquery'
-], function(Router, Collection, query) {
+], function(Router, Collection, query, View) {
 
-  var more_rows = true, total_rows;
-  var router, collection;
+  var more_rows = true, total_rows, limit = 50, skip = 0;
+  var router, collection, views = [];
 
   require.ready(function() {
 
@@ -34,7 +35,8 @@ require([
      * TODO: Need a .htaccess file.
      */
 
-    collection = new Collection();
+    collection = new Collection()
+      .bind('add', addView);
 
      router = new Router()
       .bind('route:page', loadFeed)
@@ -45,7 +47,6 @@ require([
 
   function loadFeed(index) {
 
-    limit = 10;
     skip = limit * (index - 1);
 
     query({
@@ -64,13 +65,14 @@ require([
   function loadSingle(index) {
 
     // TODO: Get content and then fire this callbacks.
-    onDocumentReady();
   }
 
-  function onDocumentReady() {
-
-    // Equivalent to jQuery's $(function() {}); Data's ready and everything.
-
+  function addView(model) {
+    views.push(new View({
+      model: model,
+      id: model.cid
+    }));
+    model.trigger('change');
   }
 
 });
