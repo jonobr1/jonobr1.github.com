@@ -20,18 +20,25 @@ define([
       this.el.setAttribute('class', this.className);
       this.container.appendChild(this.el);
 
-      this.distance = timeDeltaToPixels(this.model.get('date'), this.model.collection.models[0].get('date'));
+      var prev = _.indexOf(this.model.collection.models, this.model) - 1;
+
+      if (prev >= 0) {
+        prev = this.model.collection.at(prev);
+        this.distance = timeDeltaToPixels(this.model.get('date'), prev.get('date'));
+      } else {
+        this.distance = 0;
+      }
 
       $(this.el)
         .css({
-          position: 'absolute',
+          position: 'relative',
           marginTop: this.distance
         });
 
     },
 
     render: function() {
-      // Fade In content
+      // TODO: Fade In content
       $(this.el).html(template(this.model.toJSON()));
       return this;
     }
@@ -43,7 +50,17 @@ define([
   }
 
   function template(o) {
-    return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.display + '" alt="' + o.title + '"/></a>';
+
+    switch(o.asset_type) {
+      case 'image':
+        return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.stash + '" alt="' + o.title + '"/></a>';
+        break;
+      case 'embed':
+        return o.content.info.html;
+        break;
+      default:
+        return '';
+    }
   }
 
   return View;
