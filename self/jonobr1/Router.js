@@ -14,8 +14,8 @@ define([
 
     initialize: function() {
 
-      this.route('page/:page', 'page', _.identity);
-      this.route('single/:slug', 'single', _.identity);
+      this.route('page/:page', 'page', onRouted);
+      this.route('single/:slug', 'single', onRouted);
 
     },
 

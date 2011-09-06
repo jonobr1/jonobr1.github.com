@@ -13,13 +13,15 @@ require({
 
 require([
   'jonobr1/Router',
+  'jonobr1/Collection',
   'jonobr1/query',
   'backbone',
   'underscore',
   'jquery'
-], function(Router, query) {
+], function(Router, Collection, query) {
 
-  var router;
+  var more_rows = true, total_rows;
+  var router, collection;
 
   require.ready(function() {
 
@@ -29,7 +31,10 @@ require([
      * main page : a feed of the firehose slug.
      * single : a page to display one item from the feed.
      * 
+     * TODO: Need a .htaccess file.
      */
+
+    collection = new Collection();
 
      router = new Router()
       .bind('route:page', loadFeed)
@@ -40,17 +45,19 @@ require([
 
   function loadFeed(index) {
 
-    var limit = 10;
-    var skip = limit * index;
+    limit = 10;
+    skip = limit * (index - 1);
 
     query({
-
       limit: limit,
       skip: skip,
       callback: function(data) {
-        // TODO: Organize data to be viewed using Backbone.View
+        collection.add(data.records);
+        more_rows = data.more_rows;
+        total_rows = data.total_rows;
       }
     });
+
   }
 
   // Does not exist in Public API yet.

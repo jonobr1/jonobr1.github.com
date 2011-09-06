@@ -14,9 +14,7 @@ define([
       callback: _.identity
     });
 
-    var url = 'https://gimmebar.com/api/v0/public/assets/' + params.username + '/'
-      + params.collection + '?type=' + params.type + '&limit=' + params.limit
-      + '&skip=' + params.skip;
+    var url = 'https://gimmebar.com/api/v0/public/assets/' + params.username + '/' + params.collection + '?type=' + params.type + '&limit=' + params.limit + '&skip=' + params.skip;
 
     $.post('/self/proxy.php', {
       url: url
