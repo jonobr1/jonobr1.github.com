@@ -1,0 +1,4 @@
+Options +FollowSymlinks
+RewriteEngine On
+RewriteBase /
+RewriteRule ^((?!\.(js|html|php|jpg|jpeg|png|gif)).)*$ index.html
