@@ -53,10 +53,17 @@ define([
 
     switch(o.asset_type) {
       case 'image':
-        return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.stash + '" alt="' + o.title + '"/></a>';
+        var href = o.content.stash;
+        if (!href) {
+          href = o.content.full;
+        }
+        return '<a href="' + o.source + '" target="_blank"><img src="' + href + '" alt="' + o.title + '"/></a>';
         break;
       case 'embed':
         return o.content.info.html;
+        break;
+      case 'page':
+        return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.thumb + '" alt="' + o.title + '"/></a>';
         break;
       default:
         return '';
