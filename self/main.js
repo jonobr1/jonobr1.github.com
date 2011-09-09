@@ -63,7 +63,6 @@ require([
 
   // Does not exist in Public API yet.
   function loadSingle(index) {
-
     // TODO: Get content and then fire this callbacks.
   }
 

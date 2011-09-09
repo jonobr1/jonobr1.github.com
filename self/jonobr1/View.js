@@ -20,6 +20,8 @@ define([
       this.el.setAttribute('class', this.className);
       this.container.appendChild(this.el);
 
+      // console.log(this.model);
+
       var prev = _.indexOf(this.model.collection.models, this.model) - 1;
 
       if (prev >= 0) {
@@ -46,7 +48,7 @@ define([
   });
 
   function timeDeltaToPixels(cur, ref) {
-    return Math.round((ref - cur));
+    return Math.round((ref - cur) / 60);
   }
 
   function template(o) {
