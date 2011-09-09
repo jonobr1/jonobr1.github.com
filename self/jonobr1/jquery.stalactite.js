@@ -2,7 +2,7 @@
  * jQuery Stalactite : Element Packing
  * Examples and documentation at: http://jonobr1.github.com/stalactite
  * Copyright (c) 2011 Jono Brandel
- * Version: .01 (8-SEPTEMBER-2011)
+ * Version: 0.1 (8-SEPTEMBER-2011)
  * Requires: jQuery v1.6.2 or later
  *
  * Copyright 2011 jonobr1
