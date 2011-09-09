@@ -1,5 +1,5 @@
 /**
- * jQuery Stalactite : Element Packing
+ * jQuery Stalactite : Lightweight Element Packing
  * Examples and documentation at: http://jonobr1.github.com/stalactite
  * Copyright (c) 2011 Jono Brandel
  * Version: 0.1 (8-SEPTEMBER-2011)
@@ -98,7 +98,7 @@
     }
 
     function animateIn($dom, params, callback) {
-      $dom.stop().animate($.extend({}, params, options.styles),
+      $dom.css('z-index', 'auto').stop().animate($.extend({}, params, options.styles),
         options.duration, options.easing, callback);
     }
 
