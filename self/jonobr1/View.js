@@ -4,6 +4,8 @@ define([
   'backbone'
 ], function() {
 
+  var THRESHOLD = 3;
+
   var View = Backbone.View.extend({
 
     tagName: 'div',
@@ -15,27 +17,34 @@ define([
       }
 
       this.model.bind('change', this.render, this);
-
+      this.views = this.options.views;
       this.className = 'post ' + this.model.get('tags').toString().replace(/\,/g, ' ');
       this.el.setAttribute('class', this.className);
-      this.container.appendChild(this.el);
 
-      // console.log(this.model);
+      var prevIndex = _.indexOf(this.model.collection.models, this.model) - 1;
+      var prev;
 
-      var prev = _.indexOf(this.model.collection.models, this.model) - 1;
-
-      if (prev >= 0) {
-        prev = this.model.collection.at(prev);
-        this.distance = timeDeltaToPixels(this.model.get('date'), prev.get('date'));
+      // TODO: CLEAN UP!!!
+      if (prevIndex >= 0) {
+        prev = this.model.collection.at(prevIndex);
+        this.distance = timeDelta(this.model.get('date'), prev.get('date'));
+        if (this.distance < THRESHOLD) {
+          this.packet = this.views[prevIndex].packet;
+        } else {
+          this.packet = $('<div class="packet" />')
+            .css({
+              position: 'relative',
+              marginTop: this.distance
+            })
+            .appendTo(this.container)[0];
+        }
       } else {
         this.distance = 0;
+        this.packet = $('<div class="packet" />') // TODO: ABSTRACT
+          .appendTo(this.container)[0];
       }
 
-      $(this.el)
-        .css({
-          position: 'relative',
-          marginTop: this.distance
-        });
+      $(this.el).appendTo(this.packet);
 
     },
 
@@ -47,7 +56,8 @@ define([
 
   });
 
-  function timeDeltaToPixels(cur, ref) {
+  function timeDelta(cur, ref) {
+    // cur and ref are in seconds
     return Math.round((ref - cur) / 60);
   }
 

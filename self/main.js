@@ -32,7 +32,6 @@ require([
      * main page : a feed of the firehose slug.
      * single : a page to display one item from the feed.
      * 
-     * TODO: Need a .htaccess file.
      */
 
     collection = new Collection()
@@ -69,7 +68,8 @@ require([
   function addView(model) {
     views.push(new View({
       model: model,
-      id: model.cid
+      id: model.cid,
+      views: views
     }));
     model.trigger('change');
   }
