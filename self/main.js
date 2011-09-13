@@ -16,13 +16,15 @@ require([
   'jonobr1/Collection',
   'jonobr1/query',
   'jonobr1/View',
+  'jonobr1/ScrollMap',
   'backbone',
   'underscore',
-  'jquery'
-], function(Router, Collection, query, View) {
+  'jquery',
+  'jonobr1/jquery.stalactite'
+], function(Router, Collection, query, View, ScrollMap) {
 
   var more_rows = true, total_rows, limit = 50, skip = 0;
-  var router, collection, views = [];
+  var router, collection, views = [], scrollMap, $scroll;
 
   require.ready(function() {
 
@@ -33,6 +35,16 @@ require([
      * single : a page to display one item from the feed.
      * 
      */
+
+    scrollMap = new ScrollMap(onDocumentScroll);
+    $scroll = $('<p id="playhead" />')
+      .css({
+        position: 'fixed',
+        top: 10,
+        right: 10
+      })
+      .html('<span class="date" style="opacity: 0;"/>')
+      .appendTo('#content');
 
     collection = new Collection()
       .bind('add', addView);
@@ -55,6 +67,7 @@ require([
         collection.add(data.records);
         more_rows = data.more_rows;
         total_rows = data.total_rows;
+        updateUI();
       }
     });
 
@@ -66,12 +79,59 @@ require([
   }
 
   function addView(model) {
+
+    // Figure out how to add in the right place???
+
     views.push(new View({
       model: model,
       id: model.cid,
-      views: views
+      views: views,
+      container: document.getElementById('content')
     }));
     model.trigger('change');
+  }
+
+  function updateUI() {
+
+    $('.packet').stalactite();
+    scrollMap.init();
+    scrollMap.getScrollPosition();
+  }
+
+  function onDocumentScroll(e) {
+    $scroll
+      .css({
+        // marginTop: (e.y * ($(window).height())) + 10
+      })
+      .stop().animate({ // TODO: Optimize
+      }, function() {
+        $(this).find('span')
+        .animate({
+          opacity: 1
+        });
+      })
+      .find('span')
+        .html(formatDate(e.y));
+      
+  }
+
+  function formatDate(f) {
+
+    var first = parseInt(collection.at(0).get('date'));
+    var last = parseInt(collection.at(collection.length - 1).get('date'));
+
+    var date = new Date(Math.floor(first - f * (first - last)) * 1000);
+
+    var day = (date.getDate() >= 10) ? date.getDate() : '0' + date.getDate();
+    var month = (date.getMonth() >= 10) ? date.getMonth() : '0' + date.getMonth();
+    var year = date.getYear() - 100;
+    var hour = (date.getHours() >= 10) ? date.getHours() : '0' + date.getHours();
+    var minutes = (date.getMinutes() >= 10) ? date.getMinutes() : '0' + date.getMinutes();
+    var seconds = (date.getSeconds() >= 10) ? date.getSeconds() : '0' + date.getSeconds();
+
+    return year + '&middot;' + month + '&middot;' + day + '<br />'
+      + hour + '\:' + minutes + '\:' + seconds;
+
   }
 
 });

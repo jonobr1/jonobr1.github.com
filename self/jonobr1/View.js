@@ -4,7 +4,7 @@ define([
   'backbone'
 ], function() {
 
-  var THRESHOLD = 3;
+  var THRESHOLD = 5;
 
   var View = Backbone.View.extend({
 
@@ -12,35 +12,43 @@ define([
 
     initialize: function() {
 
-      if (!this.container) {
+      if (_.isUndefined(this.options.container)) {
         this.container = document.body;
+      } else {
+        this.container = this.options.container;
       }
 
       this.model.bind('change', this.render, this);
       this.views = this.options.views;
+      this.distance = 0;
       this.className = 'post ' + this.model.get('tags').toString().replace(/\,/g, ' ');
       this.el.setAttribute('class', this.className);
 
-      var prevIndex = _.indexOf(this.model.collection.models, this.model) - 1;
-      var prev;
+      var index = this.model.collection.indexOf(this.model);
+      var pindex;
 
-      // TODO: CLEAN UP!!!
-      if (prevIndex >= 0) {
-        prev = this.model.collection.at(prevIndex);
+      if (index <= 0 && this.model.collection.length > 1) {
+        // We're going backwards in time.
+        pindex = index + 1;
+      } else {
+        // We're going forwards in time.
+        pindex = index - 1;
+      }
+
+      if (pindex >= 0) {
+        var prev = this.model.collection.at(pindex);
         this.distance = timeDelta(this.model.get('date'), prev.get('date'));
         if (this.distance < THRESHOLD) {
-          this.packet = this.views[prevIndex].packet;
-        } else {
-          this.packet = $('<div class="packet" />')
-            .css({
-              position: 'relative',
-              marginTop: this.distance
-            })
-            .appendTo(this.container)[0];
+          this.packet = this.views[pindex].packet;
         }
-      } else {
-        this.distance = 0;
-        this.packet = $('<div class="packet" />') // TODO: ABSTRACT
+      }
+
+      if (_.isUndefined(this.packet)) {
+        this.packet = $('<div class="packet" />')
+          .css({
+            position: 'relative',
+            marginTop: this.distance
+          })
           .appendTo(this.container)[0];
       }
 
@@ -49,8 +57,8 @@ define([
     },
 
     render: function() {
-      // TODO: Fade In content
-      $(this.el).html(template(this.model.toJSON()));
+      $(this.el)
+        .html(template(this.model.toJSON()));
       return this;
     }
 

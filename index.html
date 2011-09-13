@@ -1,16 +1,33 @@
 <!doctype html>
 <html>
   <head>
-    <title>jonobr1</title>
+    <title>Penates</title>
+    <link href='http://fonts.googleapis.com/css?family=Lekton:400,700,400italic' rel='stylesheet' type='text/css'>
     <style type="text/css">
       * {
         margin: 0;
         padding: 0;
       }
-
-      .post {
-        width: 100%;
+      #content {
+        margin: 144px;
+      }
+      .packet>* {
+        padding: 10px;
+      }
+      .packet {
         text-align: center;
+      }
+      .packet iframe, .packet embed {
+        max-width: 720px;
+        max-height: 405px;
+      }
+      #playhead {
+        font-family: 'Lekton', monospace, sans-serif;
+        font-weight: 900;
+        font-size: 1.0em;
+        text-shadow: none;
+        color: #444;
+        text-align: right;
       }
     </style>
     <script type="text/javascript"
@@ -18,5 +35,6 @@
     <script type="text/javascript" src="/self/main.js"></script>
   </head>
   <body>
+    <div id="content"></div>
   </body>
 </html>

@@ -4,15 +4,11 @@ define([
   'backbone'
   ], function() {
 
-    var model = Backbone.Model.extend();
     var Collection = Backbone.Collection.extend({
-      model: model,
+      model: Backbone.Model.extend(),
       value: null,
-      username: 'jonobr1',
-      name: 'firehose',
-      url: function() {
-        return '/self/get.php?query=https://gimmebar.com/api/v0/public/assets/'
-          + this.username + '/' + this.name;
+      comparator: function(model) {
+        return -model.get('date');  // Descending order
       }
     });
 
