@@ -44,7 +44,7 @@ require([
         right: 10
       })
       .html('<span class="date" style="opacity: 0;"/>')
-      .appendTo('#content');
+      .appendTo('body');
 
     collection = new Collection()
       .bind('add', addView);
@@ -123,13 +123,13 @@ require([
     var date = new Date(Math.floor(first - f * (first - last)) * 1000);
 
     var day = (date.getDate() >= 10) ? date.getDate() : '0' + date.getDate();
-    var month = (date.getMonth() >= 10) ? date.getMonth() : '0' + date.getMonth();
+    var month = (date.getMonth() + 1 >= 10) ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
     var year = date.getYear() - 100;
     var hour = (date.getHours() >= 10) ? date.getHours() : '0' + date.getHours();
     var minutes = (date.getMinutes() >= 10) ? date.getMinutes() : '0' + date.getMinutes();
     var seconds = (date.getSeconds() >= 10) ? date.getSeconds() : '0' + date.getSeconds();
 
-    return year + '&middot;' + month + '&middot;' + day + '<br />'
+    return day + '&middot;' + month + '&middot;' + year + '<br />'
       + hour + '\:' + minutes + '\:' + seconds;
 
   }

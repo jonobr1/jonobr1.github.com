@@ -31,6 +31,7 @@
 
       var $this = $(this);
       var packTimeout = null;
+      var row = 0;
 
       prep($this);
       appendLoader($this);
@@ -47,6 +48,7 @@
           packTimeout = setTimeout(function() {
             resizing = false;
             packTimeout = null;
+            row = 0;
             pack($this, calculateOffset);
           }, 2000);
         });
@@ -69,6 +71,61 @@
         });
       } else {
         pack($this, calculateOffset);
+      }
+
+      function calculateOffset($content, origin, prevMinIndex, prevMaxIndex, i) {
+
+        if (i >= $content.length) {
+          options.complete.apply(this);
+          return;
+        } else if (resizing && options.fluid) {
+          return;
+        }
+
+        var $this = $($content[i]);
+        var $prev = $($content[i - 1]);
+        var x1 = $this.offset().left, x2 = x1 + $this.outerWidth(),
+            y1 = $this.offset().top, y2 = y1 + $this.outerHeight();
+
+        if ($prev.length > 0) {
+          if (x1 < $prev.offset().left && i > 0) {
+            row++;
+            prevMinIndex = prevMaxIndex;
+            prevMaxIndex = i - 1;
+          }
+        }
+
+        var offsetY = 0;
+
+        if (row > 0) {
+
+          for (var j = prevMaxIndex; j >= prevMinIndex; j--) {
+
+            var $prev = $($content[j]);
+            var a1 = $prev.offset().left, a2 = a1 + $prev.outerWidth(),
+                b1 = $prev.offset().top, b2 = b1 + $prev.outerHeight();
+
+            if (a1 >= x2 || a2 <= x1) {
+              continue;
+            } else if (offsetY < b2) {
+              offsetY = b2;
+            }
+
+          }
+
+          offsetY = offsetY - y1;
+
+        } else {
+          offsetY = - parseInt($this.css('margin-top').toString().replace('px', ''));
+        }
+
+        animateIn($this, {
+          opacity: 1,
+          marginTop: '+=' + offsetY
+        }, function() {
+          calculateOffset($content, origin, prevMinIndex, prevMaxIndex, i + 1);
+        });
+
       }
 
     });
@@ -102,58 +159,6 @@
         options.duration, options.easing, callback);
     }
 
-    function calculateOffset($content, origin, row, prevMinIndex, prevMaxIndex, i) {
-
-      if (i >= $content.length) {
-        options.complete.apply(this);
-        return;
-      } else if (resizing && options.fluid) {
-        return;
-      }
-
-      var $this = $($content[i]);
-      var x1 = $this.offset().left, x2 = x1 + $this.outerWidth(),
-          y1 = $this.offset().top, y2 = y1 + $this.outerHeight();
-
-      if (x1 === origin.x && i > 0) {
-        row++;
-        prevMinIndex = prevMaxIndex;
-        prevMaxIndex = i - 1;
-      }
-
-      var offsetY = 0;
-
-      if (row > 0) {
-
-        for (var j = prevMaxIndex; j >= prevMinIndex; j--) {
-
-          var $prev = $($content[j]);
-          var a1 = $prev.offset().left, a2 = a1 + $prev.outerWidth(),
-              b1 = $prev.offset().top, b2 = b1 + $prev.outerHeight();
-
-          if (a1 > x2 || a2 < x1) {
-            continue;
-          } else if (offsetY < b2) {
-            offsetY = b2;
-          }
-
-        }
-
-        offsetY = offsetY - y1;
-
-      } else {
-        offsetY = - parseInt($this.css('margin-top').toString().replace('px', ''));
-      }
-
-      animateIn($this, {
-        opacity: 1,
-        marginTop: '+=' + offsetY
-      }, function() {
-        calculateOffset($content, origin, row, prevMinIndex, prevMaxIndex, i + 1);
-      });
-
-    }
-
   };
 
   function removeLoader() {
@@ -168,7 +173,7 @@
       .children().css({
         position: 'relative',
         display: 'inline-block',
-        verticalAlign: 'middle',
+        verticalAlign: 'top',
         opacity: 0,
         zIndex: -1
       });
@@ -179,7 +184,7 @@
 
     var $content = $dom.children();
 
-    var row = 0, prevMinIndex = 0, prevMaxIndex = 0;
+    var prevMinIndex = 0, prevMaxIndex = 0;
 
     var origin = {
       x: $dom.offset().left + ($dom.outerWidth() - $dom.width()) / 2,
@@ -188,7 +193,7 @@
 
     removeLoader();
 
-    callback.apply(this, [$content, origin, row, prevMinIndex, prevMaxIndex, 0]);
+    callback.apply(this, [$content, origin, prevMinIndex, prevMaxIndex, 0]);
 
   }
 

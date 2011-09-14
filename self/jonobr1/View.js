@@ -4,7 +4,7 @@ define([
   'backbone'
 ], function() {
 
-  var THRESHOLD = 5;
+  var THRESHOLD = 10;
 
   var View = Backbone.View.extend({
 
