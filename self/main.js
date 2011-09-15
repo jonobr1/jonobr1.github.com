@@ -65,11 +65,11 @@ require([
 
   function prev(e) {
     e.preventDefault();
-    loadFeed(parseInt(page) - 1);
+    loadFeed(parseInt(page) - 1, true);
     $(this).unbind('click');
   }
 
-  function loadFeed(index) {
+  function loadFeed(index, direction) {
 
     page = index;
     skip = limit * (index - 1);
@@ -77,15 +77,22 @@ require([
     query({
       limit: limit,
       skip: skip,
-      callback: loadContent
+      callback: function(data) {
+        loadContent(data, direction)
+      }
     });
 
   }
 
-  function loadContent(data) {
+  function loadContent(data, backwards) {
     router.navigate('page/' + page);
     currentViews = [];
-    collection.add(data.records);
+    if (backwards) {
+      data.records.reverse();
+    }
+    _.each(data.records, function(record) {
+      collection.add(record);
+    });
     more_rows = data.more_rows;
     total_rows = data.total_rows;
     updateUI();

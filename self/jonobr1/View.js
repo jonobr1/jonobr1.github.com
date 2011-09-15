@@ -35,6 +35,7 @@ define([
         pindex = index - 1;
       }
 
+      // This is done incorrectly.
       if (pindex >= 0) {
         var prev = this.model.collection.at(pindex);
         this.distance = timeDelta(this.model.get('date'), prev.get('date'));
@@ -43,24 +44,25 @@ define([
         }
       }
 
-      // Fix the going in the future shit.
-
       if (_.isUndefined(this.packet)) {
-        this.packet = $('<div class="packet" />')
-          .css({
-            position: 'relative',
-            marginTop: this.distance
-          })[0];
-          if (index <= 0 && this.model.collection.length > 1) {
-            // We're going backwards in time.
-            $(this.packet).prependTo(this.container);
+          if (pindex > index) {
+            this.packet = $('<div class="packet" />')
+              .css({
+                position: 'relative',
+                marginBottom: this.distance
+              })
+              .prependTo(this.container)[0];
           } else {
-            // We're going forwards in time.
-            $(this.packet).appendTo(this.container);
+            this.packet = $('<div class="packet" />')
+              .css({
+                position: 'relative',
+                marginTop: this.distance
+              })
+              .appendTo(this.container)[0];
           }
       }
 
-      if (index <= 0 && this.model.collection.length > 1) {
+      if (pindex > index) {
         // We're going backwards in time.
         $(this.el).prependTo(this.packet);
       } else {
