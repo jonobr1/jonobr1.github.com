@@ -8,7 +8,7 @@
         margin: 0;
         padding: 0;
       }
-      #content {
+      body {
         margin: 144px;
       }
       .packet>* {
@@ -29,12 +29,34 @@
         color: #444;
         text-align: right;
       }
+      div.navigation {
+        text-align: center;
+        font: 100 1.25em/1em Arial, sans-serif;
+      }
+      #next a:link, #next a:visited,
+      #prev a:link, #prev a:visited {
+        font-family: Georgia, Times, serif;
+        font-weight: 100;
+        font-size: 1.25em;
+        display: inline-block;
+        color: #444;
+        padding: 25px;
+        margin: 12px;
+
+      }
+      #next a:hover, #next a:active,
+      #prev a:hover, #prev a:active {
+        background: #ffd;
+        text-decoration: none;
+      }
     </style>
     <script type="text/javascript"
       src="/third-party/require/require.js"></script>
     <script type="text/javascript" src="/self/main.js"></script>
   </head>
   <body>
+    <div id="prev" class="navigation">&#8593;<br /><a href="#">Ad reliquum futurum.</a></div>
     <div id="content"></div>
+    <div id="next" class="navigation"><a href="#">In residuum praeteritum.</a><br />&#8595;</div>
   </body>
 </html>

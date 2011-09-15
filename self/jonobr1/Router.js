@@ -26,6 +26,8 @@ define([
       if (!indexed) {
         this.navigate('page/1', true);
       }
+
+      return this;
     }
 
   });

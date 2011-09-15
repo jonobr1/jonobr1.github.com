@@ -43,20 +43,37 @@ define([
         }
       }
 
+      // Fix the going in the future shit.
+
       if (_.isUndefined(this.packet)) {
         this.packet = $('<div class="packet" />')
           .css({
             position: 'relative',
             marginTop: this.distance
-          })
-          .appendTo(this.container)[0];
+          })[0];
+          if (index <= 0 && this.model.collection.length > 1) {
+            // We're going backwards in time.
+            $(this.packet).prependTo(this.container);
+          } else {
+            // We're going forwards in time.
+            $(this.packet).appendTo(this.container);
+          }
       }
 
-      $(this.el).appendTo(this.packet);
+      if (index <= 0 && this.model.collection.length > 1) {
+        // We're going backwards in time.
+        $(this.el).prependTo(this.packet);
+      } else {
+        // We're going forwards in time.
+        $(this.el).appendTo(this.packet);
+      }
+
+      
 
     },
 
     render: function() {
+      // TODO: Animate from width: 0 -> width: auto... somehow.
       $(this.el)
         .html(template(this.model.toJSON()));
       return this;
@@ -80,7 +97,8 @@ define([
         return '<a href="' + o.source + '" target="_blank"><img src="' + href + '" alt="' + o.title + '"/></a>';
         break;
       case 'embed':
-        return o.content.info.html;
+        // return o.content.info.html;
+        return '';
         break;
       case 'page':
         return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.thumb + '" alt="' + o.title + '"/></a>';

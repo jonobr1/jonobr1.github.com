@@ -25,6 +25,7 @@ require([
 
   var more_rows = true, total_rows, limit = 50, skip = 0;
   var router, collection, views = [], scrollMap, $scroll;
+  var page = 0, currentViews = [];
 
   require.ready(function() {
 
@@ -56,21 +57,40 @@ require([
 
   });
 
+  function next(e) {
+    e.preventDefault();
+    loadFeed(parseInt(page) + 1);
+    $(this).unbind('click');
+  }
+
+  function prev(e) {
+    e.preventDefault();
+    loadFeed(parseInt(page) - 1);
+    $(this).unbind('click');
+  }
+
   function loadFeed(index) {
 
+    page = index;
     skip = limit * (index - 1);
 
     query({
       limit: limit,
       skip: skip,
-      callback: function(data) {
-        collection.add(data.records);
-        more_rows = data.more_rows;
-        total_rows = data.total_rows;
-        updateUI();
-      }
+      callback: loadContent
     });
 
+  }
+
+  function loadContent(data) {
+    router.navigate('page/' + page);
+    currentViews = [];
+    collection.add(data.records);
+    more_rows = data.more_rows;
+    total_rows = data.total_rows;
+    updateUI();
+    $('#next').click(next);
+    $('#prev').click(prev);
   }
 
   // Does not exist in Public API yet.
@@ -80,20 +100,23 @@ require([
 
   function addView(model) {
 
-    // Figure out how to add in the right place???
-
-    views.push(new View({
+    var view = new View({
       model: model,
       id: model.cid,
       views: views,
-      container: document.getElementById('content')
-    }));
+      container: $('#content')[0]
+    });
+    views.push(view);
+    currentViews.push(view);
     model.trigger('change');
   }
 
   function updateUI() {
 
-    $('.packet').stalactite();
+    var packets = _.union(_.map(currentViews, function(view) {
+      return view.packet;
+    }));
+    $(packets).stalactite();
     scrollMap.init();
     scrollMap.getScrollPosition();
   }
