@@ -54,15 +54,18 @@
         });
       }
 
-      var $assets = $this.find('img, embed, iframe, audio, video').not('.stalactite-loaded');
-      var $content = $this.find(':not(img, embed iframe, audio, video)');
+      var $assets = $this
+        .children()
+        .not('.stalactite-loaded')
+        .find('img, embed, iframe, audio, video');
+      var $content = $this
+        .find(':not(img, embed iframe, audio, video)');
 
       var loadedImgs = 0;
 
       if ($assets.length > 0) {
         $assets.each(function(i) {
           var $asset = $(this).load(function() {
-            $asset.addClass('stalactite-loaded');
             animateIn($asset);
             loadedImgs++;
             if (loadedImgs >= $assets.length) {
@@ -177,7 +180,7 @@
         position: 'relative',
         display: 'inline-block',
         verticalAlign: 'top',
-        // opacity: 0,
+        opacity: 0,
         zIndex: -1
       });
 
@@ -185,7 +188,7 @@
 
   function pack($dom, callback) {
 
-    var $content = $dom.children();
+    var $content = $dom.children().addClass('stalactite-loaded');
 
     var prevMinIndex = 0, prevMaxIndex = 0;
 

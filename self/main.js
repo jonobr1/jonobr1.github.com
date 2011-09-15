@@ -25,7 +25,7 @@ require([
 
   var more_rows = true, total_rows, limit = 50, skip = 0;
   var router, collection, views = [], scrollMap, $scroll;
-  var page = 0, currentViews = [];
+  var page = 0, currentViews = [], existingPages = [], querying = false;
 
   require.ready(function() {
 
@@ -71,24 +71,42 @@ require([
 
   function loadFeed(index, direction) {
 
-    page = index;
-    skip = limit * (index - 1);
-
-    query({
-      limit: limit,
-      skip: skip,
-      callback: function(data) {
-        loadContent(data, direction)
+    if (_.include(existingPages, index)) {
+      if (direction) {
+        loadFeed(index - 1, true);
+      } else {
+        loadFeed(index + 1);
       }
-    });
+    } else {
+
+      if (!querying) {
+
+        querying = true;
+
+        page = index;
+        skip = limit * (index - 1);
+
+        query({
+          limit: limit,
+          skip: skip,
+          callback: function(data) {
+            querying = false;
+            loadContent(data, direction)
+          }
+        });
+
+      }
+
+    }
 
   }
 
   function loadContent(data, backwards) {
     router.navigate('page/' + page);
+    existingPages.push(parseInt(page));
     currentViews = [];
     if (backwards) {
-      data.records.reverse();
+      data.records.reverse(); 
     }
     _.each(data.records, function(record) {
       collection.add(record);
@@ -113,8 +131,8 @@ require([
       views: views,
       container: $('#content')[0]
     });
-    views.push(view);
-    currentViews.push(view);
+    views.splice(model.collection.indexOf(model), 0, view);
+    currentViews.push(view)
     model.trigger('change');
   }
 
