@@ -5,7 +5,8 @@ require({
     "backbone": "/third-party/backbone/backbone",
     "text": "/third-party/requirejs/text",
     "underscore": "/third-party/underscore/underscore-min",
-    "order": "/third-party/requirejs/order"
+    "order": "/third-party/requirejs/order",
+    "enhance.animate": "/third-party/animate.enhanced/jquery.animate-enhanced.min"
   }, 
   "baseUrl": "/self", 
   "priority": ["jquery", "underscore"]
@@ -20,6 +21,7 @@ require([
   'backbone',
   'underscore',
   'jquery',
+  'enhance.animate',
   'jonobr1/jquery.stalactite'
 ], function(Router, Collection, query, View, ScrollMap) {
 
@@ -28,14 +30,6 @@ require([
   var page = 0, currentViews = [], existingPages = [], querying = false;
 
   require.ready(function() {
-
-    /**
-     * Controller to handle the URLs.
-     * 
-     * main page : a feed of the firehose slug.
-     * single : a page to display one item from the feed.
-     * 
-     */
 
     scrollMap = new ScrollMap(onDocumentScroll);
     $scroll = $('<p id="playhead" />')
@@ -141,7 +135,7 @@ require([
     var packets = _.union(_.map(currentViews, function(view) {
       return view.packet;
     }));
-    $(packets).stalactite();
+    $(packets).stalactite(); // TODO: Fire this after animation calls in View.js
     scrollMap.init();
     scrollMap.getScrollPosition();
   }
@@ -160,7 +154,6 @@ require([
       })
       .find('span')
         .html(formatDate(e.y));
-      
   }
 
   function formatDate(f) {

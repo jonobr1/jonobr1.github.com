@@ -7,3 +7,6 @@
 [submodule "third-party/underscore"]
 	path = third-party/underscore
 	url = https://github.com/documentcloud/underscore.git
+[submodule "third-party/animate.enhanced"]
+	path = third-party/animate.enhanced
+	url = https://github.com/benbarnett/jQuery-Animate-Enhanced.git

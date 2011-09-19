@@ -1,6 +1,7 @@
 define([
   'underscore',
   'jquery',
+  'enhance.animate',
   'backbone'
 ], function() {
 
@@ -74,22 +75,53 @@ define([
         $(this.el).appendTo(this.packet);
       }
 
-      
-
     },
 
     render: function() {
-      // TODO: Animate from width: 0 -> width: auto... somehow.
-      $(this.el)
-        .html(template(this.model.toJSON()));
+      var $c = prepAnimation();
+      animateIn($c, this.el, template(this.model.toJSON()));
       return this;
     }
 
   });
 
+  function prepAnimation() {
+    return $('<div class="temp-container"/>')
+      .css({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        display: 'hidden'
+      })
+      .appendTo('body');
+  }
+
+  function animateIn($container, el, html) {
+
+    var $children = $container
+      .html(html)
+      .children();
+
+    $children
+      .find('img')
+      .load(function() {
+
+        var w = $children.width();
+
+        $children
+          .appendTo(el)
+          .children()
+          .width(0)
+          .animate({
+            width: w
+          }, function() {
+            $container.remove();
+          });
+      });
+  }
+
   function timeDelta(cur, ref) {
-    // cur and ref are in seconds
-    return Math.round((ref - cur) / 60);
+    return Math.round((ref - cur) / 60); // cur and ref are in seconds
   }
 
   function template(o) {

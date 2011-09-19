@@ -5,9 +5,12 @@ define([
 ], function() {
 
   var indexed = false;
-
   /**
    * Routes all URL bindings for site.
+   * 
+   * main page : a feed of the firehose slug.
+   * single : a page to display one item from the feed.
+   * 
    * @class
    */
   var Router = Backbone.Router.extend({

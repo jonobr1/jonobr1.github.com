@@ -22,6 +22,8 @@
 
 (function($) {
 
+  var indexed = []; // List of all dom elements already applied.
+
   $.fn.stalactite = function(customOptions) {
 
     var resizing = false;
@@ -31,10 +33,28 @@
 
       var $this = $(this);
       var packTimeout = null;
-      var row = 0;
-
-      prep($this);
+      var $newElems = prep($this);
       appendLoader($this);
+
+      var prevThisIndex = index($this);
+      var params = {
+        row: 0,
+        prevMinIndex: 0,
+        prevMaxIndex: 0,
+        i: 0
+      };
+
+      // Check for oldies to speed things up
+      if (prevThisIndex >= 0) {
+
+        if ($this.children().index($newElems[0]) > 0) {
+          params = indexed[prevThisIndex];
+          // TODO: needs to pack all items on last row as well.
+        }
+
+      }
+
+      var row = params.row;
 
       if (options.fluid) {
         $this.css('width', 'auto');
@@ -49,7 +69,12 @@
             resizing = false;
             packTimeout = null;
             row = 0;
-            pack($this, calculateOffset);
+            pack($this, calculateOffset, {
+              row: 0,
+              prevMinIndex: 0,
+              prevMaxIndex: 0,
+              i: 0
+            });
           }, 2000);
         });
       }
@@ -69,17 +94,31 @@
             animateIn($asset);
             loadedImgs++;
             if (loadedImgs >= $assets.length) {
-              pack($this, calculateOffset);
+              pack($this, calculateOffset, params);
             }
           });
         });
       } else {
-        pack($this, calculateOffset);
+        pack($this, calculateOffset, params);
       }
 
       function calculateOffset($content, origin, prevMinIndex, prevMaxIndex, i) {
 
         if (i >= $content.length) {
+          if (prevThisIndex >= 0) { // update
+            indexed[prevThisIndex].prevMinIndex = prevMinIndex;
+            indexed[prevThisIndex].prevMaxIndex = prevMaxIndex;
+            indexed[prevThisIndex].i = i;
+            indexed[prevThisIndex].row = row;
+          } else {  // push a new instance
+            indexed.push({
+              dom: $content.parent('div')[0],
+              row: row,
+              prevMinIndex: prevMinIndex,
+              prevMaxIndex: prevMaxIndex,
+              i: i
+            });
+          }
           options.complete.apply(this);
           return;
         } else if (resizing && options.fluid) {
@@ -165,6 +204,19 @@
 
   };
 
+  function index($dom) {
+    var dom = $dom[0];
+    var iterator = -1;
+    for (var i = 0; i < indexed.length; i++) {
+      var d = indexed[i].dom;
+      if (dom === d) {
+        iterator = i;
+        break;
+      }
+    }
+    return iterator;
+  }
+
   function removeLoader() {
     $('.stalactite-loader').fadeOut(function() {
       $('.stalactite-loader').remove();
@@ -173,7 +225,7 @@
 
   function prep($dom) {
 
-    $dom
+    var result = $dom
       .children()
       .not('.stalactite-loaded')
       .css({
@@ -184,13 +236,13 @@
         zIndex: -1
       });
 
+    return result;
+
   }
 
-  function pack($dom, callback) {
+  function pack($dom, callback, params) {
 
     var $content = $dom.children().addClass('stalactite-loaded');
-
-    var prevMinIndex = 0, prevMaxIndex = 0;
 
     var origin = {
       x: $dom.offset().left + ($dom.outerWidth() - $dom.width()) / 2,
@@ -199,7 +251,7 @@
 
     removeLoader();
 
-    callback.apply(this, [$content, origin, prevMinIndex, prevMaxIndex, 0]);
+    callback.apply(this, [$content, origin, params.prevMinIndex, params.prevMaxIndex, params.i]);
 
   }
 
