@@ -90,8 +90,7 @@ define([
       .css({
         position: 'absolute',
         top: 0,
-        left: 0,
-        display: 'hidden'
+        left: -9999
       })
       .appendTo('body');
   }
@@ -105,13 +104,13 @@ define([
     $children
       .find('img')
       .load(function() {
-
         var w = $children.width();
-
+        var h = $children.find('img').height();
         $children
           .appendTo(el)
           .children()
           .width(0)
+          .height(h)
           .animate({
             width: w
           }, function() {

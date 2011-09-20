@@ -48,8 +48,9 @@
       if (prevThisIndex >= 0) {
 
         if ($this.children().index($newElems[0]) > 0) {
-          params = indexed[prevThisIndex];
           // TODO: needs to pack all items on last row as well.
+          // By going back N number of items to determine the previous row.
+          params = indexed[prevThisIndex];
         }
 
       }
@@ -105,6 +106,7 @@
       function calculateOffset($content, origin, prevMinIndex, prevMaxIndex, i) {
 
         if (i >= $content.length) {
+          console.log('ending');
           if (prevThisIndex >= 0) { // update
             indexed[prevThisIndex].prevMinIndex = prevMinIndex;
             indexed[prevThisIndex].prevMaxIndex = prevMaxIndex;
@@ -114,14 +116,16 @@
             indexed.push({
               dom: $content.parent('div')[0],
               row: row,
-              prevMinIndex: prevMinIndex,
+              prevMinIndex: prevMinIndex, 
               prevMaxIndex: prevMaxIndex,
               i: i
             });
           }
           options.complete.apply(this);
+          removeLoader();
           return;
         } else if (resizing && options.fluid) {
+          removeLoader();
           return;
         }
 
@@ -131,12 +135,16 @@
             y1 = $this.offset().top, y2 = y1 + $this.outerHeight();
 
         if ($prev.length > 0) {
+          console.log('prev is greater than 0', x1, $prev.offset());
           if (x1 < $prev.offset().left && i > 0) {
+            console.log('first of its kind');
             row++;
             prevMinIndex = prevMaxIndex;
             prevMaxIndex = i - 1;
           }
         }
+
+        console.log(row, prevMinIndex, prevMaxIndex, i);
 
         var offsetY = 0;
 
@@ -248,8 +256,6 @@
       x: $dom.offset().left + ($dom.outerWidth() - $dom.width()) / 2,
       y: $dom.offset().top + ($dom.outerHeight() - $dom.height()) / 2
     };
-
-    removeLoader();
 
     callback.apply(this, [$content, origin, params.prevMinIndex, params.prevMaxIndex, params.i]);
 
