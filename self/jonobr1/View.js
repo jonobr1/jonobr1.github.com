@@ -136,7 +136,7 @@ define([
         opacity: 0,
         zIndex: -1
       })
-      .addClass('stalactite-loaded');
+      .addClass('image-loaded');
 
     var prevWidth = 0;
     $prevs = $packet.find('.post');
@@ -145,6 +145,7 @@ define([
     for (var i = $prevs.length - 1; i >= Math.max(0, $prevs.length - 10); i--) {
       var $prev = $prevs.eq(i);
       if ($prev.position().top === $el.position().top) {
+        $prev.removeClass('stalactite-loaded');
         prevWidth += $prev.outerWidth();
       } else {
         continue;
@@ -157,13 +158,10 @@ define([
       .appendTo(el);
 
     if (x1 > $packet.width()) {
-
       $children
         .children()
         .width(w);
-
     } else {
-
       $children
         .children()
         .width(0);
@@ -177,7 +175,7 @@ define([
       .animate({
         width: w,
         height: h
-      }, 50, 'linear', function() {
+      }, 150, function() {
         animating = false;
         callback();
         $container.remove();

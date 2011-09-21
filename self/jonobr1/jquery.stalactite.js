@@ -33,7 +33,8 @@
 
       var $this = $(this);
       var packTimeout = null;
-      var $newElems = prep($this);
+      var $newElems = prep($this, options);
+      var indexable = {};
       appendLoader($this);
 
       var prevThisIndex = index($this);
@@ -48,9 +49,7 @@
       if (prevThisIndex >= 0) {
 
         if ($this.children().index($newElems[0]) > 0) {
-          // TODO: needs to pack all items on last row as well.
-          // By going back N number of items to determine the previous row.
-          params = indexed[prevThisIndex];
+          params = indexable = indexed[prevThisIndex];
         }
 
       }
@@ -84,7 +83,7 @@
 
       var $assets = $this
         .children()
-        .not('.stalactite-loaded')
+        .not(options.cssSelector)
         .find('img, embed, iframe, audio, video');
       var $content = $this
         .find(':not(img, embed iframe, audio, video)');
@@ -108,19 +107,11 @@
       function calculateOffset($content, origin, prevMinIndex, prevMaxIndex, i) {
 
         if (i >= $content.length) {
+          // TODO: CLEAN UP! By extending objects
           if (indexed[prevThisIndex]) { // update
-            indexed[prevThisIndex].prevMinIndex = prevMinIndex;
-            indexed[prevThisIndex].prevMaxIndex = prevMaxIndex;
-            indexed[prevThisIndex].i = i;
-            indexed[prevThisIndex].row = row;
+            indexed[prevThisIndex] = $.extend(indexed[prevThisIndex], indexable);
           } else {  // push a new instance
-            indexed.push({
-              dom: $content.parent('div')[0],
-              row: row,
-              prevMinIndex: prevMinIndex, 
-              prevMaxIndex: prevMaxIndex,
-              i: i
-            });
+            indexed.push($.extend({ dom: $content.parent('div')[0] }, indexable));
           }
           options.complete.apply(this);
           removeLoader();
@@ -130,16 +121,18 @@
           return;
         }
 
-        var $this = $($content[i]);
+        var $this = $($content[i]); 
         var $prev = $($content[i - 1]);
         var x1 = $this.offset().left, x2 = x1 + $this.outerWidth(),
             y1 = $this.offset().top, y2 = y1 + $this.outerHeight();
 
         if ($prev.length > 0) {
-          if (x1 < $prev.offset().left && i > 0) {
+          if (x1 < $prev.offset().left && i > 0 && i !== indexed[prevThisIndex].i) {
             row++;
-            prevMinIndex = prevMaxIndex;
-            prevMaxIndex = i - 1;
+            indexable.row = row;
+            indexable.prevMinIndex = prevMinIndex = prevMaxIndex;
+            indexable.prevMaxIndex = prevMaxIndex = i - 1;
+            indexable.i = i;
           }
         }
 
@@ -232,18 +225,22 @@
     });
   }
 
-  function prep($dom) {
+  function prep($dom, options) {
 
     var result = $dom
       .children()
-      .not('.stalactite-loaded')
-      .css({
-        position: 'relative',
-        display: 'inline-block',
-        verticalAlign: 'top',
-        opacity: 0,
-        zIndex: -1
-      });
+      .not('.stalactite-loaded');
+
+    if (options.cssPrep) {
+      result
+        .css({
+          position: 'relative',
+          display: 'inline-block',
+          verticalAlign: 'top',
+          opacity: 0,
+          zIndex: -1
+        });
+    }
 
     return result;
 
@@ -265,6 +262,8 @@
   $.fn.stalactite.defaultOptions = {
     duration: 150,
     easing: 'swing',
+    cssSelector: '.stalactite-loaded',
+    cssPrep: true,
     fluid: true,
     loader: '<img src="data:image/gif;base64, R0lGODlhEAAQAPQAAP///zMzM/n5+V9fX5ycnDc3N1FRUd7e3rm5uURERJGRkYSEhOnp6aysrNHR0WxsbHd3dwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAAFUCAgjmRpnqUwFGwhKoRgqq2YFMaRGjWA8AbZiIBbjQQ8AmmFUJEQhQGJhaKOrCksgEla+KIkYvC6SJKQOISoNSYdeIk1ayA8ExTyeR3F749CACH5BAkKAAAALAAAAAAQABAAAAVoICCKR9KMaCoaxeCoqEAkRX3AwMHWxQIIjJSAZWgUEgzBwCBAEQpMwIDwY1FHgwJCtOW2UDWYIDyqNVVkUbYr6CK+o2eUMKgWrqKhj0FrEM8jQQALPFA3MAc8CQSAMA5ZBjgqDQmHIyEAIfkECQoAAAAsAAAAABAAEAAABWAgII4j85Ao2hRIKgrEUBQJLaSHMe8zgQo6Q8sxS7RIhILhBkgumCTZsXkACBC+0cwF2GoLLoFXREDcDlkAojBICRaFLDCOQtQKjmsQSubtDFU/NXcDBHwkaw1cKQ8MiyEAIfkECQoAAAAsAAAAABAAEAAABVIgII5kaZ6AIJQCMRTFQKiDQx4GrBfGa4uCnAEhQuRgPwCBtwK+kCNFgjh6QlFYgGO7baJ2CxIioSDpwqNggWCGDVVGphly3BkOpXDrKfNm/4AhACH5BAkKAAAALAAAAAAQABAAAAVgICCOZGmeqEAMRTEQwskYbV0Yx7kYSIzQhtgoBxCKBDQCIOcoLBimRiFhSABYU5gIgW01pLUBYkRItAYAqrlhYiwKjiWAcDMWY8QjsCf4DewiBzQ2N1AmKlgvgCiMjSQhACH5BAkKAAAALAAAAAAQABAAAAVfICCOZGmeqEgUxUAIpkA0AMKyxkEiSZEIsJqhYAg+boUFSTAkiBiNHks3sg1ILAfBiS10gyqCg0UaFBCkwy3RYKiIYMAC+RAxiQgYsJdAjw5DN2gILzEEZgVcKYuMJiEAOwAAAAAAAAAAAA==" />',
     styles: {},

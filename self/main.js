@@ -134,12 +134,14 @@ require([
   }
 
   function updateUI() {
-    console.log('stalactite');
     queueUI = _.identity;
     var packets = _.union(_.map(currentViews, function(view) {
       return view.packet;
     }));
-    $(packets).stalactite();
+    $(packets).stalactite({
+      cssSelector: '.image-loaded',
+      cssPrep: false
+    });
     scrollMap.init();
     scrollMap.getScrollPosition();
   }
