@@ -6,6 +6,8 @@ define([
 ], function() {
 
   var THRESHOLD = 10;
+  var animating = false;
+
 
   var View = Backbone.View.extend({
 
@@ -79,7 +81,8 @@ define([
 
     render: function() {
       var $c = prepAnimation();
-      animateIn($c, this.el, template(this.model.toJSON()));
+      animateIn($c, this.el, template(this.model.toJSON()),
+        this.packet, this.options.complete);
       return this;
     }
 
@@ -95,28 +98,91 @@ define([
       .appendTo('body');
   }
 
-  function animateIn($container, el, html) {
+  function animateIn($container, el, html, packet, callback) {
 
+    // Animate in
     var $children = $container
       .html(html)
       .children();
 
+    if ($children.length > 0) {
+      $children
+        .find('img')
+        .load(function() {
+          handleAnimation($container, el, $children, packet, callback);
+        });
+    } else {
+      $container.remove();
+      callback();
+    }
+  }
+
+  function handleAnimation($container, el, $children, packet, callback) {
+
+    if (animating) {
+      setTimeout(handleAnimation, 100, $container, el, $children, packet, callback);
+      return;
+    }
+
+    var $packet = $(packet);
+    var w = $children.width();
+    var h = $children.find('img').height();
+
+    var $el = $(el) // Pretty much run prep from jquery.stalactite.js
+      .css({
+        position: 'relative',
+        display: 'inline-block',
+        verticalAlign: 'top',
+        opacity: 0,
+        zIndex: -1
+      })
+      .addClass('stalactite-loaded');
+
+    var prevWidth = 0;
+    $prevs = $packet.find('.post');
+
+    // Possibly clean up?                // a threshold...
+    for (var i = $prevs.length - 1; i >= Math.max(0, $prevs.length - 10); i--) {
+      var $prev = $prevs.eq(i);
+      if ($prev.position().top === $el.position().top) {
+        prevWidth += $prev.outerWidth();
+      } else {
+        continue;
+      }
+    }
+
+    var x1 = prevWidth + $el.outerWidth() + w;
+
     $children
-      .find('img')
-      .load(function() {
-        var w = $children.width();
-        var h = $children.find('img').height();
-        $children
-          .appendTo(el)
-          .children()
-          .width(0)
-          .height(h)
-          .animate({
-            width: w
-          }, function() {
-            $container.remove();
-          });
+      .appendTo(el);
+
+    if (x1 > $packet.width()) {
+
+      $children
+        .children()
+        .width(w);
+
+    } else {
+
+      $children
+        .children()
+        .width(0);
+    }
+
+    animating = true;
+
+    $children
+      .children()
+      .height(0)
+      .animate({
+        width: w,
+        height: h
+      }, 50, 'linear', function() {
+        animating = false;
+        callback();
+        $container.remove();
       });
+
   }
 
   function timeDelta(cur, ref) {

@@ -70,12 +70,14 @@
             resizing = false;
             packTimeout = null;
             row = 0;
-            pack($this, calculateOffset, {
+            params = {
               row: 0,
               prevMinIndex: 0,
               prevMaxIndex: 0,
               i: 0
-            });
+            };
+            indexed = [];
+            pack($this, calculateOffset, params);
           }, 2000);
         });
       }
@@ -106,8 +108,7 @@
       function calculateOffset($content, origin, prevMinIndex, prevMaxIndex, i) {
 
         if (i >= $content.length) {
-          console.log('ending');
-          if (prevThisIndex >= 0) { // update
+          if (indexed[prevThisIndex]) { // update
             indexed[prevThisIndex].prevMinIndex = prevMinIndex;
             indexed[prevThisIndex].prevMaxIndex = prevMaxIndex;
             indexed[prevThisIndex].i = i;
@@ -135,16 +136,12 @@
             y1 = $this.offset().top, y2 = y1 + $this.outerHeight();
 
         if ($prev.length > 0) {
-          console.log('prev is greater than 0', x1, $prev.offset());
           if (x1 < $prev.offset().left && i > 0) {
-            console.log('first of its kind');
             row++;
             prevMinIndex = prevMaxIndex;
             prevMaxIndex = i - 1;
           }
         }
-
-        console.log(row, prevMinIndex, prevMaxIndex, i);
 
         var offsetY = 0;
 
@@ -206,7 +203,11 @@
     }
 
     function animateIn($dom, params, callback) {
-      $dom.css('z-index', 'auto').stop().animate($.extend({}, params, options.styles),
+      var args = $.extend({}, params, options.styles);
+      if (args.opacity == $dom.css('opacity')) {  // Weird bug.
+        delete args.opacity;
+      }
+      $dom.css('z-index', 'auto').stop().animate(args,
         options.duration, options.easing, callback);
     }
 

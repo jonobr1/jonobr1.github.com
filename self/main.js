@@ -25,7 +25,7 @@ require([
   'jonobr1/jquery.stalactite'
 ], function(Router, Collection, query, View, ScrollMap) {
 
-  var more_rows = true, total_rows, limit = 10, skip = 0;
+  var more_rows = true, total_rows, limit = 5, skip = 0;
   var router, collection, views = [], scrollMap, $scroll;
   var page = 0, currentViews = [], existingPages = [], querying = false;
   var queueUI = _.identity;
@@ -124,22 +124,24 @@ require([
       model: model,
       id: model.cid,
       views: views,
-      container: $('#content')[0]
+      container: $('#content')[0],
+      complete: queueUI
     });
     views.splice(model.collection.indexOf(model), 0, view);
     currentViews.push(view);
     model.trigger('change');
-    queueUI();  // Something's weird about the placement of this.
+    // queueUI();  // Something's weird about the placement of this.
   }
 
   function updateUI() {
+    console.log('stalactite');
+    queueUI = _.identity;
     var packets = _.union(_.map(currentViews, function(view) {
       return view.packet;
     }));
     $(packets).stalactite();
     scrollMap.init();
     scrollMap.getScrollPosition();
-    queueUI = _.identity;
   }
 
   function onDocumentScroll(e) {
