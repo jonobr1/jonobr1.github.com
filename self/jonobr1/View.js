@@ -8,7 +8,6 @@ define([
   var THRESHOLD = 10;
   var animating = false;
 
-
   var View = Backbone.View.extend({
 
     tagName: 'div',
@@ -22,10 +21,10 @@ define([
       }
 
       this.model.bind('change', this.render, this);
-      this.views = this.options.views;
       this.distance = 0;
       this.className = 'post ' + this.model.get('tags').toString().replace(/\,/g, ' ');
       this.el.setAttribute('class', this.className);
+      this.model.set({ view: this }, { silent: true });
 
       var index = this.model.collection.indexOf(this.model);
       var pindex;
@@ -38,50 +37,43 @@ define([
         pindex = index - 1;
       }
 
-      // This is done incorrectly.
       if (pindex >= 0) {
         var prev = this.model.collection.at(pindex);
         this.distance = Math.abs(timeDelta(this.model.get('date'), prev.get('date')));
         if (this.distance < THRESHOLD) {
-          if (pindex > index) {
-            this.packet = this.views[index].packet;
-          } else {
-            this.packet = this.views[pindex].packet;
-          }
+          this.packet = prev.get('view').packet;
         }
       }
 
       if (_.isUndefined(this.packet)) {
+
+        this.packet = $('<div />')
+          .css({
+            position: 'relative'
+          })[0];
+
           if (pindex > index) {
-            this.packet = $('<div class="packet future" />')
-              .css({
-                position: 'relative',
-                marginBottom: this.distance
-              })
-              .prependTo(this.container)[0];
+            this.packet.setAttribute('class', 'packet future');
+            this.packet.style.marginBottom = this.distance + 'px';
+            this.container.insertBefore(this.packet, this.container.firstChild);
           } else {
-            this.packet = $('<div class="packet past" />')
-              .css({
-                position: 'relative',
-                marginTop: this.distance
-              })
-              .appendTo(this.container)[0];
+            this.packet.setAttribute('class', 'packet past');
+            this.packet.style.marginTop = this.distance + 'px';
+            this.container.appendChild(this.packet);
           }
       }
 
       if (pindex > index) {
-        // We're going into the future.
         $(this.el).prependTo(this.packet);
       } else {
-        // We're going into the past.
         $(this.el).appendTo(this.packet);
       }
 
     },
 
     render: function() {
-      var $c = prepAnimation();
-      animateIn($c, this.el, template(this.model.toJSON()),
+      var $container = prepAnimation();
+      animateIn($container, this.el, template(this.model.toJSON()),
         this.packet, this.options.complete);
       return this;
     }
@@ -109,11 +101,11 @@ define([
       $children
         .find('img')
         .load(function() {
+          handling = false;
           handleAnimation($container, el, $children, packet, callback);
         });
     } else {
-      $container.remove();
-      callback();
+      callback.call(this);
     }
   }
 
@@ -123,6 +115,8 @@ define([
       setTimeout(handleAnimation, 100, $container, el, $children, packet, callback);
       return;
     }
+
+    animating = true;
 
     var $packet = $(packet);
     var w = $children.width();
@@ -145,7 +139,7 @@ define([
     for (var i = $prevs.length - 1; i >= Math.max(0, $prevs.length - 10); i--) {
       var $prev = $prevs.eq(i);
       if ($prev.position().top === $el.position().top) {
-        $prev.removeClass('stalactite-loaded');
+        $prev.addClass('stalactite-loaded');
         prevWidth += $prev.outerWidth();
       } else {
         continue;
@@ -167,8 +161,6 @@ define([
         .width(0);
     }
 
-    animating = true;
-
     $children
       .children()
       .height(0)  // Smarter height detection?
@@ -177,8 +169,7 @@ define([
         height: h
       }, 150, function() {
         animating = false;
-        callback();
-        $container.remove();
+        callback.call(this);
       });
 
   }

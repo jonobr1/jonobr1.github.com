@@ -25,8 +25,11 @@ require([
   'jonobr1/jquery.stalactite'
 ], function(Router, Collection, query, View, ScrollMap) {
 
+  // Figure out why page 5 is exceptionally slow in all browsers.
+  // In general speed things up! Has something to do with the view.
+
   var more_rows = true, total_rows, limit = 5, skip = 0;
-  var router, collection, views = [], scrollMap, $scroll;
+  var router, collection, scrollMap, $scroll;
   var page = 0, currentViews = [], existingPages = [], querying = false;
   var queueUI = _.identity;
 
@@ -99,7 +102,7 @@ require([
   function loadContent(data, backwards) {
     router.navigate('page/' + page);
     existingPages.push(parseInt(page));
-    currentViews = [];
+    currentViews.splice(0, currentViews.length);
     if (backwards) {
       data.records.reverse(); 
     }
@@ -119,18 +122,13 @@ require([
   }
 
   function addView(model) {
-
-    var view = new View({
+    currentViews.push(new View({
       model: model,
       id: model.cid,
-      views: views,
       container: $('#content')[0],
       complete: queueUI
-    });
-    views.splice(model.collection.indexOf(model), 0, view);
-    currentViews.push(view);
+    }));
     model.trigger('change');
-    // queueUI();  // Something's weird about the placement of this.
   }
 
   function updateUI() {
