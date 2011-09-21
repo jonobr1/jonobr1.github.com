@@ -34,7 +34,6 @@
       var $this = $(this);
       var packTimeout = null;
       var $newElems = prep($this, options);
-      var indexable = {};
       appendLoader($this);
 
       var prevThisIndex = index($this);
@@ -49,7 +48,7 @@
       if (prevThisIndex >= 0) {
 
         if ($this.children().index($newElems[0]) > 0) {
-          params = indexable = indexed[prevThisIndex];
+          params = indexed[prevThisIndex];
         }
 
       }
@@ -107,11 +106,10 @@
       function calculateOffset($content, origin, prevMinIndex, prevMaxIndex, i) {
 
         if (i >= $content.length) {
-          // TODO: CLEAN UP! By extending objects
           if (indexed[prevThisIndex]) { // update
-            indexed[prevThisIndex] = $.extend(indexed[prevThisIndex], indexable);
+            indexed[prevThisIndex] = $.extend(indexed[prevThisIndex], params);
           } else {  // push a new instance
-            indexed.push($.extend({ dom: $content.parent('div')[0] }, indexable));
+            indexed.push($.extend({ dom: $content.parent('div')[0] }, params));
           }
           options.complete.apply(this);
           removeLoader();
@@ -127,12 +125,12 @@
             y1 = $this.offset().top, y2 = y1 + $this.outerHeight();
 
         if ($prev.length > 0) {
-          if (x1 < $prev.offset().left && i > 0 && i !== indexed[prevThisIndex].i) {
+          if (x1 < $prev.offset().left && i > 0 && i !== params.i) {
             row++;
-            indexable.row = row;
-            indexable.prevMinIndex = prevMinIndex = prevMaxIndex;
-            indexable.prevMaxIndex = prevMaxIndex = i - 1;
-            indexable.i = i;
+            params.row = row;
+            params.prevMinIndex = prevMinIndex = prevMaxIndex;
+            params.prevMaxIndex = prevMaxIndex = i - 1;
+            params.i = i;
           }
         }
 
