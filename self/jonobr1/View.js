@@ -171,7 +171,7 @@ define([
 
     $children
       .children()
-      .height(0)
+      .height(0)  // Smarter height detection?
       .animate({
         width: w,
         height: h
