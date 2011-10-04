@@ -92,6 +92,11 @@ define([
 
   function animateIn($container, el, html, packet, callback) {
 
+    var complete = function() {
+      callback.call(this);
+      $container.remove();
+    };
+
     // Animate in
     var $children = $container
       .html(html)
@@ -102,10 +107,10 @@ define([
         .find('img')
         .load(function() {
           handling = false;
-          handleAnimation($container, el, $children, packet, callback);
+          handleAnimation($container, el, $children, packet, complete);
         });
     } else {
-      callback.call(this);
+      complete.call(this);
     }
   }
 
@@ -113,6 +118,7 @@ define([
 
     if (animating) {
       setTimeout(handleAnimation, 100, $container, el, $children, packet, callback);
+      // Try defer here or maybe even debounce?
       return;
     }
 

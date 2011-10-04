@@ -3,6 +3,9 @@ define([
   'jquery'
 ], function() {
 
+  var clientID = '4e7c946d2e0aaa7f3a000002';
+  var secret = 'da37b854f33626d99a0361c96f63890a';
+
   return function(params) {
 
     params = _.defaults(params || {}, {

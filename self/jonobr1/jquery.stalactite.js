@@ -268,4 +268,4 @@
     complete: function(value) { return value; }
   };
 
-})(jQuery)
+})(jQuery);
