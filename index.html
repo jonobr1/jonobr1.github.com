@@ -2,17 +2,20 @@
 <html>
   <head>
     <title>Penates</title>
-    <link href='http://fonts.googleapis.com/css?family=Lekton:400,700,400italic' rel='stylesheet' type='text/css'>
+    <!-- <link href='http://fonts.googleapis.com/css?family=Lekton:400,700,400italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='http://fonts.googleapis.com/css?family=Allerta+Stencil' rel='stylesheet' type='text/css'> -->
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
     <style type="text/css">
       * {
         margin: 0;
         padding: 0;
       }
       body {
-        margin: 144px;
+        margin: 25px auto;
       }
       .packet>* {
         padding: 10px;
+        position: relative;
       }
       .packet {
         text-align: center;
@@ -22,27 +25,28 @@
         max-height: 405px;
       }
       #playhead {
-        font-family: 'Lekton', monospace, sans-serif;
-        font-weight: 900;
-        font-size: 1.0em;
-        text-shadow: none;
-        color: #444;
-        text-align: right;
+        font-family: 'Lato', monospace;
+        text-align: center;
+        font-weight: 100;
+        text-shadow: 1px 1px 0 #f00;
+        color: #fcc;
       }
       div.navigation {
+        position: relative;
         text-align: center;
         font: 100 1.25em/1em Arial, sans-serif;
+        z-index: 9999;
       }
       #next a:link, #next a:visited,
       #prev a:link, #prev a:visited {
-        font-family: Georgia, Times, serif;
+        font-family: Arial, Helvetica, sans-serif;
         font-weight: 100;
         font-size: 1.25em;
         display: inline-block;
         color: #444;
         padding: 25px;
         margin: 12px;
-
+        text-decoration: none;
       }
       #next a:hover, #next a:active,
       #prev a:hover, #prev a:active {
@@ -55,8 +59,8 @@
     <script type="text/javascript" src="/self/main.js"></script>
   </head>
   <body>
-    <div id="prev" class="navigation">&#8593;<br /><a href="#">Ad reliquum futurum.</a></div>
+    <div id="prev" class="navigation"><a href="#">&#8593;</a></div>
     <div id="content"></div>
-    <div id="next" class="navigation"><a href="#">In residuum praeteritum.</a><br />&#8595;</div>
+    <div id="next" class="navigation"><a href="#">&#8595;</a></div>
   </body>
 </html>

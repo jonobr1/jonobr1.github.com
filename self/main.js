@@ -3,9 +3,9 @@ require({
   "paths": {
     "jquery": "/third-party/jquery.min",
     "backbone": "/third-party/backbone/backbone",
-    "text": "/third-party/requirejs/text",
+    "text": "/third-party/require/text",
     "underscore": "/third-party/underscore/underscore-min",
-    "order": "/third-party/requirejs/order",
+    "order": "/third-party/require/order",
     "enhance.animate": "/third-party/animate.enhanced/jquery.animate-enhanced.min"
   }, 
   "baseUrl": "/self", 
@@ -28,43 +28,77 @@ require([
   // Figure out why page 5 is exceptionally slow in all browsers.
   // In general speed things up! Has something to do with the view.
 
-  var more_rows = true, total_rows, limit = 5, skip = 0;
-  var router, collection, scrollMap, $scroll;
+  var more_rows = true, total_rows, limit = 1, skip = 0;
+  var router, collection, scrollMap, $scroll, $win;
   var page = 0, currentViews = [], existingPages = [], querying = false;
   var queueUI = _.identity;
 
   require.ready(function() {
 
+    var lazyResize = _.debounce(onWindowResize, 350);
+    $win = $(window).resize(lazyResize);
+
+    // Set size of document
+    $('body')
+      .width($win.width() - 25);
+
     scrollMap = new ScrollMap(onDocumentScroll);
     $scroll = $('<p id="playhead" />')
       .css({
         position: 'fixed',
-        top: 10,
-        right: 10
+        top: 0,
+        left: 0,
+        zIndex: 500,
+        opacity: 0,
+        fontSize: $win.height() / 3.0 - 10,
+        lineHeight: '100%'
       })
-      .html('<span class="date" style="opacity: 0;"/>')
+      .html('<span class="date" />')
       .appendTo('body');
+
+    $scroll.find('span').css({
+      position: 'relative',
+      zIndex: 9999
+    })
 
     collection = new Collection()
       .bind('add', addView);
 
      router = new Router()
-      .bind('route:page', loadFeed)
+      .bind('route:case', loadFeed)
       .bind('route:single', loadSingle)
       .init();
 
   });
 
+  function onWindowResize() {
+
+    $scroll
+      .css({
+        left: ($win.width() - $scroll.outerWidth()) / 2,
+        top: ($win.height() - $scroll.outerHeight()) / 2
+      });
+
+  }
+
   function next(e) {
+
     e.preventDefault();
-    loadFeed(parseInt(page) + 1);
-    $(this).unbind('click');
+    $(this)
+      .unbind('click')
+      .animate({ opacity: 0 }, function() {
+        loadFeed(parseInt(page) + 1);
+      });
   }
 
   function prev(e) {
+
     e.preventDefault();
-    loadFeed(parseInt(page) - 1, true);
-    $(this).unbind('click');
+    $(this)
+      .unbind('click')
+      .animate({ opacity: 0 }, function() {
+        loadFeed(parseInt(page) - 1, true);
+      });
   }
 
   function loadFeed(index, direction) {
@@ -76,6 +110,10 @@ require([
         loadFeed(index + 1);
       }
     } else {
+
+      if (index <= 0) {
+        return false;
+      }
 
       if (!querying) {
 
@@ -100,7 +138,7 @@ require([
   }
 
   function loadContent(data, backwards) {
-    router.navigate('page/' + page);
+    router.navigate('case/' + page);
     existingPages.push(parseInt(page));
     currentViews.splice(0, currentViews.length);
     if (backwards) {
@@ -112,8 +150,6 @@ require([
     });
     more_rows = data.more_rows;
     total_rows = data.total_rows;
-    $('#next').click(next);
-    $('#prev').click(prev);
   }
 
   // Does not exist in Public API yet.
@@ -137,8 +173,13 @@ require([
       return view.packet;
     }));
     $(packets).stalactite({
+      fluid: false,
       cssSelector: '.image-loaded',
-      cssPrep: false
+      cssPrep: false,
+      complete: function() {
+        $('#next').click(next).fadeIn();
+        $('#prev').click(prev).fadeIn();
+      }
     });
     scrollMap.init();
     scrollMap.getScrollPosition();
@@ -146,18 +187,15 @@ require([
 
   function onDocumentScroll(e) {
     $scroll
-      .css({
-        // marginTop: (e.y * ($(window).height())) + 10
-      })
-      .stop().animate({ // TODO: Optimize
-      }, function() {
-        $(this).find('span')
-        .animate({
-          opacity: 1
-        });
-      })
       .find('span')
         .html(formatDate(e.y));
+
+    if ($scroll.css('opacity') < 1) {
+      _.delay(function() {
+        $scroll.animate({ opacity: 1.0 });
+        onWindowResize();
+      }, 1000);
+    }
   }
 
   function formatDate(f) {
@@ -174,7 +212,7 @@ require([
     var minutes = (date.getMinutes() >= 10) ? date.getMinutes() : '0' + date.getMinutes();
     var seconds = (date.getSeconds() >= 10) ? date.getSeconds() : '0' + date.getSeconds();
 
-    return day + '&middot;' + month + '&middot;' + year + '<br />'
+    return day + '\/' + month + '\/' + year + '<br />'
       + hour + '\:' + minutes + '\:' + seconds;
 
   }

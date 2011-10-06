@@ -198,7 +198,7 @@
       if (args.opacity == $dom.css('opacity')) {  // Weird bug.
         delete args.opacity;
       }
-      $dom.css('z-index', 'auto').stop().animate(args,
+      $dom/*.css('z-index', 'auto')*/.stop().animate(args,
         options.duration, options.easing, callback);
     }
 
@@ -235,8 +235,8 @@
           position: 'relative',
           display: 'inline-block',
           verticalAlign: 'top',
-          opacity: 0,
-          zIndex: -1
+          opacity: 0
+          // zIndex: -1
         });
     }
 

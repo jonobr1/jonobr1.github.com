@@ -17,7 +17,7 @@ define([
 
     initialize: function() {
 
-      this.route('page/:page', 'page', onRouted);
+      this.route('case/:page', 'case', onRouted);
       this.route('single/:slug', 'single', onRouted);
 
     },
@@ -27,7 +27,7 @@ define([
       Backbone.history.start({ pushState: true });
 
       if (!indexed) {
-        this.navigate('page/1', true);
+        this.navigate('case/1', true);
       }
 
       return this;

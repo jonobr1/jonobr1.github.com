@@ -10,9 +10,11 @@ define([
 
   var View = Backbone.View.extend({
 
-    tagName: 'div',
+    tagName: 'div', // Maybe try to remove this?
 
     initialize: function() {
+
+      var _this = this;
 
       if (_.isUndefined(this.options.container)) {
         this.container = document.body;
@@ -49,24 +51,34 @@ define([
 
         this.packet = $('<div />')
           .css({
+            marginTop: 0,
+            marginBottom: 0,
             position: 'relative'
           })[0];
 
           if (pindex > index) {
             this.packet.setAttribute('class', 'packet future');
-            this.packet.style.marginBottom = this.distance + 'px';
             this.container.insertBefore(this.packet, this.container.firstChild);
+            $(this.packet).animate({
+              marginBottom: _this.distance
+            }, 350);
           } else {
             this.packet.setAttribute('class', 'packet past');
-            this.packet.style.marginTop = this.distance + 'px';
             this.container.appendChild(this.packet);
+            $(this.packet).animate({
+              marginTop: _this.distance
+            }, 350);
           }
       }
 
       if (pindex > index) {
-        $(this.el).prependTo(this.packet);
+        $(this.el).prependTo(this.packet).css({
+          zIndex: Math.floor(Math.random() * 1000)
+        });
       } else {
-        $(this.el).appendTo(this.packet);
+        $(this.el).appendTo(this.packet).css({
+          zIndex: Math.floor(Math.random() * 1000)
+        });
       }
 
     },
@@ -75,6 +87,7 @@ define([
       var $container = prepAnimation();
       animateIn($container, this.el, template(this.model.toJSON()),
         this.packet, this.options.complete);
+      // $container.html(template(this.model.toJSON()));
       return this;
     }
 
@@ -134,7 +147,7 @@ define([
         display: 'inline-block',
         verticalAlign: 'top',
         opacity: 0,
-        zIndex: -1
+        // zIndex: -1
       })
       .addClass('image-loaded');
 
@@ -169,7 +182,7 @@ define([
 
     $children
       .children()
-      .height(0)  // Smarter height detection?
+      // .height(0)  // Smarter height detection?
       .animate({
         width: w,
         height: h
