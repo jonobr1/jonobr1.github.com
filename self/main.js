@@ -27,20 +27,26 @@ require([
 
   // Figure out why page 5 is exceptionally slow in all browsers.
   // In general speed things up! Has something to do with the view.
+  // TODO: Make touch events work !!
 
   var more_rows = true, total_rows, limit = 1, skip = 0;
   var router, collection, scrollMap, $scroll, $win;
   var page = 0, currentViews = [], existingPages = [], querying = false;
-  var queueUI = _.identity;
+  var queueUI = _.identity, total_gimmes = 0, loader;
 
   require.ready(function() {
 
-    var lazyResize = _.debounce(onWindowResize, 350);
-    $win = $(window).resize(lazyResize);
+    loader = $('')[0];
 
-    // Set size of document
-    $('body')
-      .width($win.width() - 25);
+    var lazyResize = _.debounce(function() {
+        $scroll.css({
+          opacity: 1.0
+        });
+        onWindowResized();
+      }, 2500);
+
+    // width x height ratio of Lato
+    var ratio = .7;
 
     scrollMap = new ScrollMap(onDocumentScroll);
     $scroll = $('<p id="playhead" />')
@@ -50,7 +56,6 @@ require([
         left: 0,
         zIndex: 500,
         opacity: 0,
-        fontSize: $win.height() / 3.0 - 10,
         lineHeight: '100%'
       })
       .html('<span class="date" />')
@@ -60,6 +65,20 @@ require([
       position: 'relative',
       zIndex: 9999
     })
+
+    $win = $(window)
+      .resize(function() {
+        $scroll.css('opacity', 0.0);  // Figure out
+        lazyResize.apply(this, arguments);
+        onWindowResized.apply(this, arguments);
+      });
+    _.delay(function() {
+      $win.trigger('resize');
+    }, 350);  // TODO: Based on Google WebLoader API
+
+    // Solidify size of document
+    $('body')
+      .width($win.width() - 25);
 
     collection = new Collection()
       .bind('add', addView);
@@ -71,47 +90,83 @@ require([
 
   });
 
-  function onWindowResize() {
+  function onWindowResized() {
 
-    $scroll
-      .css({
+    var ratio = .7;
+    var fontSize = ($win.width() < $win.height()) ?
+      ($win.width() * ratio / 3.0 - 10) : ($win.height() / 3.0 - 10);
+
+    _.defer(function() {
+      $scroll.css({
+        fontSize: fontSize,
         left: ($win.width() - $scroll.outerWidth()) / 2,
         top: ($win.height() - $scroll.outerHeight()) / 2
       });
+    });
 
   }
 
   function next(e) {
 
     e.preventDefault();
-    $(this)
-      .unbind('click')
-      .animate({ opacity: 0 }, function() {
-        loadFeed(parseInt(page) + 1);
-      });
+    if (!querying) {
+      var $a = $(this)
+        .find('a')
+        .addClass('unselect')
+        .html('<img src="data:image/gif;base64, R0lGODlhEAAQAPQAAP///zMzM/n5+V9fX5ycnDc3N1FRUd7e3rm5uURERJGRkYSEhOnp6aysrNHR0WxsbHd3dwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAAFUCAgjmRpnqUwFGwhKoRgqq2YFMaRGjWA8AbZiIBbjQQ8AmmFUJEQhQGJhaKOrCksgEla+KIkYvC6SJKQOISoNSYdeIk1ayA8ExTyeR3F749CACH5BAkKAAAALAAAAAAQABAAAAVoICCKR9KMaCoaxeCoqEAkRX3AwMHWxQIIjJSAZWgUEgzBwCBAEQpMwIDwY1FHgwJCtOW2UDWYIDyqNVVkUbYr6CK+o2eUMKgWrqKhj0FrEM8jQQALPFA3MAc8CQSAMA5ZBjgqDQmHIyEAIfkECQoAAAAsAAAAABAAEAAABWAgII4j85Ao2hRIKgrEUBQJLaSHMe8zgQo6Q8sxS7RIhILhBkgumCTZsXkACBC+0cwF2GoLLoFXREDcDlkAojBICRaFLDCOQtQKjmsQSubtDFU/NXcDBHwkaw1cKQ8MiyEAIfkECQoAAAAsAAAAABAAEAAABVIgII5kaZ6AIJQCMRTFQKiDQx4GrBfGa4uCnAEhQuRgPwCBtwK+kCNFgjh6QlFYgGO7baJ2CxIioSDpwqNggWCGDVVGphly3BkOpXDrKfNm/4AhACH5BAkKAAAALAAAAAAQABAAAAVgICCOZGmeqEAMRTEQwskYbV0Yx7kYSIzQhtgoBxCKBDQCIOcoLBimRiFhSABYU5gIgW01pLUBYkRItAYAqrlhYiwKjiWAcDMWY8QjsCf4DewiBzQ2N1AmKlgvgCiMjSQhACH5BAkKAAAALAAAAAAQABAAAAVfICCOZGmeqEgUxUAIpkA0AMKyxkEiSZEIsJqhYAg+boUFSTAkiBiNHks3sg1ILAfBiS10gyqCg0UaFBCkwy3RYKiIYMAC+RAxiQgYsJdAjw5DN2gILzEEZgVcKYuMJiEAOwAAAAAAAAAAAA==" />');
+        loadFeed(parseInt(total_gimmes - page) - 1, false, function(error) {
+          $a
+            .removeClass('unselect')
+            .html((error) ? 'x' : '&#8595;');
+        });
+    }
   }
 
   function prev(e) {
 
     e.preventDefault();
-    $(this)
-      .unbind('click')
-      .animate({ opacity: 0 }, function() {
-        loadFeed(parseInt(page) - 1, true);
-      });
+    if (!querying) {
+      var $a = $(this)
+        .find('a')
+        .addClass('unselect')
+        .html('<img src="data:image/gif;base64, R0lGODlhEAAQAPQAAP///zMzM/n5+V9fX5ycnDc3N1FRUd7e3rm5uURERJGRkYSEhOnp6aysrNHR0WxsbHd3dwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAAFUCAgjmRpnqUwFGwhKoRgqq2YFMaRGjWA8AbZiIBbjQQ8AmmFUJEQhQGJhaKOrCksgEla+KIkYvC6SJKQOISoNSYdeIk1ayA8ExTyeR3F749CACH5BAkKAAAALAAAAAAQABAAAAVoICCKR9KMaCoaxeCoqEAkRX3AwMHWxQIIjJSAZWgUEgzBwCBAEQpMwIDwY1FHgwJCtOW2UDWYIDyqNVVkUbYr6CK+o2eUMKgWrqKhj0FrEM8jQQALPFA3MAc8CQSAMA5ZBjgqDQmHIyEAIfkECQoAAAAsAAAAABAAEAAABWAgII4j85Ao2hRIKgrEUBQJLaSHMe8zgQo6Q8sxS7RIhILhBkgumCTZsXkACBC+0cwF2GoLLoFXREDcDlkAojBICRaFLDCOQtQKjmsQSubtDFU/NXcDBHwkaw1cKQ8MiyEAIfkECQoAAAAsAAAAABAAEAAABVIgII5kaZ6AIJQCMRTFQKiDQx4GrBfGa4uCnAEhQuRgPwCBtwK+kCNFgjh6QlFYgGO7baJ2CxIioSDpwqNggWCGDVVGphly3BkOpXDrKfNm/4AhACH5BAkKAAAALAAAAAAQABAAAAVgICCOZGmeqEAMRTEQwskYbV0Yx7kYSIzQhtgoBxCKBDQCIOcoLBimRiFhSABYU5gIgW01pLUBYkRItAYAqrlhYiwKjiWAcDMWY8QjsCf4DewiBzQ2N1AmKlgvgCiMjSQhACH5BAkKAAAALAAAAAAQABAAAAVfICCOZGmeqEgUxUAIpkA0AMKyxkEiSZEIsJqhYAg+boUFSTAkiBiNHks3sg1ILAfBiS10gyqCg0UaFBCkwy3RYKiIYMAC+RAxiQgYsJdAjw5DN2gILzEEZgVcKYuMJiEAOwAAAAAAAAAAAA==" />');
+        loadFeed(parseInt(total_gimmes - page) + 1, true, function(error) {
+          $a
+            .removeClass('unselect')
+            .html((error) ? 'x' : '&#8593;');
+        });
+    }
   }
 
-  function loadFeed(index, direction) {
+  function loadFeed(index, direction, onFinishExec) {
 
-    if (_.include(existingPages, index)) {
+    // Really round about but I guess it works :\
+    if (total_gimmes <= 0) {
+      querying = true;
+      query({
+        limit: 0,
+        skip: 0,
+        callback: function(data) {
+          querying = false;
+          if (_.isNumber(data.total_records)) {
+            total_gimmes = data.total_records;
+            loadFeed(index || total_gimmes, direction);
+          }
+        }
+      });
+      return false;
+    }
+
+    if (_.include(existingPages, total_gimmes - index)) {
       if (direction) {
-        loadFeed(index - 1, true);
+        loadFeed(index + 1, true, onFinishExec);
       } else {
-        loadFeed(index + 1);
+        loadFeed(index - 1, false, onFinishExec);
       }
     } else {
 
-      if (index <= 0) {
+      if (index <= 0 || index > total_gimmes) {
+        onFinishExec.call(this, true);
         return false;
       }
 
@@ -119,15 +174,15 @@ require([
 
         querying = true;
 
-        page = index;
-        skip = limit * (index - 1);
+        page = total_gimmes - index;
+        skip = limit * page;
 
         query({
           limit: limit,
           skip: skip,
           callback: function(data) {
             querying = false;
-            loadContent(data, direction)
+            loadContent(data, direction, index, onFinishExec)
           }
         });
 
@@ -137,8 +192,8 @@ require([
 
   }
 
-  function loadContent(data, backwards) {
-    router.navigate('case/' + page);
+  function loadContent(data, backwards, index, onFinishExec) {
+    router.navigate('case/' + index);
     existingPages.push(parseInt(page));
     currentViews.splice(0, currentViews.length);
     if (backwards) {
@@ -150,6 +205,9 @@ require([
     });
     more_rows = data.more_rows;
     total_rows = data.total_rows;
+    if (_.isFunction(onFinishExec)) {
+      onFinishExec.call(this);
+    }
   }
 
   // Does not exist in Public API yet.
@@ -175,6 +233,7 @@ require([
     $(packets).stalactite({
       fluid: false,
       cssSelector: '.image-loaded',
+      loader: '',
       cssPrep: false,
       complete: function() {
         $('#next').click(next).fadeIn();
@@ -188,14 +247,7 @@ require([
   function onDocumentScroll(e) {
     $scroll
       .find('span')
-        .html(formatDate(e.y));
-
-    if ($scroll.css('opacity') < 1) {
-      _.delay(function() {
-        $scroll.animate({ opacity: 1.0 });
-        onWindowResize();
-      }, 1000);
-    }
+        .html(formatDate(e.y)); // Doesn't work in FF
   }
 
   function formatDate(f) {

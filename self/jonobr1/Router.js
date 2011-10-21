@@ -27,7 +27,7 @@ define([
       Backbone.history.start({ pushState: true });
 
       if (!indexed) {
-        this.navigate('case/1', true);
+        this.navigate('case/', true);
       }
 
       return this;

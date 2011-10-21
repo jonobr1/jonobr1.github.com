@@ -2,8 +2,6 @@
 <html>
   <head>
     <title>Penates</title>
-    <!-- <link href='http://fonts.googleapis.com/css?family=Lekton:400,700,400italic' rel='stylesheet' type='text/css'> -->
-    <!-- <link href='http://fonts.googleapis.com/css?family=Allerta+Stencil' rel='stylesheet' type='text/css'> -->
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
     <style type="text/css">
       * {
@@ -32,10 +30,19 @@
         color: #fcc;
       }
       div.navigation {
-        position: relative;
+        position: fixed;
         text-align: center;
         font: 100 1.25em/1em Arial, sans-serif;
         z-index: 9999;
+        width: 100%;
+      }
+      #prev {
+        top: 0;
+        left: 0;
+      }
+      #next {
+        left: 0;
+        bottom: 0;
       }
       #next a:link, #next a:visited,
       #prev a:link, #prev a:visited {
@@ -47,11 +54,26 @@
         padding: 25px;
         margin: 12px;
         text-decoration: none;
+        background: #fff;
       }
       #next a:hover, #next a:active,
       #prev a:hover, #prev a:active {
         background: #ffd;
         text-decoration: none;
+      }
+      a.unselect:link, a.unselect:visited {
+        cursor: default;
+      }
+      a.unselect:hover, a.unselect:active {
+        background: #fff !important;
+      }
+      #playhead {
+        /* not working */
+        -webkit-transition: opacity 350ms cubic-bezier(0.785, 0.135, 0.150, 0.860);
+           -moz-transition: opacity 350ms cubic-bezier(0.785, 0.135, 0.150, 0.860);
+            -ms-transition: opacity 350ms cubic-bezier(0.785, 0.135, 0.150, 0.860);
+             -o-transition: opacity 350ms cubic-bezier(0.785, 0.135, 0.150, 0.860);
+                transition: opacity 350ms cubic-bezier(0.785, 0.135, 0.150, 0.860);
       }
     </style>
     <script type="text/javascript"

@@ -59,23 +59,29 @@ define([
           if (pindex > index) {
             this.packet.setAttribute('class', 'packet future');
             this.container.insertBefore(this.packet, this.container.firstChild);
-            $(this.packet).animate({
-              marginBottom: _this.distance
-            }, 350);
+            $(this.packet)
+              .stop()
+              .animate({
+                marginBottom: _this.distance
+              }, 350);
           } else {
             this.packet.setAttribute('class', 'packet past');
             this.container.appendChild(this.packet);
-            $(this.packet).animate({
-              marginTop: _this.distance
-            }, 350);
+            $(this.packet)
+              .stop()
+              .animate({
+                marginTop: _this.distance
+              }, 350);
           }
       }
 
       if (pindex > index) {
+        this.prepended = true;
         $(this.el).prependTo(this.packet).css({
           zIndex: Math.floor(Math.random() * 1000)
         });
       } else {
+        this.prepended = false;
         $(this.el).appendTo(this.packet).css({
           zIndex: Math.floor(Math.random() * 1000)
         });
@@ -86,8 +92,7 @@ define([
     render: function() {
       var $container = prepAnimation();
       animateIn($container, this.el, template(this.model.toJSON()),
-        this.packet, this.options.complete);
-      // $container.html(template(this.model.toJSON()));
+        this.packet, this.prepended, this.options.complete);
       return this;
     }
 
@@ -103,7 +108,7 @@ define([
       .appendTo('body');
   }
 
-  function animateIn($container, el, html, packet, callback) {
+  function animateIn($container, el, html, packet, prepended, callback) {
 
     var complete = function() {
       callback.call(this);
@@ -120,19 +125,19 @@ define([
         .find('img')
         .load(function() {
           handling = false;
-          handleAnimation($container, el, $children, packet, complete);
+          handleAnimation($container, el, $children, packet, prepended, complete);
         });
     } else {
       complete.call(this);
     }
   }
 
-  function handleAnimation($container, el, $children, packet, callback) {
+  function handleAnimation($container, el, $children, packet, prepended, callback) {
 
     if (animating) {
       setTimeout(handleAnimation, 100, $container, el, $children, packet, callback);
       // Try defer here or maybe even debounce?
-      return;
+      return false;
     }
 
     animating = true;
@@ -155,7 +160,7 @@ define([
     $prevs = $packet.find('.post');
 
     // Possibly clean up?                // a threshold...
-    for (var i = $prevs.length - 1; i >= Math.max(0, $prevs.length - 10); i--) {
+    for (var i = $prevs.length - 1, min = Math.max(0, $prevs.length - 10); i >= min; i--) {
       var $prev = $prevs.eq(i);
       if ($prev.position().top === $el.position().top) {
         $prev.addClass('stalactite-loaded');
@@ -166,30 +171,33 @@ define([
     }
 
     var x1 = prevWidth + $el.outerWidth() + w;
+    var width = (x1 > $packet.width() && !prepended) ? w : 0;
 
     $children
-      .appendTo(el);
-
-    if (x1 > $packet.width()) {
-      $children
+      .appendTo(el)
         .children()
-        .width(w);
-    } else {
-      $children
-        .children()
-        .width(0);
-    }
-
-    $children
-      .children()
-      // .height(0)  // Smarter height detection?
-      .animate({
-        width: w,
-        height: h
-      }, 150, function() {
-        animating = false;
-        callback.call(this);
-      });
+        .width(width)
+        .height(0)  // Smarter height detection?
+        .stop()
+        .animate({
+          width: w,
+          height: h
+        }, 150, function() {
+          animating = false;
+          if (!prepended || $('body').scrollTop() > 0) {
+            var that = this;
+            _.delay(function() {
+              var offset = (prepended) ? 0 : ($(document).height() + 500);
+              $('html, body').animate({
+                scrollTop: offset
+              }, 350, function() {
+                callback.call(that);
+              });
+            }, 350);
+          } else {
+            callback.call(this);
+          }
+        });
 
   }
 
@@ -205,14 +213,17 @@ define([
         if (!href) {
           href = o.content.full;
         }
-        return '<a href="' + o.source + '" target="_blank"><img src="' + href + '" alt="' + o.title + '"/></a>';
+        return '<a href="' + o.source + '" target="_blank"><img src="' + href + '" alt="' + o.title.replace(/\<(.*)\>/g, '') + '"/></a>';
         break;
       case 'embed':
-        // return o.content.info.html;
-        return '';
+        var attr = '';
+        if (o.content.info.thumbnail_width > $('body').width()) {
+          attr = 'width="' + ($('body').width() - 50) + '" ';
+        }
+        return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.thumbnail + '" ' + attr + 'alt="' + content.title.replace(/\<(.*)\>/g, '') + '"/></a>';
         break;
       case 'page':
-        return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.thumb + '" alt="' + o.title + '"/></a>';
+        return '<a href="' + o.source + '" target="_blank"><img src="' + o.content.thumb + '" alt="' + o.title.replace(/\<(.*)\>/g, '') + '"/></a>';
         break;
       default:
         return '';
