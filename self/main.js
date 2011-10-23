@@ -18,32 +18,26 @@ require([
   'jonobr1/query',
   'jonobr1/View',
   'jonobr1/ScrollMap',
+  'jonobr1/goog.webfont',
   'backbone',
   'underscore',
   'jquery',
   'enhance.animate',
   'jonobr1/jquery.stalactite'
-], function(Router, Collection, query, View, ScrollMap) {
+], function(Router, Collection, query, View, ScrollMap, GoogleWebFont) {
 
-  // Figure out why page 5 is exceptionally slow in all browsers.
   // In general speed things up! Has something to do with the view.
   // TODO: Make touch events work !!
 
   var more_rows = true, total_rows, limit = 1, skip = 0;
   var router, collection, scrollMap, $scroll, $win;
   var page = 0, currentViews = [], existingPages = [], querying = false;
-  var queueUI = _.identity, total_gimmes = 0, loader;
+  var queueUI = _.identity, total_gimmes = 0, loader, fontLoaded = false;
+  var lazyResize, $date, initializeScene;
 
   require.ready(function() {
 
     loader = $('')[0];
-
-    var lazyResize = _.debounce(function() {
-        $scroll.css({
-          opacity: 1.0
-        });
-        onWindowResized();
-      }, 2500);
 
     // width x height ratio of Lato
     var ratio = .7;
@@ -61,20 +55,42 @@ require([
       .html('<span class="date" />')
       .appendTo('body');
 
-    $scroll.find('span').css({
+    $date = $scroll.find('span').css({
       position: 'relative',
       zIndex: 9999
     })
 
+    lazyResize = _.debounce(function() {
+        $scroll.css({
+          opacity: 1.0
+        });
+      }, 700);
+
     $win = $(window)
       .resize(function() {
-        $scroll.css('opacity', 0.0);  // Figure out
-        lazyResize.apply(this, arguments);
+        $scroll.css('opacity', 0.0);
         onWindowResized.apply(this, arguments);
       });
-    _.delay(function() {
+    var gwf = new GoogleWebFont('Lato:100', function() {
+      fontLoaded = true;
       $win.trigger('resize');
-    }, 350);  // TODO: Based on Google WebLoader API
+    });
+
+    initializeScene = _.once(function() {
+      scrollMap.init();
+      if (new RegExp(total_gimmes.toString()).test(window.location)) {
+        $('#prev a').addClass('unselect').html('x');
+      } else if (new RegExp('1').test(window.location)) {
+        $('#next a').addClass('unselect').html('x');
+      }
+      var css = {
+        position: 'relative',
+        zIndex: '9999'
+      }
+      $('#next a').animate({ opacity: 1.0 }).click(next);
+      $('#prev a').animate({ opacity: 1.0 }).click(prev);
+      $win.trigger('resize');
+    })
 
     // Solidify size of document
     $('body')
@@ -92,18 +108,26 @@ require([
 
   function onWindowResized() {
 
-    var ratio = .7;
-    var fontSize = ($win.width() < $win.height()) ?
-      ($win.width() * ratio / 3.0 - 10) : ($win.height() / 3.0 - 10);
+    if (fontLoaded && $date.html() !== '') {
 
-    _.defer(function() {
-      $scroll.css({
-        fontSize: fontSize,
-        left: ($win.width() - $scroll.outerWidth()) / 2,
-        top: ($win.height() - $scroll.outerHeight()) / 2
+      var ratio = .7;
+      var fontSize = ($win.width() < $win.height()) ?
+        ($win.width() * ratio / 3.0 - 10) : ($win.height() / 3.0 - 10);
+
+      $scroll.css('font-size', fontSize);
+
+      _.defer(function() {
+        var x = ($win.width() - $scroll.outerWidth()) / 2;
+        var y = ($win.height() - $scroll.outerHeight()) / 2;
+        $scroll.css({
+          left: x,
+          top: y
+        });
       });
-    });
 
+      lazyResize.apply(this, arguments);
+
+    }
   }
 
   function next(e) {
@@ -111,13 +135,17 @@ require([
     e.preventDefault();
     if (!querying) {
       var $a = $(this)
-        .find('a')
         .addClass('unselect')
         .html('<img src="data:image/gif;base64, R0lGODlhEAAQAPQAAP///zMzM/n5+V9fX5ycnDc3N1FRUd7e3rm5uURERJGRkYSEhOnp6aysrNHR0WxsbHd3dwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAAFUCAgjmRpnqUwFGwhKoRgqq2YFMaRGjWA8AbZiIBbjQQ8AmmFUJEQhQGJhaKOrCksgEla+KIkYvC6SJKQOISoNSYdeIk1ayA8ExTyeR3F749CACH5BAkKAAAALAAAAAAQABAAAAVoICCKR9KMaCoaxeCoqEAkRX3AwMHWxQIIjJSAZWgUEgzBwCBAEQpMwIDwY1FHgwJCtOW2UDWYIDyqNVVkUbYr6CK+o2eUMKgWrqKhj0FrEM8jQQALPFA3MAc8CQSAMA5ZBjgqDQmHIyEAIfkECQoAAAAsAAAAABAAEAAABWAgII4j85Ao2hRIKgrEUBQJLaSHMe8zgQo6Q8sxS7RIhILhBkgumCTZsXkACBC+0cwF2GoLLoFXREDcDlkAojBICRaFLDCOQtQKjmsQSubtDFU/NXcDBHwkaw1cKQ8MiyEAIfkECQoAAAAsAAAAABAAEAAABVIgII5kaZ6AIJQCMRTFQKiDQx4GrBfGa4uCnAEhQuRgPwCBtwK+kCNFgjh6QlFYgGO7baJ2CxIioSDpwqNggWCGDVVGphly3BkOpXDrKfNm/4AhACH5BAkKAAAALAAAAAAQABAAAAVgICCOZGmeqEAMRTEQwskYbV0Yx7kYSIzQhtgoBxCKBDQCIOcoLBimRiFhSABYU5gIgW01pLUBYkRItAYAqrlhYiwKjiWAcDMWY8QjsCf4DewiBzQ2N1AmKlgvgCiMjSQhACH5BAkKAAAALAAAAAAQABAAAAVfICCOZGmeqEgUxUAIpkA0AMKyxkEiSZEIsJqhYAg+boUFSTAkiBiNHks3sg1ILAfBiS10gyqCg0UaFBCkwy3RYKiIYMAC+RAxiQgYsJdAjw5DN2gILzEEZgVcKYuMJiEAOwAAAAAAAAAAAA==" />');
         loadFeed(parseInt(total_gimmes - page) - 1, false, function(error) {
-          $a
-            .removeClass('unselect')
-            .html((error) ? 'x' : '&#8595;');
+          if (error) {
+            $a
+              .html('x');
+          } else {
+            $a
+              .removeClass('unselect')
+              .html('&#8595;');
+          }
         });
     }
   }
@@ -127,13 +155,17 @@ require([
     e.preventDefault();
     if (!querying) {
       var $a = $(this)
-        .find('a')
         .addClass('unselect')
         .html('<img src="data:image/gif;base64, R0lGODlhEAAQAPQAAP///zMzM/n5+V9fX5ycnDc3N1FRUd7e3rm5uURERJGRkYSEhOnp6aysrNHR0WxsbHd3dwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAAFUCAgjmRpnqUwFGwhKoRgqq2YFMaRGjWA8AbZiIBbjQQ8AmmFUJEQhQGJhaKOrCksgEla+KIkYvC6SJKQOISoNSYdeIk1ayA8ExTyeR3F749CACH5BAkKAAAALAAAAAAQABAAAAVoICCKR9KMaCoaxeCoqEAkRX3AwMHWxQIIjJSAZWgUEgzBwCBAEQpMwIDwY1FHgwJCtOW2UDWYIDyqNVVkUbYr6CK+o2eUMKgWrqKhj0FrEM8jQQALPFA3MAc8CQSAMA5ZBjgqDQmHIyEAIfkECQoAAAAsAAAAABAAEAAABWAgII4j85Ao2hRIKgrEUBQJLaSHMe8zgQo6Q8sxS7RIhILhBkgumCTZsXkACBC+0cwF2GoLLoFXREDcDlkAojBICRaFLDCOQtQKjmsQSubtDFU/NXcDBHwkaw1cKQ8MiyEAIfkECQoAAAAsAAAAABAAEAAABVIgII5kaZ6AIJQCMRTFQKiDQx4GrBfGa4uCnAEhQuRgPwCBtwK+kCNFgjh6QlFYgGO7baJ2CxIioSDpwqNggWCGDVVGphly3BkOpXDrKfNm/4AhACH5BAkKAAAALAAAAAAQABAAAAVgICCOZGmeqEAMRTEQwskYbV0Yx7kYSIzQhtgoBxCKBDQCIOcoLBimRiFhSABYU5gIgW01pLUBYkRItAYAqrlhYiwKjiWAcDMWY8QjsCf4DewiBzQ2N1AmKlgvgCiMjSQhACH5BAkKAAAALAAAAAAQABAAAAVfICCOZGmeqEgUxUAIpkA0AMKyxkEiSZEIsJqhYAg+boUFSTAkiBiNHks3sg1ILAfBiS10gyqCg0UaFBCkwy3RYKiIYMAC+RAxiQgYsJdAjw5DN2gILzEEZgVcKYuMJiEAOwAAAAAAAAAAAA==" />');
         loadFeed(parseInt(total_gimmes - page) + 1, true, function(error) {
-          $a
-            .removeClass('unselect')
-            .html((error) ? 'x' : '&#8593;');
+          if (error) {
+            $a
+              .html('x');
+          } else {
+            $a
+              .removeClass('unselect')
+              .html('&#8593;');
+          }
         });
     }
   }
@@ -236,18 +268,15 @@ require([
       loader: '',
       cssPrep: false,
       complete: function() {
-        $('#next').click(next).fadeIn();
-        $('#prev').click(prev).fadeIn();
+        initializeScene();
+        scrollMap.getScrollPosition();
       }
     });
-    scrollMap.init();
-    scrollMap.getScrollPosition();
   }
 
   function onDocumentScroll(e) {
-    $scroll
-      .find('span')
-        .html(formatDate(e.y)); // Doesn't work in FF
+    $date
+      .html(formatDate(e.y)); // Doesn't work in FF
   }
 
   function formatDate(f) {

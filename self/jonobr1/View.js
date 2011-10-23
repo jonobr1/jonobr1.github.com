@@ -173,6 +173,8 @@ define([
     var x1 = prevWidth + $el.outerWidth() + w;
     var width = (x1 > $packet.width() && !prepended) ? w : 0;
 
+    $el.css('padding', '10px');
+
     $children
       .appendTo(el)
         .children()
