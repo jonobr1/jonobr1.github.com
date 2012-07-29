@@ -1,0 +1,72 @@
+@import 'sass/bourbon/bourbon';
+
+@mixin clear() {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+@mixin not-available() {
+  text-decoration: line-through;
+  cursor: default;
+  border-color: transparent;
+}
+
+// Colors
+
+$black: #000;
+$white: #efefef;
+
+$bg_color: $white;
+$text_color: $black;
+$border_color: rgba(0,0,0,0.125);
+
+// Secondary Colors
+
+$yellow: rgb(178, 138, 9);
+$dark_yellow: rgb(72, 44, 0);
+
+$violet: rgb(242, 25, 255);
+$dark_violet: rgb(72, 13, 127);
+
+$green: rgb(0, 255, 200);
+$dark_green: rgb(10, 100, 80);
+
+$blue: rgb(20, 144, 204);
+$dark_blue: rgb(14, 100, 140);
+
+// Selections
+
+$highlight: tint($green, 25%);
+
+$width: 900px;
+
+// Fonts
+
+$font_size: 12px;
+$line_height: 10px;
+
+// Navigation
+
+$border_width: 3px;
+
+// Columns
+
+$columns: 12;
+$margin: 12px;
+$gutter: 12px;
+
+$two_column: ($width / 2) - $margin;
+$three_column: ($width / 3) - $margin;
+$four_column: ($width / 4) - $margin;
+$five_column: ($width / 5) - $margin;
+$six_column: ($width / 6) - $margin;
+$seven_column: ($width / 7) - $margin;
+$eight_column: ($width / 8) - $margin;
+$nine_column: ($width / 9) - $margin;
+$ten_column: ($width / 10) - $margin;
+$eleven_column: ($width / 11) - $margin;
+$single_column: ($width / $columns) - $margin;

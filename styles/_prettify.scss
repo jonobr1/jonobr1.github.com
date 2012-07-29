@@ -1,0 +1,45 @@
+@import 'sass/bourbon/bourbon';
+@import 'shared';
+
+code, pre {
+  font-family: 'lekton', monospace;
+}
+pre {
+  font-size: $font_size;
+  line-height: $line_height * 2;
+  color: $text_color;
+  margin: $margin * 2 0;
+  display: block;
+  background-color: shade($bg_color, 7%);
+//  text-shadow: 1px 1px rgba(0,0,0,0.2);
+}
+pre .nocode { background-color: none; color: #000; }
+pre .str { color: $dark_green; }
+pre .kwd { color: $dark_violet; }
+pre .com { color: tint($text_color, 25%); font-style: italic; }
+pre .typ { color: $yellow; }
+pre .lit { color: $dark_blue; }
+pre .pun { color: $text_color; }
+pre .pln { color: $text_color; }
+pre .tag { color: $dark_yellow; }
+pre .atn { color: $dark_violet; }
+pre .atv { color: $yellow; }
+pre .dec { color: $yellow; }
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+  margin: 0;
+  color: shade($bg_color, 25%);
+}
+li.L0,li.L1,li.L2,li.L3,li.L4,li.L5,li.L6,li.L7,li.L8,li.L9 {
+  list-style-type: decimal;
+  padding: 0 $font_size / 2;
+  width: 560px;  // Width of an M * 80, the common spacing of an IDE / lint
+  border-right: 1px solid $bg_color;
+  background-color: shade($bg_color, 5%);
+  overflow: visible;
+}
+/* Alternate shading for lines */
+li.L1,li.L3,li.L5,li.L7,li.L9 {
+  background: shade($bg_color, 4%);
+}

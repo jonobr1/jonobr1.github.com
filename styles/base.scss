@@ -1,0 +1,308 @@
+@import 'sass/bourbon/bourbon';
+@import 'shared';
+@import 'prettify';
+
+* {
+  margin: 0;
+  padding: 0;
+//  outline: #fff;
+}
+
+body {
+
+  font-family: 'Nuvo Pro', sans-serif;
+  font-size: $font_size;
+  line-height: $line_height * 2;
+  background: $bg_color;
+  color: $text_color;
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.75);
+
+  // Initial nav styles
+
+  #container {
+    width: 100%;
+    min-width: $width + $line_height * 4;
+    overflow-x: hidden;
+  }
+
+  nav,
+  #content {
+    width: $width;
+    padding: 0 $line_height * 2;
+    margin: 0 auto;
+  }
+  nav {
+
+    margin: ($line_height * 2) auto;
+    padding-top: ($line_height * 2);
+    padding-bottom: ($line_height * 2);
+    font-family: 'Lekton', 'Nuvo Pro', monospace;
+    font-size: $font_size * 1.125;
+    border-bottom: $border_width solid #fff;
+    text-transform: lowercase;
+
+    input[type="submit"] {
+      @include transition(opacity, 350ms, $ease-in-out-circ);
+      padding: 0 4px 0 0 !important;
+      @include border-radius(3px);
+      border: 0;
+      color: #fff !important;
+      background: shade($white, 10%);
+      text-align: left;
+      text-shadow: 1px 1px rgba(0, 0, 0, 0.25);
+      &:hover {
+        background: shade($white, 25%);
+      }
+      opacity: 0.0;
+    }
+
+    input.eligible[type="submit"] {
+      opacity: 1.0;
+      cursor: pointer;
+    }
+
+    ul {
+
+      list-style: none;
+
+      li {
+
+        width: $single_column;
+        float: left;
+
+        &:not(.first) {
+
+          // TODO: Make the right portion in line with the grid.
+          margin: 20px 0 0 ($width / $columns + $gutter - $border_width);
+
+          input:not([type="submit"]) {
+            border: 0;
+            border-left: $border_width solid transparent;
+            background: transparent;
+            font-family: 'Lekton', 'Nuvo Pro', monospace;
+            font-size: $font_size * 1.125;
+            outline: none;
+            text-transform: lowercase;
+          }
+
+          a:link, a:visited, input {
+            border-left: $border_width solid transparent;
+            padding: 0 5px;
+            color: #000;
+            text-decoration: none;
+          }
+          a.not-available, a.not-available:hover {
+            @include not-available;
+          }
+          a:hover, a:active, input:not([type="submit"]):hover {
+            border-left-color: $border_color;
+          }
+
+          // Sign up form
+          form {
+            width: $two_column;
+          }
+
+        }
+//        &.first {
+//          margin: 0 $width / $columns 0 0;
+//        }
+
+        #logo {
+          cursor: pointer;
+          text-align: center;
+        }
+
+      }
+
+    }
+
+  }
+
+  // Headings
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    color: tint($text_color, 25%)
+  }
+
+  h1 {
+    font-size: 40px;
+    line-height: 50px;
+    margin-bottom: $line_height * 6;
+  }
+  h2 {
+    text-transform: uppercase;
+    font-size: 1.3;
+    letter-spacing: 0.2em;
+    text-align: center;
+    margin: $line_height * 2 auto;
+    padding: 0 0 $line_height * 2 0;
+    width: 75%;
+    border-bottom: $border_width solid $border_color;
+  }
+  h3, h4, h5, h6 {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 1.3em;
+    &:before {
+      color: shade($border_color, 10%);
+      content: '\2014';
+    }
+    text-indent: -25px;
+  }
+
+  // General body  styles
+
+  a:link {
+    color: $text_color;
+  }
+  a:visited {
+    color: shade($text_color, 12.5%);
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  a:active {
+    color: shade($text_color, 25%);
+  }
+
+  #content > ul,
+  #content > ol {
+
+    font-size: 1.5em;
+    line-height: 1.5em;
+    color: tint($text_color, 25%);
+    font-weight: 100;
+    width: 66%;
+    margin-left: auto;
+    margin-right: auto;
+
+    a {
+      color: tint($text_color, 25%);
+    }
+
+    li:not(:last-child) {
+      margin-bottom: $line_height;
+    }
+
+  }
+
+  #content > ol {
+    
+  }
+  #content > ul {
+    list-style: circle;
+  }
+
+  #content > img {
+
+    $two_border_width: $border_width * 2;
+    $two_line_height: $line_height * 2;
+    $margin_offset: $two_line_height - $two_border_width;
+
+    margin: $two_line_height 0 $two_line_height - $two_border_width;
+    border: $two_border_width solid $border_color;
+    width: 100%;
+    height: auto;
+
+    position: relative;
+    display: block;
+
+  }
+
+  section {
+
+    @include columns(3 $three_column);
+    @include column-gap($gutter);
+    margin: $line_height * 2 0;
+    overflow: visible;
+    & > *:first-child {
+      &:before {
+        content: '\2002';
+      }
+    }
+    & > * + * {
+      margin-top: $line_height * 2;
+    }
+    img {
+      width: $three_column - ($border_width * 2);
+      height: auto;
+      margin: -$border_width 0;
+      border: $border_width solid $border_color;
+      display: block;
+    }
+    ol, ul {
+      padding: 0 0 0 $margin * 1.5;
+    }
+    ol {
+      list-style: lower-alpha;
+    }
+    ul {
+      list-style: circle;
+    }
+  }
+
+  p.date {
+    font-style: italic;
+    margin-top: 0;
+    text-align: right;
+  }
+
+  blockquote {
+    font-weight: 100;
+    width: 66%;
+    margin: 0 auto;
+    font-style: italic;
+    font-size: 1.5em;
+    line-height: 1.5em;
+    color: tint($text_color, 15%);
+    border-left: $border_width solid $border_color;
+    padding: 0 0 0 $margin;
+  }
+
+  .slideshow {
+    margin: $line_height * 2 0;
+    cursor: pointer;
+    img {
+      width: $width / 2;
+      height: auto;
+      opacity: 0.25;
+      &.selected {
+        opacity: 1.0;
+      }
+    }
+  }
+
+  .not-available, {
+    @include not-available;
+  }
+
+  br.clear {
+    @include clear;
+  }
+
+  pre {
+
+  }
+
+  em {
+    font-style: italic;
+  }
+  strong {
+    color: #000;
+    font-weight: 700;
+  }
+
+}
+
+.animated {
+  @include transition(all, 350ms, $ease-in-out-circ);
+}
+
+::selection, input::selection {
+  background: $highlight;
+}
+::-moz-selection, input::-moz-selection {
+  background: $highlight;
+}
