@@ -1,0 +1,1 @@
+Prototypical content for site.
