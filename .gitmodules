@@ -1,0 +1,3 @@
+[submodule "src/Physics"]
+	path = src/Physics
+	url = https://github.com/jonobr1/Physics.git
