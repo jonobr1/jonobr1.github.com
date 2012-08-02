@@ -1,9 +1,8 @@
 define([
-  'RAF',
-  'physics/Physics',
-  'physics/Vector',
+  'requestAnimationFrame',
+  'Vector',
   'underscore'
-], function(raf, physics, Vector) {
+], function(raf, Vector) {
 
   var AnimatedPath = function(elem, mass) {
 
@@ -18,7 +17,6 @@ define([
     this.particles = [];
     this.mass = _.isNumber(mass) ? mass : 0.2;
     this.origin = new Vector();
-    this.ParticleSystem = physics;
 
     var d = elem.getAttribute('d');
     var p = elem.getAttribute('points');
@@ -36,37 +34,45 @@ define([
     this.origin.x += this.__coords[0][0] / 2;
     this.origin.y += this.__coords[0][1] / 2;
 
-    // Add them to physics
-
-    // TODO: Don't forget about elem.getScreenCTM(), elem.getPointAtLength(1.0);
-    //       Figure out a way to settle the particles so we don't have to raf all the time.
-
-    _.each(this.__coords, function(coord) {
-
-      var particles = [];
-      for (var i = 0, l = coord.length; i < l; i+=2) {
-
-        var x = coord[i];
-        var y = coord[i + 1];
-
-        var a = physics.makeParticle(this.mass, x, y);
-        var b = physics.makeParticle(this.mass, x, y);
-
-        b.makeFixed();
-        particles.push(a);
-        var s = physics.makeSpring(a, b, 0.2, 0.0625, 0);
-
-      }
-
-      this.particles.push(particles);
-
-    }, this);
-
-    physics.animations.push(this);
-
   };
 
   _.extend(AnimatedPath.prototype, {
+
+    setParticleSystem: function(physics) {
+
+      this.ParticleSystem = physics;
+
+      // Add them to physics
+
+      // TODO: Don't forget about elem.getScreenCTM(), elem.getPointAtLength(1.0);
+      //       Figure out a way to settle the particles so we don't have to raf all the time.
+
+      _.each(this.__coords, function(coord) {
+
+        var particles = [];
+        for (var i = 0, l = coord.length; i < l; i+=2) {
+
+          var x = coord[i];
+          var y = coord[i + 1];
+
+          var a = physics.makeParticle(this.mass, x, y);
+          var b = physics.makeParticle(this.mass, x, y);
+
+          b.makeFixed();
+          particles.push(a);
+          var s = physics.makeSpring(a, b, 0.2, 0.0625, 0);
+
+        }
+
+        this.particles.push(particles);
+
+      }, this);
+
+      physics.animations.push(_.bind(this.update, this));
+
+      return this;
+
+    },
 
     /**
      * Updates the d attribute of an SVG.

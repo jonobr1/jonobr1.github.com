@@ -19,10 +19,12 @@ paths.underscore=utils/empty paths.text=../third-party/text
 
 require([
   'svg/AnimatedPath',
-  'physics/Physics',
-  'physics/Vector',
+  'Physics',
+  'Vector',
   'webfont/loader'
-], function(AnimatedPath, physics, Vector, webfont) {
+], function(AnimatedPath, Physics, Vector, webfont) {
+
+  var physics = new Physics();
 
   webfont.start();
 
@@ -48,7 +50,7 @@ require([
 
     // Actual SVG objects
     elements = _.map($logo.find('path, polyline'), function(elem) {
-      return new AnimatedPath(elem);
+      return new AnimatedPath(elem).setParticleSystem(physics);
     });
 
     $(window).bind('mousedown', function(e) {

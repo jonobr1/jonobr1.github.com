@@ -211,7 +211,27 @@
     <script type="text/javascript" src="third-party/underscore.js"></script>
     <script type="text/javascript" src="third-party/require.js"></script>
     <!-- If you want to dev open up a require settings here and use _js/main.js -->
-    <script type="text/javascript" src="./src/_build/main.js"></script>
+    <!-- <script type="text/javascript" src="./src/_build/main.js"></script> -->
+    <script type="text/javascript">
+
+      require({
+        baseUrl: './src',
+        paths: {
+          'Physics': 'Physics/src/Physics',
+          'Vector': 'Physics/src/Vector',
+          'common': 'Physics/src/common',
+          'Attraction': 'Physics/src/Attraction',
+          'Integrator': 'Physics/src/Integrator',
+          'Particle': 'Physics/src/Particle',
+          'ParticleSystem': 'Physics/src/ParticleSystem',
+          'requestAnimationFrame': '../third-party/requestAnimationFrame',
+          'underscore': 'utils/empty',
+          'Spring': 'Physics/src/Spring'
+        }
+      })
+
+    </script>
+    <script type="text/javascript" src="./src/_js/main.js"></script>
 
   </body>
 </html>
