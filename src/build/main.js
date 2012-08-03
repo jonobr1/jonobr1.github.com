@@ -166,11 +166,17 @@ Vector = (function (_) {
    * http://documentcloud.github.com/underscore
    */
 
-  var ArrayProto = Array.prototype;
-  var hasOwnProperty = Object.prototype.hasOwnProperty;
-  var slice = ArrayProto.slice;
-  var nativeForEach = ArrayProto.forEach;
-  var nativeIndexOf      = ArrayProto.indexOf;
+  var ArrayProto   = Array.prototype,
+    hasOwnProperty = Object.prototype.hasOwnProperty,
+    slice          = ArrayProto.slice,
+    nativeForEach  = ArrayProto.forEach,
+    nativeIndexOf  = ArrayProto.indexOf,
+    nativeMap      = ArrayProto.map,
+    nativeFilter   = ArrayProto.filter,
+    nativeBind     = Function.prototype.bind;
+
+  var ctor = function(){};
+  var breaker = {};
 
   var has = function(obj, key) {
     return hasOwnProperty.call(obj, key);
@@ -209,11 +215,40 @@ Vector = (function (_) {
     return low;
   };
 
+  var filter = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context);
+    each(obj, function(value, index, list) {
+      if (iterator.call(context, value, index, list)) results[results.length] = value;
+    });
+    return results;
+  };
+
   return {
 
     has: has,
 
     each: each,
+
+    compact: function(array) {
+      return filter(array, function(value) { return !!value; });
+    },
+
+    bind: function(func, context) {
+      var bound, args;
+      if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+      if (!_.isFunction(func)) throw new TypeError;
+      args = slice.call(arguments, 2);
+      return bound = function() {
+        if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
+        ctor.prototype = func.prototype;
+        var self = new ctor;
+        var result = func.apply(self, args.concat(slice.call(arguments)));
+        if (Object(result) === result) return result;
+        return self;
+      };
+    },
 
     extend: function(obj) {
       each(slice.call(arguments, 1), function(source) {
@@ -222,6 +257,17 @@ Vector = (function (_) {
         }
       });
       return obj;
+    },
+
+    map: function(obj, iterator, context) {
+      var results = [];
+      if (obj == null) return results;
+      if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
+      each(obj, function(value, index, list) {
+        results[results.length] = iterator.call(context, value, index, list);
+      });
+      if (obj.length === +obj.length) results.length = obj.length;
+      return results;
     },
 
     indexOf: function(array, item, isSorted) {
@@ -239,6 +285,13 @@ Vector = (function (_) {
     sortedIndex: sortedIndex,
 
     identity: identity,
+
+    after: function(times, func) {
+      if (times <= 0) return func();
+      return function() {
+        if (--times < 1) { return func.apply(this, arguments); }
+      };
+    },
 
     isNumber: function(obj) {
       return toString.call(obj) == '[object Number]';
@@ -261,7 +314,7 @@ Vector = (function (_) {
 })());
 
 
-(function (AnimatedPath, Physics, Vector, webfont) {
+(function (AnimatedPath, Physics, Vector, webfont, _) {
 
   var physics = new Physics();
 
@@ -451,7 +504,7 @@ Vector = (function (_) {
     prettyPrint();
   }
 
-})(svg.AnimatedPath = (function (raf, Vector) {
+})(svg.AnimatedPath = (function (raf, Vector, _) {
 
   var AnimatedPath = function(elem, mass) {
 
@@ -663,7 +716,7 @@ Vector = (function (_) {
 
 })(requestAnimationFrame,
 Vector,
-underscore = (function (v) { return v; })()),
+common),
 Physics = (function (ParticleSystem, raf, _) {
 
   var updates = [];
@@ -1429,6 +1482,7 @@ webfont.loader = (function () {
     }
   };
 
-})());
+})(),
+common);
 
 })();

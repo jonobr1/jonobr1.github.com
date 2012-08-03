@@ -1,8 +1,8 @@
 define([
   'requestAnimationFrame',
   'Vector',
-  'underscore'
-], function(raf, Vector) {
+  'common'
+], function(raf, Vector, _) {
 
   var AnimatedPath = function(elem, mass) {
 

@@ -8,13 +8,12 @@ var params = {
   "paths": {
     'Physics': 'Physics/src/Physics',
     'Vector': 'Physics/src/Vector',
-    'common': 'Physics/src/common',
+    'common': 'utils/common',
     'Attraction': 'Physics/src/Attraction',
     'Integrator': 'Physics/src/Integrator',
     'Particle': 'Physics/src/Particle',
     'ParticleSystem': 'Physics/src/ParticleSystem',
     'requestAnimationFrame': '../third-party/requestAnimationFrame',
-    'underscore': 'utils/empty',
     'Spring': 'Physics/src/Spring'
   }
 }

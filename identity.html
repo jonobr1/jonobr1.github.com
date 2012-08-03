@@ -208,7 +208,6 @@
 
     <script type="text/javascript" src="third-party/prettify/prettify.js"></script>
     <script type="text/javascript" src="third-party/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="third-party/underscore.js"></script>
     <script type="text/javascript" src="src/build/main.min.js"></script>
     <!-- <script type="text/javascript" src="third-party/require.js"></script> -->
     <!-- If you want to dev open up a require settings here and use _js/main.js -->
@@ -220,16 +219,15 @@
         paths: {
           'Physics': 'Physics/src/Physics',
           'Vector': 'Physics/src/Vector',
-          'common': 'Physics/src/common',
+          'common': 'utils/common',
           'Attraction': 'Physics/src/Attraction',
           'Integrator': 'Physics/src/Integrator',
           'Particle': 'Physics/src/Particle',
           'ParticleSystem': 'Physics/src/ParticleSystem',
           'requestAnimationFrame': '../third-party/requestAnimationFrame',
-          'underscore': 'utils/empty',
           'Spring': 'Physics/src/Spring'
         }
-      })
+      });
 
     </script>
     <script type="text/javascript" src="./src/js/main.js"></script> -->

@@ -15,8 +15,9 @@ require([
   'svg/AnimatedPath',
   'Physics',
   'Vector',
-  'webfont/loader'
-], function(AnimatedPath, Physics, Vector, webfont) {
+  'webfont/loader',
+  'common'
+], function(AnimatedPath, Physics, Vector, webfont, _) {
 
   var physics = new Physics();
 
