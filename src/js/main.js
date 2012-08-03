@@ -5,14 +5,8 @@
  * Minify commands:
  *
 
-cd identity
-
- *
-
-node third-party/r.js -o name=_js/main out=src/_build/main.js baseUrl=./src \
-paths.RAF=../third-party/requestAnimationFrame \
-paths.jquery=utils/empty \
-paths.underscore=utils/empty paths.text=../third-party/text
+  cd src/utils
+  node build.js
 
  *
  */
