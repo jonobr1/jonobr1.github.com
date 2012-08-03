@@ -8,7 +8,7 @@ These are all the process, template, and final src / built files to make all jon
 TODO:
 
 + ~~Bring in [Physics](http://github.com/jonobr1/Physics) as submodule or built source.~~
-+ Create a proper build process that _is not_ dependent on [require](http://requirejs.org/)
++ ~~Create a proper build process that _is not_ dependent on [require](http://requirejs.org/)~~
 + Make about page
   + Artist Statement
   + Portrait
