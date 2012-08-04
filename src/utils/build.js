@@ -1,8 +1,8 @@
 
 var params = {
   "baseUrl": "../",
-  "main": "js/main",
-  "out": "../build/main.js",
+  "main": "js/topbar",
+  "out": "../build/topbar.js",
   "minify": false,
   "shortcut": "",
   "paths": {
@@ -21,6 +21,6 @@ var params = {
 require('./builder.js').build(params);
 
 params.minify = true;
-params.out = '../build/main.min.js';
+params.out = '../build/topbar.min.js';
 
 require('./builder.js').build(params);
