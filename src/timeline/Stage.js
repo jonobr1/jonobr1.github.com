@@ -2,20 +2,15 @@ define([
   'underscore'
 ], function() {
 
+  var gutter = 12;
+
   var Stage = function() {
 
-    this.birthday = Date.now() / 1000;
-    this.domElement = document.createElement('div');
-    this.$el = $(this.domElement);
-
-    this.range = {
-      min: 0,
-      max: 0
-    };
-
-    _.extend(this.domElement.style, {
-      position: 'relative'
-    });
+    this.birthday = Math.round(Date.now() / 1000);
+    this.$el = $('<div class="stage"/>');
+    this.domElement = this.$el[0];
+    this.offset = { x: 75, y: 0 };
+    this.range = { min: 0, max: 0 };
 
   };
 
@@ -27,6 +22,9 @@ define([
 
   _.extend(Stage.prototype, {
 
+    /**
+     * Append the stage to an element.
+     */
     appendTo: function(elem) {
 
       if (!_.isElement(elem)) {
@@ -43,37 +41,95 @@ define([
 
     },
 
-    place: function(time, content) {
+    /**
+     * Set a Timeline.Gallery reference on the Stage.
+     */
+    setGallery: function(gallery) {
 
-      var id = Stage.Id + time;
-      var selector = '#' + id;
-      var elem = this.$el.find(selector);
+      this.gallery = gallery;
 
-      if (_.isElement(elem)) {
-        return elem;
-      }
+      return this;
 
-      var offset = calculateOffset.call(this, time);
+    },
+
+    /**
+     * Set a Timeline.Minimap reference on the Stage.
+     */
+    setMinimap: function(minimap) {
+
+      this.minimap = minimap;
+
+      return this;
+
+    },
+
+    /**
+     * Place content based on the time.
+     */
+    place: function(model) {
+
+      var offset = calculateOffset.call(this, model);
 
       var $elem = $('<div />')
-        .attr('id', id)
         .addClass('moment')
+        .attr('model', model.id)
         .css({
           position: 'absolute',
-          top: offset.top,
-          left: offset.left,
           padding: 6 + 'px',
-          background: 'rgba(0,0,0,0.121569)'
+          background: '#d1d1d1'
         })
         .appendTo(this.domElement);
 
-      if (_.isElement(content)) {
-        $elem.append(content);
-      }
+      // Bind the models properties to the display of this div.
+      var updateDisplay = function() {
+        $elem.css({
+          top: model.top + 'px',
+          left: model.left + 'px',
+          width: model.width + 'px',
+          height: model.height + 'px'
+        });
+      };
 
+      model
+        .bind('change', updateDisplay)
+        .add(offset);
+
+      updateDisplay();
       this.updateDisplay();
 
       return $elem[0];
+
+    },
+
+    /**
+     * Update the div elements to be shown or not shown, based on frustrum
+     * culling.
+     */
+    update: function(scrollTop, windowHeight) {
+
+      var viewport = {
+        top: scrollTop,
+        bottom: scrollTop + windowHeight
+      };
+
+      _.each(this.gallery.models, function(model) {
+
+        var top = model.top - this.range.min;
+        var bottom = top + model.height;
+        var $el = this.$el.find('[model=' + model.id + ']');
+
+        if ($el) {
+
+          if (top > viewport.bottom || bottom < viewport.top) {
+            $el.removeClass('visible');
+          } else {
+            $el.addClass('visible');
+            this.gallery.getImageForModel(model, $el[0]);
+          }
+
+        }
+
+      }, this);
 
     },
 
@@ -88,10 +144,15 @@ define([
 
   });
 
-  function calculateOffset(time) {
+  function calculateOffset(model) {
 
-    var x = 150;
-    var y = Math.round((this.birthday - time) / 10);
+    var x = this.offset.x;
+    var y = Math.round((this.birthday - model.date) / 10 - this.offset.y);
+
+    if (model.width) {
+      // TODO: Clip to grid! Use the columns from the design —
+      x += Math.random() * (this.width - model.width - this.offset.x + gutter);
+    }
 
     if (y > this.range.max) {
       this.range.max = y;
@@ -101,10 +162,7 @@ define([
       this.range.min = y;
     }
 
-    return {
-      left: x + 'px',
-      top: y + 'px'
-    };
+    return { left: x, top: y };
 
   }
 

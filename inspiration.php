@@ -8,6 +8,8 @@
 
 ?>
 
+<link rel="stylesheet" type="text/css" media="screen" href="./styles/inspiration.css" />
+
 <!-- inspiration goes here -->
 
 <!-- Development environment -->

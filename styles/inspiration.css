@@ -1,0 +1,34 @@
+#content .stage {
+  position: relative; }
+  #content .stage .moment:hover {
+    z-index: 9999; }
+
+.minimap {
+  position: fixed;
+  background: #d1d1d1; }
+  .minimap .loader {
+    position: absolute;
+    background: #efefef;
+    top: 0;
+    left: 0;
+    line-height: 0;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+  .minimap canvas {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: ns-resize; }
+  .minimap div.viewport {
+    position: absolute;
+    background: #00ffc8;
+    width: 100%;
+    left: 0; }

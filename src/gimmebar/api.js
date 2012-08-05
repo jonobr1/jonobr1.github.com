@@ -12,6 +12,8 @@ define([
 
   var gimmebar = {
 
+    loaded: loaded,
+
     querying: false,
 
     limit: 10,
@@ -43,7 +45,7 @@ define([
         // Update the total records if we can
 
         var total_records = data.total_records;
-        if (_.isNumber(total_records) && gimmebar.total_records !== total_records) {
+        if (total_records && gimmebar.total_records !== total_records) {
           gimmebar.total_records = data.total_records;
           gimmebar.total_pages = Math.floor(gimmebar.total_records / gimmebar.limit);
         }
