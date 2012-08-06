@@ -1,12 +1,12 @@
 define([
   'mvc/Model',
+  'dom/grid',
   'underscore'
-], function(Model) {
+], function(Model, grid) {
 
   var $document = $(document);
   var ID = 0;
   var stage;
-  var gutter = 12;
 
   var Gallery = function() {
 
@@ -17,7 +17,7 @@ define([
 
   _.extend(Gallery, {
 
-    MaxImages: 100
+    MaxImages: 50
 
   });
 
@@ -38,6 +38,18 @@ define([
       this.models.push(m);
 
       return m;
+
+    },
+
+    hideImage: function(model, parent) {
+
+      var image = this.getImageById(model.id);
+
+      if (_.isElement(image)) {
+        $(image).fadeOut();
+      }
+
+      return this;
 
     },
 
@@ -64,7 +76,7 @@ define([
       var image = this.getImageById(model.id);
 
       if (_.isElement(image)) {
-        return image;
+        return $(image).fadeIn()[0];
       }
 
       if (length < Gallery.MaxImages) {
@@ -113,22 +125,18 @@ define([
       })
       .bind('load', function() {
 
-        var width, height;
         if (model.width === 0) {
 
-          var w = width = $image.width();
-          var h = height = $image.height();
+          var width = Math.min($image.width(), grid.getWidth(11));
+          var height = $image.height();
 
           // Cap at stage width.
 
-          if (stage.width && width > stage.width) {
-            w = stage.width - stage.offset.x;
-            h = Math.floor(w * height / width);
-            $image.width(w).height(h);
-          }
+          var dimensions = grid.snapWidth(width, height);
 
-          model.setWidth(w);
-          model.setHeight(h);
+          $image.width(dimensions.x).height(dimensions.y);
+          model.setWidth(dimensions.x);
+          model.setHeight(dimensions.y);
 
         }
 

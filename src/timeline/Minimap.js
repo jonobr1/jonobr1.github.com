@@ -1,7 +1,8 @@
 define([
   'dom/loader',
+  'dom/grid',
   'underscore'
-], function(loader) {
+], function(loader, grid) {
 
   var $document = $(document);
   var $window = $(window);
@@ -10,8 +11,8 @@ define([
 
     var _this = this;
 
-    this.width = 63;
-    this.gutter = 12;
+    this.width = grid.getWidth(1);
+    this.gutter = grid.gutter;
 
     this.$el = $('<div class="minimap" />');
     this.domElement = this.$el[0];
@@ -152,7 +153,7 @@ define([
 
     },
 
-    updateDisplay: function() {
+    updateDisplay: function(scrollTop, windowHeight) {
 
       this.update();
 
@@ -172,17 +173,17 @@ define([
 
       }, this);
 
-      this.updateViewport();
+      this.updateViewport(scrollTop, windowHeight);
 
       return this;
 
     },
 
-    updateViewport: function() {
+    updateViewport: function(scrollTop, windowHeight) {
 
       _.extend(this.viewport.style, {
-        top: this.toWorldY($document.scrollTop()) + 'px',
-        height: this.toWorldY($window.height()) + 'px'
+        top: this.toWorldY(scrollTop) + 'px',
+        height: this.toWorldY(windowHeight) + 'px'
       });
 
       return this;

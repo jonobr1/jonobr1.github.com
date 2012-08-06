@@ -1,15 +1,16 @@
 define([
+  'dom/grid',
   'underscore'
-], function() {
+], function(grid) {
 
-  var gutter = 12;
+  var random_seed = 0;
 
   var Stage = function() {
 
     this.birthday = Math.round(Date.now() / 1000);
     this.$el = $('<div class="stage"/>');
     this.domElement = this.$el[0];
-    this.offset = { x: 75, y: 0 };
+    this.offset = { x: grid.getPosition(1), y: 0 };
     this.range = { min: 0, max: 0 };
 
   };
@@ -122,6 +123,7 @@ define([
 
           if (top > viewport.bottom || bottom < viewport.top) {
             $el.removeClass('visible');
+            this.gallery.hideImage(model, $el[0]);
           } else {
             $el.addClass('visible');
             this.gallery.getImageForModel(model, $el[0]);
@@ -150,8 +152,9 @@ define([
     var y = Math.round((this.birthday - model.date) / 10 - this.offset.y);
 
     if (model.width) {
-      // TODO: Clip to grid! Use the columns from the design —
-      x += Math.random() * (this.width - model.width - this.offset.x + gutter);
+      var possible = random_seed * (this.width - model.width - this.offset.x);
+      x += grid.snapPosition(possible).x;
+      increment();
     }
 
     if (y > this.range.max) {
@@ -164,6 +167,10 @@ define([
 
     return { left: x, top: y };
 
+  }
+
+  function increment() {
+    random_seed = Math.floor(Math.random() * 7) / 6;
   }
 
   return Stage;

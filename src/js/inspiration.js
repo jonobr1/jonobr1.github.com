@@ -3,8 +3,9 @@ require([
   'timeline/Stage',
   'timeline/Minimap',
   'timeline/Gallery',
+  'dom/grid',
   'underscore'
-], function(gimmebar, Stage, Minimap, Gallery) {
+], function(gimmebar, Stage, Minimap, Gallery, grid) {
 
   var $window     = $(window);
   var $document   = $(document);
@@ -48,7 +49,7 @@ require([
    */
   var onScrollEnd = _.debounce(function() {
 
-    stage.update(scrollTop, windowHeight);
+    stage.update(scrollTop - navHeight, windowHeight);
 
   }, 750);
 
@@ -74,7 +75,7 @@ require([
     minimap
       .setOffset(navOffset.left, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
-      .updateViewport();
+      .updateViewport(scrollTop - navHeight, windowHeight);
 
     onScrollEnd();
 
@@ -116,11 +117,13 @@ require([
           var width = stashHas ? stash.dims.w : displayHas ? display.dims.w : 0;
           var height = stashHas ? stash.dims.h : displayHas ? display.dims.h : 0;
 
+          var dimensions = grid.snapWidth(parseInt(width), parseInt(height));
+
           var model = gallery.add({
             url: image_data.full,
             date: record.date,
-            width: parseInt(width),
-            height: parseInt(height)
+            width: dimensions.x,
+            height: dimensions.y
           });
 
           stage.place(model);
@@ -148,8 +151,10 @@ require([
       return;
     }
 
-    stage.update(scrollTop, windowHeight);
-    minimap.updateDisplay();
+    var offsetScroll = scrollTop - navHeight;
+
+    stage.update(offsetScroll, windowHeight);
+    minimap.updateDisplay(offsetScroll, windowHeight);
 
   }
 
