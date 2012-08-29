@@ -2,9 +2,10 @@
 
   // Page Settings
 
+  $root = '../';
   $title = 'identity';
 
-  include 'php/head.php';
+  include '../php/head.php';
 
 ?>
 
@@ -72,7 +73,7 @@ function supports_canvas() {
   <p>
     In eu neque dictum leo mattis tristique eget sed arcu. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas malesuada, nisi nec dignissim suscipit, elit nunc imperdiet leo, sed facilisis augue eros et odio. Duis sit amet magna eget risus vehicula mollis. Duis sollicitudin risus leo. Integer est quam, rhoncus ac mollis vel, auctor sit amet nulla. Sed tortor enim, sodales in tincidunt id, venenatis nec erat. Quisque in massa lorem, vel sodales ipsum. Aenean elementum, neque ultricies varius egestas, nibh mi consequat urna, imperdiet malesuada odio risus in elit. Quisque enim erat, pharetra id porttitor nec, porta ac eros. Donec semper luctus urna non tincidunt. Nunc at eros sem. Nulla facilisi. Aliquam luctus, metus ac fermentum condimentum, mauris nulla lobortis turpis, volutpat tincidunt nibh diam id augue.
   </p>
-  <img src="./images/desktop/1.png" alt="Nostalgia for a Past Future" />
+  <img src="../images/desktop/1.png" alt="Nostalgia for a Past Future" />
   <p>
     Cras luctus condimentum leo, id congue massa sodales et. Donec sagittis, lorem eu tincidunt cursus, nunc nunc euismod ipsum, non tempor sem nunc ac felis. Proin aliquet egestas mi, non tincidunt diam faucibus ac. Nullam blandit, enim sit amet blandit bibendum, nunc nunc hendrerit erat, quis suscipit metus dui eu tortor. Praesent et sapien nunc, vel semper urna. Quisque accumsan porttitor massa, vel lobortis risus rhoncus ac. Nunc nibh libero, vestibulum eu convallis sed, posuere iaculis nulla. Curabitur vitae orci enim, sit amet pellentesque erat. Donec sit amet urna ipsum.
   </p>
@@ -89,16 +90,16 @@ function supports_canvas() {
   </p>
 </section>
 <div class="slideshow">
-  <img src="./images/desktop/2.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/3.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/4.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/5.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/6.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/8.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/9.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/10.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/11.png" alt="Neuronal Synchrony" />
-  <img src="./images/desktop/12.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/2.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/3.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/4.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/5.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/6.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/8.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/9.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/10.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/11.png" alt="Neuronal Synchrony" />
+  <img src="../images/desktop/12.png" alt="Neuronal Synchrony" />
 </div>
 <section>
   <p>
@@ -146,7 +147,7 @@ function supports_canvas() {
     In metus nulla, molestie sed auctor vitae, molestie nec massa. Pellentesque condimentum aliquet adipiscing. Nunc justo leo, dignissim et posuere vel, commodo sed lorem. Etiam ornare facilisis libero, eu cursus elit tempor quis. Praesent non elit quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce facilisis ultricies rutrum. Ut lorem lorem, vestibulum nec lacinia eget, feugiat ac magna. Morbi ullamcorper ullamcorper facilisis. Etiam eget eleifend mauris. Sed neque libero, venenatis sed hendrerit a, posuere sit amet libero. Curabitur nibh tellus, egestas a gravida in, vehicula eget felis. Fusce et lectus nisl. Mauris interdum lacus eget diam pulvinar quis lacinia sem suscipit. Nullam iaculis egestas nisi, sit amet interdum ante commodo id. Nam a ultricies metus.
   </p>
 </section>
-<img src="images/desktop/7.png" alt="Nostalgia for a Past Future" />
+<img src="../images/desktop/7.png" alt="Nostalgia for a Past Future" />
 <section>
   <p>
     Nam molestie tempus ipsum, at faucibus nulla varius eget. Mauris lacinia dignissim augue sit amet feugiat. Nam auctor, nibh a vestibulum pellentesque, neque ligula commodo dolor, quis rutrum nisi lorem eu diam. Nunc elementum, lectus eu ullamcorper feugiat, nisl velit semper urna, sed ultricies sapien odio at lacus. Phasellus mi nibh, mollis quis placerat et, porttitor quis dolor. Ut in quam sit amet sapien blandit interdum. Mauris dapibus tellus quis purus malesuada porta. Donec nec mi quam. Vestibulum purus leo, pharetra ac feugiat sed, laoreet ac neque. Cras sed felis ut elit eleifend egestas sed bibendum velit. Sed sodales leo vel orci ultricies vehicula. Suspendisse semper posuere molestie. Proin non ante sed leo vehicula congue. Maecenas in nunc metus, eu laoreet sapien.
@@ -156,6 +157,6 @@ function supports_canvas() {
 
 <?
 
-  include 'php/foot.php';
+  include '../php/foot.php';
 
 ?>

@@ -16,3 +16,5 @@ TODO:
 + Bring designs to [cargo](http://cargocollective.com/) for http://portfolio.jonobr1.com/
 + Make mobile stylesheet
 + Design emails
++ Design custom loading gif
++ Add captions to `alt` attributes of `img` tags
