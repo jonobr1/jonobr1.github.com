@@ -12,9 +12,9 @@ TODO:
 + Make about page
   + ~~Artist Statement~~
   + Portrait
++ Make mobile stylesheet
 + Bring in gimme branch as http://inspiration.jonobr1.com/
 + Bring designs to [cargo](http://cargocollective.com/) for http://portfolio.jonobr1.com/
-+ Make mobile stylesheet
 + Design emails
 + Design custom loading gif
 + Add captions to `alt` attributes of `img` tags
