@@ -1,4 +1,9 @@
 
+/**
+ * Topbar compilation
+ * Use the same params variable for all compilation.
+ */
+
 var params = {
   "baseUrl": "../",
   "main": "js/topbar",
@@ -22,5 +27,19 @@ require('./builder.js').build(params);
 
 params.minify = true;
 params.out = '../build/topbar.min.js';
+
+require('./builder.js').build(params);
+
+/**
+ * Inspiration compilation
+ */
+
+params.minify = false;
+params.out = '../build/inspiration.js';
+
+require('./builder.js').build(params);
+
+params.minify = true;
+params.out = '../build/inspiration.min.js';
 
 require('./builder.js').build(params);

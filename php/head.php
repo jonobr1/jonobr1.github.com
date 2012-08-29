@@ -34,34 +34,12 @@
 
     <script type="text/javascript" src="<? echo $root; ?>third-party/prettify/prettify.js"></script>
     <script type="text/javascript" src="<? echo $root; ?>third-party/jquery-1.7.1.min.js"></script>
-    <!-- // <script type="text/javascript" src="src/build/topbar.min.js"></script> -->
-    <!-- <script type="text/javascript" src="./src/build/main.js"></script> -->
 
-    <!-- Development Environment -->
-    <script type="text/javascript" src="<? echo $root; ?>third-party/underscore.js"></script>
-    <script type="text/javascript" src="<? echo $root; ?>third-party/require.js"></script>
-    <script type="text/javascript">
+    <?
 
-      var base = "<? echo $root; ?>";
+      include $root . "php/fragments/topbar.php";
 
-      require({
-        baseUrl: base + 'src',
-        paths: {
-          'Physics': 'Physics/src/Physics',
-          'Vector': 'Physics/src/Vector',
-          'common': 'utils/common',
-          'Attraction': 'Physics/src/Attraction',
-          'Integrator': 'Physics/src/Integrator',
-          'Particle': 'Physics/src/Particle',
-          'ParticleSystem': 'Physics/src/ParticleSystem',
-          'requestAnimationFrame': '../third-party/requestAnimationFrame',
-          'Spring': 'Physics/src/Spring',
-          'underscore': 'utils/empty'
-        }
-      });
-
-    </script>
-    <script type="text/javascript" src="<? echo $root; ?>src/js/topbar.js"></script>
+    ?>
 
   </head>
   <body>
