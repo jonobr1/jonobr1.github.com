@@ -1,3 +1,16 @@
+
+<?
+
+  /**
+   * Preprocessing.
+   */
+
+  if (!$root) {
+    $root = './';
+  }
+
+?>
+
 <!doctype html>
 <html>
   <head>
@@ -14,23 +27,25 @@
     <meta property="og:url" content="http://jonobr1.com">
     <meta property="og:site_name" content="jonobr1 : <? echo $title; ?>">
 
-    <link rel="stylesheet" type="text/css" href="./styles/base.css" />
-    <link rel="shortcut icon" type="image/png" href="./images/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="<? echo $root ?>styles/base.css" />
+    <link rel="shortcut icon" type="image/png" href="<? echo $root ?>images/favicon.png" />
 
     <!-- Other import scripts -->
 
-    <script type="text/javascript" src="third-party/prettify/prettify.js"></script>
-    <script type="text/javascript" src="third-party/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>third-party/prettify/prettify.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>third-party/jquery-1.7.1.min.js"></script>
     <!-- // <script type="text/javascript" src="src/build/topbar.min.js"></script> -->
     <!-- <script type="text/javascript" src="./src/build/main.js"></script> -->
 
     <!-- Development Environment -->
-    <script type="text/javascript" src="third-party/underscore.js"></script>
-    <script type="text/javascript" src="third-party/require.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>third-party/underscore.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>third-party/require.js"></script>
     <script type="text/javascript">
 
+      var base = "<? echo $root; ?>";
+
       require({
-        baseUrl: './src',
+        baseUrl: base + 'src',
         paths: {
           'Physics': 'Physics/src/Physics',
           'Vector': 'Physics/src/Vector',
@@ -46,7 +61,7 @@
       });
 
     </script>
-    <script type="text/javascript" src="./src/js/topbar.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>src/js/topbar.js"></script>
 
   </head>
   <body>
