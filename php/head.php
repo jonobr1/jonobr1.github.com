@@ -34,6 +34,7 @@
 
     <script type="text/javascript" src="<? echo $root; ?>third-party/prettify/prettify.js"></script>
     <script type="text/javascript" src="<? echo $root; ?>third-party/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="<?echo $root; ?>third-party/marked.js"></script>
 
     <?
 

@@ -161,6 +161,15 @@ body {
         body nav ul li #logo {
           cursor: pointer;
           text-align: center; }
+  body div.image.label {
+    display: none;
+    position: absolute;
+    margin: 6px;
+    padding: 3px 6px;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: #efefef; }
   body h1, body h2, body h3, body h4, body h5, body h6 {
     font-weight: bold;
     color: #3f3f3f; }

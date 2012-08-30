@@ -36,7 +36,7 @@
 
     ?>
 
-    <script type="text/javascript" src="src/build/topbar.min.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>src/build/topbar.min.js"></script>
 
     <?
 

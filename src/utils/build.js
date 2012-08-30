@@ -21,7 +21,7 @@ var params = {
     'requestAnimationFrame': '../third-party/requestAnimationFrame',
     'Spring': 'Physics/src/Spring'
   }
-}
+};
 
 require('./builder.js').build(params);
 
@@ -34,12 +34,12 @@ require('./builder.js').build(params);
  * Inspiration compilation
  */
 
-params.minify = false;
-params.out = '../build/inspiration.js';
-
-require('./builder.js').build(params);
-
-params.minify = true;
-params.out = '../build/inspiration.min.js';
-
-require('./builder.js').build(params);
+// params.minify = false;
+// params.out = '../build/inspiration.js';
+// 
+// require('./builder.js').build(params);
+// 
+// params.minify = true;
+// params.out = '../build/inspiration.min.js';
+// 
+// require('./builder.js').build(params);

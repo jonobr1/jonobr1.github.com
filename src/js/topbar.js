@@ -70,6 +70,52 @@ require([
       })
       .find('input[type="submit"]');
 
+    /**
+     * Image `alt` labeling
+     */
+
+    _.each($('img'), function(img) {
+
+      var $img = $(img);
+
+      if ($img.attr('alt') !== '') {
+        addLabel($img);
+      }
+
+    });
+
+  }
+
+  function addLabel($img) {
+
+    var text = marked($img.attr('alt'));
+    var label = $('<div class="label image" />').html(text).appendTo(document.body);
+
+    $img.hover(function() {
+
+      var o = $img.offset();
+      var w = $img.outerWidth() - $img.width();
+      var h = $img.outerHeight() - $img.height();
+
+      label
+        .css({
+          top: o.top + h + 'px',
+          left: o.left + w + 'px'
+        })
+        .fadeIn(150);
+
+    }, function(e) {
+
+      var target = $(e.relatedTarget);
+
+      if (target.hasClass('image') || target.hasClass('label')) {
+        return;
+      }
+
+      label.fadeOut(150);
+
+    });
+
   }
 
   function isVisible() {

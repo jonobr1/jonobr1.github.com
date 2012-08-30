@@ -17,4 +17,5 @@ TODO:
 + Bring designs to [cargo](http://cargocollective.com/) for http://portfolio.jonobr1.com/
 + Design emails
 + Design custom loading gif
-+ Add captions to `alt` attributes of `img` tags
++ ~~Add captions to `alt` attributes of `img` tags~~
++ Add touch events to topbar.js
