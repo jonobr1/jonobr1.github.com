@@ -157,6 +157,14 @@ body {
             border-color: transparent; }
           body nav ul li:not(.first) a:hover, body nav ul li:not(.first) a:active, body nav ul li:not(.first) input:not([type="submit"]):hover {
             border-left-color: rgba(0, 0, 0, 0.125); }
+          body nav ul li:not(.first) input {
+            -webkit-appearance: caret;
+            -moz-appearance: caret;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            -ms-border-radius: 0;
+            -o-border-radius: 0;
+            border-radius: 0; }
           body nav ul li:not(.first) form {
             width: 438px; }
         body nav ul li #logo {
@@ -165,7 +173,7 @@ body {
   body div.image.label {
     display: none;
     position: absolute;
-    margin: 6px;
+    margin: 6px 6px;
     padding: 3px 6px;
     top: 0;
     left: 0;

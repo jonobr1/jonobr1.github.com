@@ -99,6 +99,12 @@ body {
             border-left-color: $border_color;
           }
 
+          input {
+            -webkit-appearance: caret;
+            -moz-appearance: caret;
+            @include border-radius(0);
+          }
+
           // Sign up form
           form {
             width: $two_column;
@@ -124,7 +130,7 @@ body {
   div.image.label {
     display: none;
     position: absolute;
-    margin: 6px;
+    margin: 6px 6px;
     padding: 3px 6px;
     top: 0;
     left: 0;
