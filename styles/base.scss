@@ -313,6 +313,28 @@ body {
     font-weight: 700;
   }
 
+  dl {
+
+    @include inline-block;
+    vertical-align: top;
+    width: $three_column;
+
+    & > *:first-child {
+      font-weight: bold;
+    }
+
+    &:not(:first-child) {
+      margin-left: $gutter / 2;
+    }
+
+    dt:not(:first-child) {
+      margin-top: $line_height;
+    }
+    dd:not(:first-child) {
+      margin-bottom: $line_height;
+    }
+  }
+
 }
 
 .animated {

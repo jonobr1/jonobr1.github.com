@@ -299,6 +299,24 @@ body {
   body strong {
     color: #000;
     font-weight: 700; }
+  body dl {
+    display: -moz-inline-box;
+    -moz-box-orient: vertical;
+    display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    *display: inline;
+    *vertical-align: auto;
+    vertical-align: top;
+    width: 288px; }
+    body dl > *:first-child {
+      font-weight: bold; }
+    body dl:not(:first-child) {
+      margin-left: 6px; }
+    body dl dt:not(:first-child) {
+      margin-top: 10px; }
+    body dl dd:not(:first-child) {
+      margin-bottom: 10px; }
 
 .animated {
   -webkit-transition-property: all;
