@@ -18,4 +18,4 @@ TODO:
 + Design emails
 + Design custom loading gif
 + ~~Add captions to `alt` attributes of `img` tags~~
-+ Add touch events to topbar.js
++ ~~Add touch events to topbar.js~~

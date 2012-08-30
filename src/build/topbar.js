@@ -359,13 +359,23 @@ Vector = (function (_) {
       return new AnimatedPath(elem).setParticleSystem(physics);
     });
 
-    $(window).bind('mousedown', function(e) {
+    $(window)
+      .bind('mousedown', function(e) {
 
-      if (isVisible()) {
-        logoReact(e.clientX, e.clientY);
-      }
+        if (isVisible()) {
+          logoReact(e.clientX, e.clientY);
+        }
 
-    });
+      })
+      .bind('touchend', function(e) {
+
+        var touch = e.originalEvent.changedTouches[0];
+
+        if (isVisible()) {
+          logoReact(touch.pageX, touch.pageY);
+        }
+
+      });
 
     /**
      * Email nudging
@@ -403,7 +413,7 @@ Vector = (function (_) {
     var text = marked(alt);
     var label = $('<div class="label image" />').html(text).appendTo(container);
 
-    $img.hover(function() {
+    var fadeIn = function() {
 
       var n = container.offset().top;
       var o = $img.offset();
@@ -417,7 +427,9 @@ Vector = (function (_) {
         })
         .fadeIn(150);
 
-    }, function(e) {
+    };
+
+    var fadeOut = function(e) {
 
       var target = $(e.relatedTarget);
 
@@ -427,7 +439,12 @@ Vector = (function (_) {
 
       label.fadeOut(150);
 
-    });
+    };
+
+    $img
+      .hover(fadeIn, fadeOut)
+      .bind('touchstart', fadeIn)
+      .bind('touchend', fadeOut);
 
   }
 
