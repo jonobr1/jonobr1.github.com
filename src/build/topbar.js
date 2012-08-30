@@ -413,7 +413,7 @@ Vector = (function (_) {
           top: o.top + h + 'px',
           left: o.left + w + 'px'
         })
-        .fadeIn(150);
+        .stop().fadeIn(150);
 
     }, function(e) {
 
@@ -423,7 +423,7 @@ Vector = (function (_) {
         return;
       }
 
-      label.fadeOut(150);
+      label.stop().fadeOut(150);
 
     });
 
