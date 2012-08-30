@@ -78,7 +78,8 @@ body {
   body #container {
     width: 100%;
     min-width: 940px;
-    overflow-x: hidden; }
+    overflow-x: hidden;
+    position: relative; }
   body nav,
   body #content {
     width: 900px;

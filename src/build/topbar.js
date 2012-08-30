@@ -331,6 +331,11 @@ Vector = (function (_) {
 (function (AnimatedPath, Physics, Vector, webfont, _) {
 
   var physics = new Physics();
+  var container = $('#container');
+
+  if (container.length === 0) {
+    container = document.body;
+  }
 
   webfont.start();
 
@@ -344,11 +349,6 @@ Vector = (function (_) {
 
     handleImages();
     syntaxHighlight();
-
-    // Band aid
-    // $('#home-button').click(function(e) {
-    //   e.preventDefault();
-    // });
 
     // SVG container
     $logo = $('#logo');
@@ -399,21 +399,23 @@ Vector = (function (_) {
 
   function addLabel($img) {
 
-    var text = marked($img.attr('alt'));
-    var label = $('<div class="label image" />').html(text).appendTo(document.body);
+    var alt = $img.attr('alt');
+    var text = marked(alt);
+    var label = $('<div class="label image" />').html(text).appendTo(container);
 
     $img.hover(function() {
 
+      var n = container.offset().top;
       var o = $img.offset();
-      var w = $img.outerWidth() - $img.width();
-      var h = $img.outerHeight() - $img.height();
+      var w = ($img.outerWidth() - $img.width()) / 2;
+      var h = ($img.outerHeight() - $img.height()) / 2 - n;
 
       label
         .css({
           top: o.top + h + 'px',
           left: o.left + w + 'px'
         })
-        .stop().fadeIn(150);
+        .fadeIn(150);
 
     }, function(e) {
 
@@ -423,7 +425,7 @@ Vector = (function (_) {
         return;
       }
 
-      label.stop().fadeOut(150);
+      label.fadeOut(150);
 
     });
 

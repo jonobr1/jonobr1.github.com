@@ -23,6 +23,7 @@ body {
     width: 100%;
     min-width: $width + $line_height * 4;
     overflow-x: hidden;
+    position: relative;
   }
 
   nav,
