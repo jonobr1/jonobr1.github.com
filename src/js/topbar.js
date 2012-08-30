@@ -20,11 +20,7 @@ require([
 ], function(AnimatedPath, Physics, Vector, webfont, _) {
 
   var physics = new Physics();
-  var container = $('#container');
-
-  if (container.length === 0) {
-    container = document.body;
-  }
+  var container;
 
   webfont.start();
 
@@ -35,6 +31,12 @@ require([
   $(setup);
 
   function setup() {
+
+    container = $('#container')
+
+    if (container.length < 1) {
+      container = document.body;
+    }
 
     handleImages();
     syntaxHighlight();
