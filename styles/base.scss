@@ -19,7 +19,8 @@ body {
 
   // Initial nav styles
 
-  #container {
+  #container,
+  #content_container {
     width: 100%;
     min-width: $width + $line_height * 4;
     overflow-x: hidden;
@@ -27,7 +28,13 @@ body {
   }
 
   nav,
-  #content {
+  #content,
+  #maincontainer,
+  #page_1,
+  #page_2,
+  #page_3,
+  #page_4,
+  #page_5 {
     width: $width;
     padding: 0 $line_height * 2;
     margin: 0 auto;
@@ -187,7 +194,9 @@ body {
   }
 
   #content > ul,
-  #content > ol {
+  #content > ol,
+  #maincontainer > ul,
+  #maincontainer > ol {
 
     font-size: 1.5em;
     line-height: 1.5em;
@@ -207,14 +216,17 @@ body {
 
   }
 
-  #content > ol {
+  #content > ol,
+  #maincontainer > ol {
     
   }
-  #content > ul {
+  #content > ul,
+  #maincontainer > ul {
     list-style: circle;
   }
 
-  #content > img {
+  #content > img,
+  #maincontainer >img {
 
     $two_border_width: $border_width * 2;
     $two_line_height: $line_height * 2;
@@ -339,6 +351,59 @@ body {
 
 .animated {
   @include transition(all, 350ms, $ease-in-out-circ);
+}
+
+// Cargo styles
+
+$thumb_width: 168px;
+$thumb_height: 112px;
+
+$loader_width: 20px;
+$loader_height: $loader_width;
+
+#nav_loadspin,
+#toolset {
+  top: $gutter / 2;
+  right: $gutter / 2;
+  position: absolute;
+}
+
+#nav_loadspin,
+.loader_holder {
+  display: none;
+  @include border-radius(50%);
+  background: #fff;
+  border: $border_width / 2 solid #fff;
+}
+
+.project_thumb {
+
+  width: $five_column;
+  position: relative;
+  @include inline-block;
+  text-align: center;
+
+  &:not(:first-child) {
+    margin-left: $gutter;
+  }
+
+  .loader_holder {
+    position: absolute;
+    top: ($thumb_height - $loader_height) / 2;
+    left: ($thumb_width - $loader_width) / 2;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  div.cardimgcrop {
+    border: $border_width solid transparent;
+  }
+  &:hover div.cardimgcrop {
+    border: $border_width solid $border_color;
+  }
+
 }
 
 ::selection, input::selection {

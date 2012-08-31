@@ -2,15 +2,17 @@
 
   // Page Settings
 
-  $title = '';
+  $title = 'welcome';
 
   include 'php/head.php';
 
 ?>
 
-<p>
-  Hello World.
-</p>
+<section>
+  <p>
+    Hello World.
+  </p>
+</section>
 
 <?
 

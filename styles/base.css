@@ -75,13 +75,20 @@ body {
   background: #efefef;
   color: black;
   text-shadow: 1px 1px rgba(255, 255, 255, 0.75); }
-  body #container {
+  body #container,
+  body #content_container {
     width: 100%;
     min-width: 940px;
     overflow-x: hidden;
     position: relative; }
   body nav,
-  body #content {
+  body #content,
+  body #maincontainer,
+  body #page_1,
+  body #page_2,
+  body #page_3,
+  body #page_4,
+  body #page_5 {
     width: 900px;
     padding: 0 20px;
     margin: 0 auto; }
@@ -212,7 +219,9 @@ body {
   body a:active {
     color: black; }
   body #content > ul,
-  body #content > ol {
+  body #content > ol,
+  body #maincontainer > ul,
+  body #maincontainer > ol {
     font-size: 1.5em;
     line-height: 1.5em;
     color: #3f3f3f;
@@ -221,14 +230,20 @@ body {
     margin-left: auto;
     margin-right: auto; }
     body #content > ul a,
-    body #content > ol a {
+    body #content > ol a,
+    body #maincontainer > ul a,
+    body #maincontainer > ol a {
       color: #3f3f3f; }
     body #content > ul li:not(:last-child),
-    body #content > ol li:not(:last-child) {
+    body #content > ol li:not(:last-child),
+    body #maincontainer > ul li:not(:last-child),
+    body #maincontainer > ol li:not(:last-child) {
       margin-bottom: 10px; }
-  body #content > ul {
+  body #content > ul,
+  body #maincontainer > ul {
     list-style: circle; }
-  body #content > img {
+  body #content > img,
+  body #maincontainer > img {
     margin: 20px 0 14px;
     border: 6px solid rgba(0, 0, 0, 0.125);
     width: 100%;
@@ -339,6 +354,47 @@ body {
   -ms-transition-delay: 0;
   -o-transition-delay: 0;
   transition-delay: 0; }
+
+#nav_loadspin,
+#toolset {
+  top: 6px;
+  right: 6px;
+  position: absolute; }
+
+#nav_loadspin,
+.loader_holder {
+  display: none;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid white; }
+
+.project_thumb {
+  width: 168px;
+  position: relative;
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: baseline;
+  zoom: 1;
+  *display: inline;
+  *vertical-align: auto;
+  text-align: center; }
+  .project_thumb:not(:first-child) {
+    margin-left: 12px; }
+  .project_thumb .loader_holder {
+    position: absolute;
+    top: 46px;
+    left: 74px; }
+  .project_thumb a {
+    text-decoration: none; }
+  .project_thumb div.cardimgcrop {
+    border: 3px solid transparent; }
+  .project_thumb:hover div.cardimgcrop {
+    border: 3px solid rgba(0, 0, 0, 0.125); }
 
 ::selection, input::selection {
   background: #3fffd5; }
