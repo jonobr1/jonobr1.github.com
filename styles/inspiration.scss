@@ -38,3 +38,9 @@
     left: 0;
   }
 }
+
+.loader {
+  position: absolute;
+  margin-top: $gutter / 2;
+  margin-left: ($single_column - $loader-width) / 2;
+}

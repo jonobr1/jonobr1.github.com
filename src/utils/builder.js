@@ -18,6 +18,7 @@ var fs = require('fs'),
     namespaces,
     third_party,
     request_counts,
+    written = false,
     next_load = '',
     next_path = '';
 
@@ -36,6 +37,7 @@ function build(_params) {
   namespaces = {};
 
   var deps = [];
+  written = false;
 
   // load_module(params.baseUrl + params.main + '.js', params.main);
 
@@ -272,7 +274,11 @@ function tab(str, tabs) {
 }
 
 function write(str) {
+  if (written) {
+    return;
+  }
   fs.writeFile(params.out, str);
+  written = true;
   console.log('Saved to ' + params.out);
 }
 

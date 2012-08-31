@@ -4,8 +4,8 @@ require([
   'timeline/Minimap',
   'timeline/Gallery',
   'dom/grid',
-  'underscore'
-], function(gimmebar, Stage, Minimap, Gallery, grid) {
+  'common'
+], function(gimmebar, Stage, Minimap, Gallery, grid, _) {
 
   var $window     = $(window);
   var $document   = $(document);

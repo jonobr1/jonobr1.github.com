@@ -1,8 +1,8 @@
 define([
   'dom/loader',
   'dom/grid',
-  'underscore'
-], function(loader, grid) {
+  'common'
+], function(loader, grid, _) {
 
   var $document = $(document);
   var $window = $(window);

@@ -355,12 +355,6 @@ body {
 
 // Cargo styles
 
-$thumb_width: 168px;
-$thumb_height: 112px;
-
-$loader_width: 20px;
-$loader_height: $loader_width;
-
 #nav_loadspin,
 #toolset {
   top: $gutter / 2;
@@ -369,11 +363,16 @@ $loader_height: $loader_width;
 }
 
 #nav_loadspin,
-.loader_holder {
+.loader_holder,
+.loader {
   display: none;
-  @include border-radius(50%);
-  background: #fff;
-  border: $border_width / 2 solid #fff;
+  &,
+  img {
+    @include border-radius(50%);
+    overflow: hidden;
+    background: #fff;
+//    border: $border_width / 2 solid #fff;
+  }
 }
 
 .project_thumb {

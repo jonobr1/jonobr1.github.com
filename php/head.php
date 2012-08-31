@@ -5,8 +5,10 @@
    * Preprocessing.
    */
 
-  if (!$root) {
+  if (!$root && $debug) {
     $root = './';
+  } else if (!$debug) {
+    $root = 'http://jonobr1.com/';
   }
 
 ?>

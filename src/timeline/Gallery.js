@@ -1,8 +1,8 @@
 define([
   'mvc/Model',
   'dom/grid',
-  'underscore'
-], function(Model, grid) {
+  'common'
+], function(Model, grid, _) {
 
   var $document = $(document);
   var ID = 0;

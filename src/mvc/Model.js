@@ -1,7 +1,7 @@
 define([
   'mvc/Events',
-  'underscore'
-], function(Events) {
+  'common'
+], function(Events, _) {
 
   /**
    * Model is an abstract way to save data with possible event binding. Just

@@ -2,7 +2,7 @@
 
   // Page Settings
 
-  $debug = true;
+  // $debug = true;
   $root = '../';
   $title = 'inspiration';
 
@@ -15,10 +15,27 @@
 <!-- inspiration goes here -->
 
 <!-- Development environment -->
-<script type="text/javascript" src="<? echo $root; ?>src/js/inspiration.js"></script>
+<?
 
-<!-- Built environment -->
-<!-- <script type="text/javascript" src="<? echo $root; ?>src/build/inspiration.min.js"></script> -->
+  if ($debug) {
+
+    ?>
+
+    <script type="text/javascript" src="<? echo $root; ?>src/js/inspiration.js"></script>
+
+    <?
+
+  } else {
+
+    ?>
+
+    <script type="text/javascript" src="<? echo $root; ?>src/build/inspiration.min.js"></script>
+
+    <?
+
+  }
+
+?>
 
 <?
 

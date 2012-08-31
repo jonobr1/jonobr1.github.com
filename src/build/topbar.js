@@ -193,7 +193,7 @@ Vector = (function (_) {
           }
         } else {
           for (var key in obj) {
-            if (_.has(obj, key)) {
+            if (has(obj, key)) {
               if (iterator.call(context, obj[key], key, obj) === breaker) return;
             }
           }
@@ -238,7 +238,7 @@ Vector = (function (_) {
     bind: function(func, context) {
       var bound, args;
       if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-      if (!_.isFunction(func)) throw new TypeError;
+      if (!this.isFunction(func)) throw new TypeError;
       args = slice.call(arguments, 2);
       return bound = function() {
         if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
@@ -307,6 +307,14 @@ Vector = (function (_) {
       };
     },
 
+    isElement: function(obj) {
+      return !!(obj && obj.nodeType == 1);
+    },
+
+    isObject: function(obj) {
+      return obj === Object(obj);
+    },
+
     isNumber: function(obj) {
       return toString.call(obj) == '[object Number]';
     },
@@ -323,7 +331,7 @@ Vector = (function (_) {
       return obj === null;
     }
 
-  }
+  };
 
 })());
 
@@ -400,18 +408,18 @@ Vector = (function (_) {
     _.each($('img'), function(img) {
 
       var $img = $(img);
+      var alt = $img.attr('alt');
 
-      if ($img.attr('alt') !== '') {
-        addLabel($img);
+      if (alt && alt.length > 0) {
+        addLabel($img, alt);
       }
 
     });
 
   }
 
-  function addLabel($img) {
+  function addLabel($img, alt) {
 
-    var alt = $img.attr('alt');
     var text = marked(alt);
     var label = $('<div class="label image" />').html(text).appendTo(container);
 

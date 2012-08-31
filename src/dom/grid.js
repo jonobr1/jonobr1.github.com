@@ -1,4 +1,6 @@
-define([], function() {
+define([
+  'common'
+], function(_) {
 
   var column_widths = [888, 813, 738, 663, 588, 513, 438, 363, 288, 213, 138, 63];
   var column_positions = [900, 825, 750, 675, 600, 525, 450, 375, 300, 225, 150, 75, 0];

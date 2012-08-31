@@ -362,15 +362,22 @@ body {
   position: absolute; }
 
 #nav_loadspin,
-.loader_holder {
-  display: none;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
-  border-radius: 50%;
-  background: #fff;
-  border: 1.5px solid white; }
+.loader_holder,
+.loader {
+  display: none; }
+  #nav_loadspin,
+  #nav_loadspin img,
+  .loader_holder,
+  .loader_holder img,
+  .loader,
+  .loader img {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff; }
 
 .project_thumb {
   width: 168px;

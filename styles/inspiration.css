@@ -32,3 +32,8 @@
     background: #00ffc8;
     width: 100%;
     left: 0; }
+
+.loader {
+  position: absolute;
+  margin-top: 6px;
+  margin-left: 21.5px; }

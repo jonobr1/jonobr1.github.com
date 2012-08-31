@@ -1,7 +1,7 @@
 define([
   'dom/grid',
-  'underscore'
-], function(grid) {
+  'common'
+], function(grid, _) {
 
   var random_seed = 0;
 

@@ -23,23 +23,33 @@ var params = {
   }
 };
 
-require('./builder.js').build(params);
+var builder = require('./builder.js');
+
+builder.build(params);
 
 params.minify = true;
 params.out = '../build/topbar.min.js';
 
-require('./builder.js').build(params);
+builder.build(params);
 
 /**
  * Inspiration compilation
  */
 
-// params.minify = false;
-// params.out = '../build/inspiration.js';
-// 
-// require('./builder.js').build(params);
-// 
-// params.minify = true;
-// params.out = '../build/inspiration.min.js';
-// 
-// require('./builder.js').build(params);
+params = {
+  "baseUrl": '../',
+  "main": "js/inspiration",
+  "out": "../build/inspiration.js",
+  "minify": false,
+  "shortcut": "",
+  "paths": {
+    "common": "utils/common"
+  }
+};
+
+builder.build(params);
+
+params.minify = true;
+params.out = '../build/inspiration.min.js';
+
+builder.build(params);

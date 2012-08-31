@@ -36,7 +36,7 @@ define([
           }
         } else {
           for (var key in obj) {
-            if (_.has(obj, key)) {
+            if (has(obj, key)) {
               if (iterator.call(context, obj[key], key, obj) === breaker) return;
             }
           }
@@ -81,7 +81,7 @@ define([
     bind: function(func, context) {
       var bound, args;
       if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-      if (!_.isFunction(func)) throw new TypeError;
+      if (!this.isFunction(func)) throw new TypeError;
       args = slice.call(arguments, 2);
       return bound = function() {
         if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
@@ -150,6 +150,14 @@ define([
       };
     },
 
+    isElement: function(obj) {
+      return !!(obj && obj.nodeType == 1);
+    },
+
+    isObject: function(obj) {
+      return obj === Object(obj);
+    },
+
     isNumber: function(obj) {
       return toString.call(obj) == '[object Number]';
     },
@@ -166,6 +174,6 @@ define([
       return obj === null;
     }
 
-  }
+  };
 
 });

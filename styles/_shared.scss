@@ -70,3 +70,11 @@ $nine_column: ($width / 9) - $margin;
 $ten_column: ($width / 10) - $margin;
 $eleven_column: ($width / 11) - $margin;
 $single_column: ($width / $columns) - $margin;
+
+// Cargo variables
+
+$thumb_width: 168px;
+$thumb_height: 112px;
+
+$loader_width: 20px;
+$loader_height: $loader_width;

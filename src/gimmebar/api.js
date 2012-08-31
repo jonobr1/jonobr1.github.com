@@ -1,6 +1,6 @@
 define([
-  'underscore'
-], function() {
+  'common'
+], function(_) {
 
   var proxy  = '../php/get.php?q=';
   var base   = 'https://gimmebar.com/api/v1';

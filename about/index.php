@@ -3,6 +3,7 @@
 
   // Page Settings
 
+  // $debug = true;
   $title = 'about';
   $root = '../';
 
