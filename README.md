@@ -18,8 +18,9 @@ TODO:
 + __Inspiration__: Permalinks
 + __Inspiration__: Byline or description at the top.
 + ~~Bring designs to [cargo](http://cargocollective.com/) for http://works.jonobr1.com/~~
++ __Works__: Make actual project pages
 + Design emails
-+ Design custom loading gif
++ ~~Design custom loading gif~~
 + ~~Add captions to `alt` attributes of `img` tags~~
 + ~~Add touch events to topbar.js~~
-+ Route domains
++ ~~Route domains~~
