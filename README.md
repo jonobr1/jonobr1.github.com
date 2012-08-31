@@ -10,14 +10,14 @@ TODO:
 + ~~Bring in [Physics](http://github.com/jonobr1/Physics) as submodule or built source.~~
 + ~~Create a proper build process that _is not_ dependent on [require](http://requirejs.org/)~~
 + ~~Make about page~~
-  + ~~Artist Statement~~
-  + ~~Portrait~~ _Won't Fix_
++ __About__: ~~Artist Statement~~
++ __About__: ~~Portrait~~ _Won't Fix_
 + Make mobile stylesheet
 + ~~Bring in gimme branch as http://inspiration.jonobr1.com/~~
-  + Needs visible measurements
-  + Permalinks
-  + Byline or description at the top.
-+ Bring designs to [cargo](http://cargocollective.com/) for http://works.jonobr1.com/
++ __Inspiration__: Needs visible measurements
++ __Inspiration__: Permalinks
++ __Inspiration__: Byline or description at the top.
++ ~~Bring designs to [cargo](http://cargocollective.com/) for http://works.jonobr1.com/~~
 + Design emails
 + Design custom loading gif
 + ~~Add captions to `alt` attributes of `img` tags~~
