@@ -13,7 +13,7 @@ TODO:
   + ~~Artist Statement~~
   + ~~Portrait~~ _Won't Fix_
 + Make mobile stylesheet
-+ Bring in gimme branch as http://inspiration.jonobr1.com/
++ ~~Bring in gimme branch as http://inspiration.jonobr1.com/~~
   + Needs visible measurements
   + Permalinks
   + Byline or description at the top.
