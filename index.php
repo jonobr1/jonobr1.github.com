@@ -9,12 +9,6 @@
 
 ?>
 
-<section>
-  <p>
-    Hello World.
-  </p>
-</section>
-
 <?
 
   include 'php/foot.php';
