@@ -13,10 +13,10 @@
 <!-- <img src="../images/portrait.jpg" alt="__Diminishing Returns__ _2012_" /> -->
 <section>
   <p>
-    Jono Brandel (b. May 22, 1986) relies on the combination of two fundamental disciplines: graphic design and computer programming. The results of this mixture vary in form, but usually have a screen-based component. He aims to humanize digital aesthetics.
+    Jono Brandel (b. May 22, 1986) relies on the combination of two fundamental disciplines: <a href="http://en.wikipedia.org/wiki/Graphic_design">graphic design</a> and <a href="http://en.wikipedia.org/wiki/Computer_programming">computer programming</a>. The results of this mixture vary in form, but usually have a screen-based component. He aims to humanize digital aesthetics.
   </p>
   <p>
-    Jono studied Design | Media Arts with a minor in Latin at UCLA. He went on to receive two artist grants one at cheLA and the other at Fabrica. He is now part of the Data Arts Team in Google&rsquo;s Creative Lab. His work has been exhibited at the Tate Modern, OFFF, and the HAMMER Museum. He has also had the pleasure to perform alongside Boys Noize, Deadmau5, Crystal Castles, and many others accompanying their music with moving image.
+    Jono studied <a href="http://dma.ucla.edu/">Design | Media Arts</a> with a minor in <a href="http://classics.ucla.edu/">Latin</a> at UCLA. He went on to receive two artist grants one at <a href="http://chela.org.ar">cheLA</a> and the other at <a href="http://fabrica.it">Fabrica</a>. He is now part of the Data Arts Team in Google&rsquo;s Creative Lab. His work has been exhibited at the <a href="http://www.tate.org.uk/visit/tate-modern">Tate Modern</a>, <a href="http://offf.ws">OFFF</a>, and the <a href="http://hammer.ucla.edu/">HAMMER Museum</a>. He has also had the pleasure to perform alongside <a href="http://boysnoize.com/">Boys Noize</a>, <a href="http://deadmau5">Deadmau5</a>, <a href="http://http://crystalcastles.com/">Crystal Castles</a>, and many others accompanying their music with moving image.
   </p>
   <p>
     For a full list of performances, commercial work, or CV please email directly.
@@ -60,17 +60,29 @@
     Affiliation
   </dt>
   <dt>
-    Ghostly International
+    <a href="http://www.gaffta.org/">Gray Area Foundation for the Arts</a> <i>2012</i>
   </dt>
+  <dd>
+    Guest Performance
+  </dd>
   <dt>
-    Creator&apos;s Project
+    <a href="http://www.thecreatorsproject.com/">Creator&apos;s Project</a> <i>2011&mdash;2012</i>
   </dt>
+  <dd>
+    Guest Lectures
+  </dd>
   <dt>
-    Gray Area Foundation for the Arts
+    <a href="http://eyebeam.org/">Eyebeam</a> <i>2011</i>
   </dt>
+  <dd>
+    Guest Lectures
+  </dd>
   <dt>
-    Hardfest
+    <a href="http://hardfest.com/">Hardfest</a> <i>2008&mdash;2009</i>
   </dt>
+  <dd>
+    Resident Performances
+  </dd>
 </dl>
 
 <dl>
@@ -82,9 +94,6 @@
   </dt>
   <dt>
     <a href="http://vimeo.com/jonobr1">vimeo</a>
-  </dt>
-  <dt>
-    <a href="http://behance.com/jonobr1">Behance</a>
   </dt>
   <dt>
     <a href="http://cargocollective.com/jonobr1/following">Cargo</a>

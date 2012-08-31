@@ -63,7 +63,7 @@
           </a>
         </li>
         <li>
-          <a href="http://portfolio.jonobr1.com/">portfolio</a>
+          <a href="http://works.jonobr1.com/">works</a>
           <a href="http://about.jonobr1.com/">about</a>
         </li>
         <li>
