@@ -3,6 +3,7 @@
 var js = js || {};
 var svg = svg || {};
 var webfont = webfont || {};
+var dom = dom || {};
 
 requestAnimationFrame = (function () {
 
@@ -173,6 +174,7 @@ Vector = (function (_) {
     nativeIndexOf  = ArrayProto.indexOf,
     nativeMap      = ArrayProto.map,
     nativeFilter   = ArrayProto.filter,
+    nativeIsArray  = Array.isArray,
     nativeBind     = Function.prototype.bind;
 
   var ctor = function(){};
@@ -307,6 +309,15 @@ Vector = (function (_) {
       };
     },
 
+    clone: function(obj) {
+      if (!_.isObject(obj)) return obj;
+      return this.isArray(obj) ? obj.slice() : _.extend({}, obj);
+    },
+
+    isArray: nativeIsArray || function(obj) {
+      return toString.call(obj) == '[object Array]';
+    },
+
     isElement: function(obj) {
       return !!(obj && obj.nodeType == 1);
     },
@@ -336,7 +347,7 @@ Vector = (function (_) {
 })());
 
 
-(function (AnimatedPath, Physics, Vector, webfont, _) {
+(function (AnimatedPath, Physics, Vector, webfont, label, _) {
 
   var physics = new Physics();
   var container;
@@ -406,55 +417,8 @@ Vector = (function (_) {
      */
 
     _.each($('img'), function(img) {
-
-      var $img = $(img);
-      var alt = $img.attr('alt');
-
-      if (alt && alt.length > 0) {
-        addLabel($img, alt);
-      }
-
+      label.add($(img), container);
     });
-
-  }
-
-  function addLabel($img, alt) {
-
-    var text = marked(alt);
-    var label = $('<div class="label image" />').html(text).appendTo(container);
-
-    var fadeIn = function() {
-
-      var n = container.offset().top;
-      var o = $img.offset();
-      var w = ($img.outerWidth() - $img.width()) / 2;
-      var h = ($img.outerHeight() - $img.height()) / 2 - n;
-
-      label
-        .css({
-          top: o.top + h + 'px',
-          left: o.left + w + 'px'
-        })
-        .fadeIn(150);
-
-    };
-
-    var fadeOut = function(e) {
-
-      var target = $(e.relatedTarget);
-
-      if (target.hasClass('image') || target.hasClass('label')) {
-        return;
-      }
-
-      label.fadeOut(150);
-
-    };
-
-    $img
-      .hover(fadeIn, fadeOut)
-      .bind('touchstart', fadeIn)
-      .bind('touchend', fadeOut);
 
   }
 
@@ -1569,6 +1533,61 @@ webfont.loader = (function () {
       var s = document.getElementsByTagName('script')[0];
       s.parentNode.insertBefore(wf, s);
     }
+  };
+
+})(),
+dom.label = (function () {
+
+  return {
+
+    add: function($img, container) {
+
+      var alt = $img.attr('alt');
+
+      if (!alt || alt.length <= 0) {
+        return;
+      }
+
+      var text = marked(alt);
+      var label = $('<div class="label image" />').html(text).appendTo(container || document.body);
+
+      var fadeIn = function() {
+
+        var n = container.offset().top;
+        var o = $img.offset();
+        var w = ($img.outerWidth() - $img.width()) / 2;
+        var h = ($img.outerHeight() - $img.height()) / 2 - n;
+
+        label
+          .css({
+            top: o.top + h + 'px',
+            left: o.left + w + 'px'
+          })
+          .fadeIn(150);
+
+      };
+
+      var fadeOut = function(e) {
+
+        var target = $(e.relatedTarget);
+
+        if (target.hasClass('image') || target.hasClass('label')) {
+          return;
+        }
+
+        label.fadeOut(150);
+
+      };
+
+      $img
+        .hover(fadeIn, fadeOut)
+        .bind('touchstart', fadeIn)
+        .bind('touchend', fadeOut);
+
+      return label;
+
+    }
+
   };
 
 })(),

@@ -5,6 +5,8 @@
 
   .stage {
     position: relative;
+    background-image: url(../images/background.gif);
+    background-repeat: repeat;
     .moment:hover {
       z-index: 9999;
     }
@@ -23,6 +25,8 @@
     line-height: 0;
     @include border-radius(50%);
     @include user-select(none);
+    margin-top: $gutter / 2;
+    margin-left: ($single_column - $loader-width + ($line_height * 2)) / 2;
   }
   canvas {
     position: relative;
@@ -39,10 +43,4 @@
     width: 100%;
     left: 0;
   }
-}
-
-.loader {
-  position: absolute;
-  margin-top: $gutter / 2;
-  margin-left: ($single_column - $loader-width) / 2;
 }

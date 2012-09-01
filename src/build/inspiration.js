@@ -23,6 +23,7 @@ common = (function () {
     nativeIndexOf  = ArrayProto.indexOf,
     nativeMap      = ArrayProto.map,
     nativeFilter   = ArrayProto.filter,
+    nativeIsArray  = Array.isArray,
     nativeBind     = Function.prototype.bind;
 
   var ctor = function(){};
@@ -157,6 +158,15 @@ common = (function () {
       };
     },
 
+    clone: function(obj) {
+      if (!_.isObject(obj)) return obj;
+      return this.isArray(obj) ? obj.slice() : _.extend({}, obj);
+    },
+
+    isArray: nativeIsArray || function(obj) {
+      return toString.call(obj) == '[object Array]';
+    },
+
     isElement: function(obj) {
       return !!(obj && obj.nodeType == 1);
     },
@@ -262,6 +272,8 @@ dom.grid = (function (_) {
     }
 
   };
+
+  // grid.width = grid.width * grid.columns;
 
   return grid;
 
@@ -380,22 +392,45 @@ dom.grid = (function (_) {
           var width = stashHas ? stash.dims.w : displayHas ? display.dims.w : 0;
           var height = stashHas ? stash.dims.h : displayHas ? display.dims.h : 0;
 
+          if (width === 0 || height === 0) {
+            break;
+          }
+
           var dimensions = grid.snapWidth(parseInt(width), parseInt(height));
 
           var model = gallery.add({
             url: image_data.full,
             date: record.date,
-            width: dimensions.x,
-            height: dimensions.y
+            width: dimensions.x / 2,
+            height: dimensions.y / 2,
+            title: record.title
           });
 
-          stage.place(model);
+          for (var i = 0, l = gallery.models.length; i < l; i++) {
+
+            var m = gallery.models[i];
+
+            if (model.id === m.id || gallery.areNeighbors(model, m) || !gallery.isNeighbors(model, m)) {
+              continue;
+            }
+            gallery.makeNeighbors(model, m);
+
+          }
 
           break;
 
       }
 
     });
+
+    for (var i = 0, l = gallery.models.length; i < l; i++) {
+      var model = gallery.models[i];
+      if (model.placed) {
+        continue;
+      }
+      model.add({ placed: true });
+      stage.place(model);
+    }
 
     updateDisplay();
     minimap.loader.hide();
@@ -462,6 +497,8 @@ dom.grid = (function (_) {
       $.get(proxy + url, function(resp) {
 
         var data = JSON.parse(resp);
+
+        console.log('GET: ', data);
 
         // Update the total records if we can
 
@@ -553,6 +590,7 @@ timeline.Stage = (function (grid, _) {
      */
     place: function(model) {
 
+      var _this = this;
       var offset = calculateOffset.call(this, model);
 
       var $elem = $('<div />')
@@ -560,19 +598,30 @@ timeline.Stage = (function (grid, _) {
         .attr('model', model.id)
         .css({
           position: 'absolute',
-          padding: 6 + 'px',
+          // padding: 6 + 'px',
           background: '#d1d1d1'
         })
         .appendTo(this.domElement);
 
       // Bind the models properties to the display of this div.
       var updateDisplay = function() {
+
+        // var offset = calculateOffset.call(_this, model);
+        // 
+        // if (offset.left !== model.left) {
+        //   model.left = offset.left;
+        // }
+        // if (offset.top !== model.top) {
+        //   model.top = offset.top;
+        // }
+
         $elem.css({
           top: model.top + 'px',
           left: model.left + 'px',
           width: model.width + 'px',
           height: model.height + 'px'
         });
+
       };
 
       model
@@ -603,7 +652,7 @@ timeline.Stage = (function (grid, _) {
         var bottom = top + model.height;
         var $el = this.$el.find('[model=' + model.id + ']');
 
-        if ($el) {
+        if ($el.length > 0) {
 
           if (top > viewport.bottom || bottom < viewport.top) {
             $el.removeClass('visible');
@@ -635,10 +684,60 @@ timeline.Stage = (function (grid, _) {
     var x = this.offset.x;
     var y = Math.round((this.birthday - model.date) / 10 - this.offset.y);
 
-    if (model.width) {
-      var possible = random_seed * (this.width - model.width - this.offset.x);
-      x += grid.snapPosition(possible).x;
-      increment();
+    /**
+     * Neighbor repelling
+     */
+    if (model.id !== 0 && _.isArray(model.neighbors)) {
+
+      for (var i = 0, l = model.neighbors.length; i < l; i++) {
+
+        var m = model.neighbors[i];
+        if (_.isUndefined(m.top) || _.isUndefined(m.left)) {
+          continue;
+        }
+
+        var left = m.left;
+        var right = left + (m.width || 0);
+        var top = m.top;
+        var bottom = top + (m.height || 0);
+
+        if (x + (model.width || 0) >= left && x <= right
+          && y + (model.height || 0) >= top && y <= bottom) {
+
+          var offset_column = grid.snapPosition(right + grid.width).x;
+          var offset_width = offset_column + (model.width || 0);
+
+          if (offset_width < 900 && offset_column > x) {
+            x = offset_column;
+          }
+
+        }
+
+      }
+
+      for (var i = 0, l = model.neighbors.length; i < l; i++) {
+
+        var m = model.neighbors[i];
+        if (_.isUndefined(m.top) || _.isUndefined(m.left)) {
+          continue;
+        }
+
+        var left = m.left;
+        var right = left + (m.width || 0);
+        var top = m.top;
+        var bottom = top + (m.height || 0);
+
+        if (x + (model.width || 0) >= left && x <= right
+          && y + (model.height || 0) >= top && y <= bottom) {
+
+            if (y < bottom) {
+              y = bottom + grid.gutter;
+            }
+
+        }
+
+      }
+
     }
 
     if (y > this.range.max) {
@@ -712,7 +811,11 @@ timeline.Minimap = (function (loader, grid, _) {
     }, this);
 
     $(this.domElement)
-      .bind('mousedown', onElementMouseDown);
+      .bind('mousedown', onElementMouseDown)
+      .bind('mouseup', function(e) {
+        drag(e);
+        endDrag();
+      });
 
   };
 
@@ -826,7 +929,7 @@ timeline.Minimap = (function (loader, grid, _) {
         var x = this.toWorldX(model.left - half_offset);
         var y = this.toWorldY(model.top - this.stage.range.min);
         var w = this.toWorldX(model.width - this.stage.offset.x);
-        var h = this.toWorldY(model.height);
+        var h = this.toWorldY(model.height) + 6;
 
         this.ctx.fillRect(x, y, w, h);
 
@@ -892,7 +995,7 @@ timeline.Minimap = (function (loader, grid, _) {
 })(common),
 dom.grid,
 common),
-timeline.Gallery = (function (Model, grid, _) {
+timeline.Gallery = (function (Model, grid, label, _) {
 
   var $document = $(document);
   var ID = 0;
@@ -907,7 +1010,12 @@ timeline.Gallery = (function (Model, grid, _) {
 
   _.extend(Gallery, {
 
-    MaxImages: 50
+    MaxImages: 50,
+
+    /**
+     * Seconds to check for neighbors.
+     */
+    Threshold: 3600
 
   });
 
@@ -929,6 +1037,36 @@ timeline.Gallery = (function (Model, grid, _) {
 
       return m;
 
+    },
+
+    /**
+     * Is the match made already?
+     */
+    areNeighbors: function(m1, m2) {
+      return m1.neighbors && m1.neighbors.length > 0 && _.indexOf(m1.neighbors, m2) >= 0;
+    },
+
+    /**
+     * Date comparison
+     */
+    isNeighbors: function(m1, m2) {
+      var d1 = m1.date;
+      var d2 = m2.date;
+      return Math.abs(d1 - d2) < Gallery.Threshold;
+    },
+
+    /**
+     * Make a connection between two models.
+     */
+    makeNeighbors: function(m1, m2) {
+      if (!_.isArray(m1.neighbors)) {
+        m1.add({ neighbors: [] });
+      }
+      if (!_.isArray(m2.neighbors)) {
+        m2.add({ neighbors: [] });
+      }
+      m1.neighbors.push(m2);
+      m2.neighbors.push(m1);
     },
 
     hideImage: function(model, parent) {
@@ -1010,6 +1148,7 @@ timeline.Gallery = (function (Model, grid, _) {
   function makeNewImage(model, img) {
 
     var $image = $(img || '<img />')
+      .attr('alt', model.title)
       .css({
         display: 'none'
       })
@@ -1029,6 +1168,8 @@ timeline.Gallery = (function (Model, grid, _) {
           model.setHeight(dimensions.y);
 
         }
+
+        // label.add($image, $image.parent());
 
         $image.fadeIn();
 
@@ -1186,6 +1327,61 @@ timeline.Gallery = (function (Model, grid, _) {
 })(),
 common),
 dom.grid,
+dom.label = (function () {
+
+  return {
+
+    add: function($img, container) {
+
+      var alt = $img.attr('alt');
+
+      if (!alt || alt.length <= 0) {
+        return;
+      }
+
+      var text = marked(alt);
+      var label = $('<div class="label image" />').html(text).appendTo(container || document.body);
+
+      var fadeIn = function() {
+
+        var n = container.offset().top;
+        var o = $img.offset();
+        var w = ($img.outerWidth() - $img.width()) / 2;
+        var h = ($img.outerHeight() - $img.height()) / 2 - n;
+
+        label
+          .css({
+            top: o.top + h + 'px',
+            left: o.left + w + 'px'
+          })
+          .fadeIn(150);
+
+      };
+
+      var fadeOut = function(e) {
+
+        var target = $(e.relatedTarget);
+
+        if (target.hasClass('image') || target.hasClass('label')) {
+          return;
+        }
+
+        label.fadeOut(150);
+
+      };
+
+      $img
+        .hover(fadeIn, fadeOut)
+        .bind('touchstart', fadeIn)
+        .bind('touchend', fadeOut);
+
+      return label;
+
+    }
+
+  };
+
+})(),
 common),
 dom.grid,
 common);

@@ -11,7 +11,7 @@ define([
 
     var _this = this;
 
-    this.width = grid.getWidth(1);
+    this.width = grid.getWidth(1) + 20;
     this.gutter = grid.gutter;
 
     this.$el = $('<div class="minimap" />');

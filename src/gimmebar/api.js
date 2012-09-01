@@ -42,8 +42,6 @@ define([
 
         var data = JSON.parse(resp);
 
-        console.log('GET: ', data);
-
         // Update the total records if we can
 
         var total_records = data.total_records;

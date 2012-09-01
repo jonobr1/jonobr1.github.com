@@ -1,5 +1,7 @@
 #content .stage {
-  position: relative; }
+  position: relative;
+  background-image: url(../images/background.gif);
+  background-repeat: repeat; }
   #content .stage .moment:hover {
     z-index: 9999; }
 
@@ -20,7 +22,9 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none; }
+    user-select: none;
+    margin-top: 6px;
+    margin-left: 31.5px; }
   .minimap canvas {
     position: relative;
     display: block;
@@ -34,8 +38,3 @@
     border-bottom: 2px solid #00ffc8;
     width: 100%;
     left: 0; }
-
-.loader {
-  position: absolute;
-  margin-top: 6px;
-  margin-left: 21.5px; }

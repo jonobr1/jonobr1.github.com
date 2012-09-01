@@ -121,13 +121,13 @@ require([
             break;
           }
 
-          var dimensions = grid.snapWidth(parseInt(width), parseInt(height));
+          var dimensions = grid.snapWidth(parseInt(width / 2), parseInt(height / 2));
 
           var model = gallery.add({
             url: image_data.full,
             date: record.date,
-            width: dimensions.x / 2,
-            height: dimensions.y / 2,
+            width: dimensions.x,
+            height: dimensions.y,
             title: record.title
           });
 
@@ -159,6 +159,8 @@ require([
 
     updateDisplay();
     minimap.loader.hide();
+
+    $window.trigger('resize');
 
   }
 
