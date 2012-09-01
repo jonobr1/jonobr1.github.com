@@ -4,7 +4,9 @@
  * Use the same params variable for all compilation.
  */
 
-var params = {
+var builder = require('./builder.js');
+
+var topbar = {
   "baseUrl": "../",
   "main": "js/topbar",
   "out": "../build/topbar.js",
@@ -23,33 +25,42 @@ var params = {
   }
 };
 
-var builder = require('./builder.js');
+function compileTopbar() {
 
-builder.build(params);
+  builder.build(topbar);
 
-params.minify = true;
-params.out = '../build/topbar.min.js';
+  topbar.minify = true;
+  topbar.out = '../build/topbar.min.js';
+  topbar.on_compile = compileInspiration;
 
-builder.build(params);
+  builder.build(topbar);
+
+}
 
 /**
  * Inspiration compilation
  */
 
-params = {
-  "baseUrl": '../',
-  "main": "js/inspiration",
-  "out": "../build/inspiration.js",
-  "minify": false,
-  "shortcut": "",
-  "paths": {
-    "common": "utils/common"
-  }
-};
+function compileInspiration() {
 
-builder.build(params);
+  var inspiration = {
+    "baseUrl": '../',
+    "main": "js/inspiration",
+    "out": "../build/inspiration.js",
+    "minify": false,
+    "shortcut": "",
+    "paths": {
+      "common": "utils/common"
+    }
+  };
 
-params.minify = true;
-params.out = '../build/inspiration.min.js';
+  builder.build(inspiration);
 
-builder.build(params);
+  inspiration.minify = true;
+  inspiration.out = '../build/inspiration.min.js';
+
+  builder.build(inspiration);
+
+}
+
+compileTopbar();

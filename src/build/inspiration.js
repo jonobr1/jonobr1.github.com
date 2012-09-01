@@ -159,8 +159,8 @@ common = (function () {
     },
 
     clone: function(obj) {
-      if (!_.isObject(obj)) return obj;
-      return this.isArray(obj) ? obj.slice() : _.extend({}, obj);
+      if (!this.isObject(obj)) return obj;
+      return this.isArray(obj) ? obj.slice() : this.extend({}, obj);
     },
 
     isArray: nativeIsArray || function(obj) {
@@ -531,7 +531,7 @@ timeline.Stage = (function (grid, _) {
     this.birthday = Math.round(Date.now() / 1000);
     this.$el = $('<div class="stage"/>');
     this.domElement = this.$el[0];
-    this.offset = { x: grid.getPosition(1), y: 0 };
+    this.offset = { x: grid.getPosition(2), y: 0 };
     this.range = { min: 0, max: 0 };
 
   };

@@ -310,8 +310,8 @@ Vector = (function (_) {
     },
 
     clone: function(obj) {
-      if (!_.isObject(obj)) return obj;
-      return this.isArray(obj) ? obj.slice() : _.extend({}, obj);
+      if (!this.isObject(obj)) return obj;
+      return this.isArray(obj) ? obj.slice() : this.extend({}, obj);
     },
 
     isArray: nativeIsArray || function(obj) {
