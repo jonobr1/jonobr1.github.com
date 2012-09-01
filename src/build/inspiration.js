@@ -396,13 +396,13 @@ dom.grid = (function (_) {
             break;
           }
 
-          var dimensions = grid.snapWidth(parseInt(width), parseInt(height));
+          var dimensions = grid.snapWidth(parseInt(width / 2), parseInt(height / 2));
 
           var model = gallery.add({
             url: image_data.full,
             date: record.date,
-            width: dimensions.x / 2,
-            height: dimensions.y / 2,
+            width: dimensions.x,
+            height: dimensions.y,
             title: record.title
           });
 
@@ -434,6 +434,8 @@ dom.grid = (function (_) {
 
     updateDisplay();
     minimap.loader.hide();
+
+    $window.trigger('resize');
 
   }
 
@@ -497,8 +499,6 @@ dom.grid = (function (_) {
       $.get(proxy + url, function(resp) {
 
         var data = JSON.parse(resp);
-
-        console.log('GET: ', data);
 
         // Update the total records if we can
 
@@ -769,7 +769,7 @@ timeline.Minimap = (function (loader, grid, _) {
 
     var _this = this;
 
-    this.width = grid.getWidth(1);
+    this.width = grid.getWidth(1) + 20;
     this.gutter = grid.gutter;
 
     this.$el = $('<div class="minimap" />');
