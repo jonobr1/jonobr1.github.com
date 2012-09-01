@@ -34,6 +34,8 @@
   div.viewport {
     position: absolute;
     background: $green;
+    border-top: 2px solid $green;
+    border-bottom: 2px solid $green;
     width: 100%;
     left: 0;
   }

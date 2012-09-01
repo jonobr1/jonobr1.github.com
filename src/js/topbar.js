@@ -16,8 +16,9 @@ require([
   'Physics',
   'Vector',
   'webfont/loader',
+  'dom/label',
   'common'
-], function(AnimatedPath, Physics, Vector, webfont, _) {
+], function(AnimatedPath, Physics, Vector, webfont, label, _) {
 
   var physics = new Physics();
   var container;
@@ -87,55 +88,8 @@ require([
      */
 
     _.each($('img'), function(img) {
-
-      var $img = $(img);
-      var alt = $img.attr('alt');
-
-      if (alt && alt.length > 0) {
-        addLabel($img, alt);
-      }
-
+      label.add($(img), container);
     });
-
-  }
-
-  function addLabel($img, alt) {
-
-    var text = marked(alt);
-    var label = $('<div class="label image" />').html(text).appendTo(container);
-
-    var fadeIn = function() {
-
-      var n = container.offset().top;
-      var o = $img.offset();
-      var w = ($img.outerWidth() - $img.width()) / 2;
-      var h = ($img.outerHeight() - $img.height()) / 2 - n;
-
-      label
-        .css({
-          top: o.top + h + 'px',
-          left: o.left + w + 'px'
-        })
-        .fadeIn(150);
-
-    };
-
-    var fadeOut = function(e) {
-
-      var target = $(e.relatedTarget);
-
-      if (target.hasClass('image') || target.hasClass('label')) {
-        return;
-      }
-
-      label.fadeOut(150);
-
-    };
-
-    $img
-      .hover(fadeIn, fadeOut)
-      .bind('touchstart', fadeIn)
-      .bind('touchend', fadeOut);
 
   }
 

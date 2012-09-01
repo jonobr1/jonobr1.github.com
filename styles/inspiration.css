@@ -30,6 +30,8 @@
   .minimap div.viewport {
     position: absolute;
     background: #00ffc8;
+    border-top: 2px solid #00ffc8;
+    border-bottom: 2px solid #00ffc8;
     width: 100%;
     left: 0; }
 

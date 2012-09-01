@@ -69,6 +69,7 @@ define([
      */
     place: function(model) {
 
+      var _this = this;
       var offset = calculateOffset.call(this, model);
 
       var $elem = $('<div />')
@@ -76,19 +77,30 @@ define([
         .attr('model', model.id)
         .css({
           position: 'absolute',
-          padding: 6 + 'px',
+          // padding: 6 + 'px',
           background: '#d1d1d1'
         })
         .appendTo(this.domElement);
 
       // Bind the models properties to the display of this div.
       var updateDisplay = function() {
+
+        // var offset = calculateOffset.call(_this, model);
+        // 
+        // if (offset.left !== model.left) {
+        //   model.left = offset.left;
+        // }
+        // if (offset.top !== model.top) {
+        //   model.top = offset.top;
+        // }
+
         $elem.css({
           top: model.top + 'px',
           left: model.left + 'px',
           width: model.width + 'px',
           height: model.height + 'px'
         });
+
       };
 
       model
@@ -119,7 +131,7 @@ define([
         var bottom = top + model.height;
         var $el = this.$el.find('[model=' + model.id + ']');
 
-        if ($el) {
+        if ($el.length > 0) {
 
           if (top > viewport.bottom || bottom < viewport.top) {
             $el.removeClass('visible');
@@ -151,10 +163,60 @@ define([
     var x = this.offset.x;
     var y = Math.round((this.birthday - model.date) / 10 - this.offset.y);
 
-    if (model.width) {
-      var possible = random_seed * (this.width - model.width - this.offset.x);
-      x += grid.snapPosition(possible).x;
-      increment();
+    /**
+     * Neighbor repelling
+     */
+    if (model.id !== 0 && _.isArray(model.neighbors)) {
+
+      for (var i = 0, l = model.neighbors.length; i < l; i++) {
+
+        var m = model.neighbors[i];
+        if (_.isUndefined(m.top) || _.isUndefined(m.left)) {
+          continue;
+        }
+
+        var left = m.left;
+        var right = left + (m.width || 0);
+        var top = m.top;
+        var bottom = top + (m.height || 0);
+
+        if (x + (model.width || 0) >= left && x <= right
+          && y + (model.height || 0) >= top && y <= bottom) {
+
+          var offset_column = grid.snapPosition(right + grid.width).x;
+          var offset_width = offset_column + (model.width || 0);
+
+          if (offset_width < 900 && offset_column > x) {
+            x = offset_column;
+          }
+
+        }
+
+      }
+
+      for (var i = 0, l = model.neighbors.length; i < l; i++) {
+
+        var m = model.neighbors[i];
+        if (_.isUndefined(m.top) || _.isUndefined(m.left)) {
+          continue;
+        }
+
+        var left = m.left;
+        var right = left + (m.width || 0);
+        var top = m.top;
+        var bottom = top + (m.height || 0);
+
+        if (x + (model.width || 0) >= left && x <= right
+          && y + (model.height || 0) >= top && y <= bottom) {
+
+            if (y < bottom) {
+              y = bottom + grid.gutter;
+            }
+
+        }
+
+      }
+
     }
 
     if (y > this.range.max) {
@@ -176,3 +238,4 @@ define([
   return Stage;
 
 });
+;

@@ -1,8 +1,9 @@
 define([
   'mvc/Model',
   'dom/grid',
+  'dom/label',
   'common'
-], function(Model, grid, _) {
+], function(Model, grid, label, _) {
 
   var $document = $(document);
   var ID = 0;
@@ -17,7 +18,12 @@ define([
 
   _.extend(Gallery, {
 
-    MaxImages: 50
+    MaxImages: 50,
+
+    /**
+     * Seconds to check for neighbors.
+     */
+    Threshold: 3600
 
   });
 
@@ -39,6 +45,36 @@ define([
 
       return m;
 
+    },
+
+    /**
+     * Is the match made already?
+     */
+    areNeighbors: function(m1, m2) {
+      return m1.neighbors && m1.neighbors.length > 0 && _.indexOf(m1.neighbors, m2) >= 0;
+    },
+
+    /**
+     * Date comparison
+     */
+    isNeighbors: function(m1, m2) {
+      var d1 = m1.date;
+      var d2 = m2.date;
+      return Math.abs(d1 - d2) < Gallery.Threshold;
+    },
+
+    /**
+     * Make a connection between two models.
+     */
+    makeNeighbors: function(m1, m2) {
+      if (!_.isArray(m1.neighbors)) {
+        m1.add({ neighbors: [] });
+      }
+      if (!_.isArray(m2.neighbors)) {
+        m2.add({ neighbors: [] });
+      }
+      m1.neighbors.push(m2);
+      m2.neighbors.push(m1);
     },
 
     hideImage: function(model, parent) {
@@ -120,6 +156,7 @@ define([
   function makeNewImage(model, img) {
 
     var $image = $(img || '<img />')
+      .attr('alt', model.title)
       .css({
         display: 'none'
       })
@@ -139,6 +176,8 @@ define([
           model.setHeight(dimensions.y);
 
         }
+
+        // label.add($image, $image.parent());
 
         $image.fadeIn();
 

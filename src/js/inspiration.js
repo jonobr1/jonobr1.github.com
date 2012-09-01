@@ -117,22 +117,45 @@ require([
           var width = stashHas ? stash.dims.w : displayHas ? display.dims.w : 0;
           var height = stashHas ? stash.dims.h : displayHas ? display.dims.h : 0;
 
+          if (width === 0 || height === 0) {
+            break;
+          }
+
           var dimensions = grid.snapWidth(parseInt(width), parseInt(height));
 
           var model = gallery.add({
             url: image_data.full,
             date: record.date,
-            width: dimensions.x,
-            height: dimensions.y
+            width: dimensions.x / 2,
+            height: dimensions.y / 2,
+            title: record.title
           });
 
-          stage.place(model);
+          for (var i = 0, l = gallery.models.length; i < l; i++) {
+
+            var m = gallery.models[i];
+
+            if (model.id === m.id || gallery.areNeighbors(model, m) || !gallery.isNeighbors(model, m)) {
+              continue;
+            }
+            gallery.makeNeighbors(model, m);
+
+          }
 
           break;
 
       }
 
     });
+
+    for (var i = 0, l = gallery.models.length; i < l; i++) {
+      var model = gallery.models[i];
+      if (model.placed) {
+        continue;
+      }
+      model.add({ placed: true });
+      stage.place(model);
+    }
 
     updateDisplay();
     minimap.loader.hide();

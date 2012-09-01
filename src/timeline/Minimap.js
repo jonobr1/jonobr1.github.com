@@ -53,7 +53,11 @@ define([
     }, this);
 
     $(this.domElement)
-      .bind('mousedown', onElementMouseDown);
+      .bind('mousedown', onElementMouseDown)
+      .bind('mouseup', function(e) {
+        drag(e);
+        endDrag();
+      });
 
   };
 
@@ -167,7 +171,7 @@ define([
         var x = this.toWorldX(model.left - half_offset);
         var y = this.toWorldY(model.top - this.stage.range.min);
         var w = this.toWorldX(model.width - this.stage.offset.x);
-        var h = this.toWorldY(model.height);
+        var h = this.toWorldY(model.height) + 6;
 
         this.ctx.fillRect(x, y, w, h);
 

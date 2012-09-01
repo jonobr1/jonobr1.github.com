@@ -77,6 +77,8 @@ define([
 
   };
 
+  // grid.width = grid.width * grid.columns;
+
   return grid;
 
 });

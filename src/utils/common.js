@@ -16,6 +16,7 @@ define([
     nativeIndexOf  = ArrayProto.indexOf,
     nativeMap      = ArrayProto.map,
     nativeFilter   = ArrayProto.filter,
+    nativeIsArray  = Array.isArray,
     nativeBind     = Function.prototype.bind;
 
   var ctor = function(){};
@@ -148,6 +149,15 @@ define([
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
       };
+    },
+
+    clone: function(obj) {
+      if (!_.isObject(obj)) return obj;
+      return this.isArray(obj) ? obj.slice() : _.extend({}, obj);
+    },
+
+    isArray: nativeIsArray || function(obj) {
+      return toString.call(obj) == '[object Array]';
     },
 
     isElement: function(obj) {
