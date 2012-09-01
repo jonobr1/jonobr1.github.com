@@ -100,7 +100,7 @@ define([
     getImageForModel: function(model, container) {
 
       var image = this.makeImage(model);
-      container.appendChild(image);
+      container.children[0].appendChild(image);
 
       return this;
 
@@ -145,7 +145,7 @@ define([
 
     getImageById: function(id) {
 
-      var el = $document.find('[model=' + id +']').children()[0];
+      var el = $document.find('[model=' + id +'] img')[0];
 
       return el;
 
@@ -177,7 +177,7 @@ define([
 
         }
 
-        // label.add($image, $image.parent());
+        label.add($image, $image.parent(), true);
 
         $image.fadeIn();
 

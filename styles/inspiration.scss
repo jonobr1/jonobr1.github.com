@@ -12,6 +12,10 @@
     }
   }
 
+  div.label.image {
+    text-overflow: ellipsis;
+  }
+
 }
 
 .minimap {
@@ -26,7 +30,7 @@
     @include border-radius(50%);
     @include user-select(none);
     margin-top: $gutter / 2;
-    margin-left: ($single_column - $loader-width + ($line_height * 2)) / 2;
+    margin-left: ($single_column - $loader-width) / 2;
   }
   canvas {
     position: relative;

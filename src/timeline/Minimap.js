@@ -11,7 +11,7 @@ define([
 
     var _this = this;
 
-    this.width = grid.getWidth(1) + 20;
+    this.width = grid.getWidth(1);
     this.gutter = grid.gutter;
 
     this.$el = $('<div class="minimap" />');
@@ -170,7 +170,7 @@ define([
 
         var x = this.toWorldX(model.left - half_offset);
         var y = this.toWorldY(model.top - this.stage.range.min);
-        var w = this.toWorldX(model.width - this.stage.offset.x);
+        var w = this.toWorldX(model.width);
         var h = this.toWorldY(model.height) + 6;
 
         this.ctx.fillRect(x, y, w, h);

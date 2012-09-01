@@ -314,7 +314,7 @@ dom.grid = (function (_) {
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
 
     minimap
-      .setOffset(navOffset.left, minimapOffset)
+      .setOffset(navOffset.left + 32, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter);
 
   }).trigger('resize');
@@ -348,7 +348,7 @@ dom.grid = (function (_) {
 
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
     minimap
-      .setOffset(navOffset.left, minimapOffset)
+      .setOffset(navOffset.left + 32, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
       .updateViewport(scrollTop - navHeight, windowHeight);
 
@@ -403,7 +403,8 @@ dom.grid = (function (_) {
             date: record.date,
             width: dimensions.x,
             height: dimensions.y,
-            title: record.title
+            title: record.title,
+            href: record.source
           });
 
           for (var i = 0, l = gallery.models.length; i < l; i++) {
@@ -598,10 +599,14 @@ timeline.Stage = (function (grid, _) {
         .attr('model', model.id)
         .css({
           position: 'absolute',
-          // padding: 6 + 'px',
+          // padding: 3 + 'px',
           background: '#d1d1d1'
         })
         .appendTo(this.domElement);
+
+      if (model.href) {
+        $elem.html('<a href="' + model.href + '"></a>');
+      }
 
       // Bind the models properties to the display of this div.
       var updateDisplay = function() {
@@ -769,7 +774,7 @@ timeline.Minimap = (function (loader, grid, _) {
 
     var _this = this;
 
-    this.width = grid.getWidth(1) + 20;
+    this.width = grid.getWidth(1);
     this.gutter = grid.gutter;
 
     this.$el = $('<div class="minimap" />');
@@ -928,7 +933,7 @@ timeline.Minimap = (function (loader, grid, _) {
 
         var x = this.toWorldX(model.left - half_offset);
         var y = this.toWorldY(model.top - this.stage.range.min);
-        var w = this.toWorldX(model.width - this.stage.offset.x);
+        var w = this.toWorldX(model.width);
         var h = this.toWorldY(model.height) + 6;
 
         this.ctx.fillRect(x, y, w, h);
@@ -1092,7 +1097,7 @@ timeline.Gallery = (function (Model, grid, label, _) {
     getImageForModel: function(model, container) {
 
       var image = this.makeImage(model);
-      container.appendChild(image);
+      container.children[0].appendChild(image);
 
       return this;
 
@@ -1137,7 +1142,7 @@ timeline.Gallery = (function (Model, grid, label, _) {
 
     getImageById: function(id) {
 
-      var el = $document.find('[model=' + id +']').children()[0];
+      var el = $document.find('[model=' + id +'] img')[0];
 
       return el;
 
@@ -1169,7 +1174,7 @@ timeline.Gallery = (function (Model, grid, label, _) {
 
         }
 
-        // label.add($image, $image.parent());
+        label.add($image, $image.parent(), true);
 
         $image.fadeIn();
 
@@ -1331,9 +1336,10 @@ dom.label = (function () {
 
   return {
 
-    add: function($img, container) {
+    add: function($img, container, relative) {
 
       var alt = $img.attr('alt');
+      var isRelative = !!relative;
 
       if (!alt || alt.length <= 0) {
         return;
@@ -1342,18 +1348,24 @@ dom.label = (function () {
       var text = marked(alt);
       var label = $('<div class="label image" />').html(text).appendTo(container || document.body);
 
+      var parent = container = $(container || document.body);
+
       var fadeIn = function() {
 
-        var n = container.offset().top;
-        var o = $img.offset();
-        var w = ($img.outerWidth() - $img.width()) / 2;
-        var h = ($img.outerHeight() - $img.height()) / 2 - n;
+        var o, n, w, h, pos;
+
+        if (isRelative) {
+          pos = { left: 0, top: 0 };
+        } else {
+          var n = container.offset().top;
+          var o = $img.offset();
+          var w = ($img.outerWidth() - $img.width()) / 2;
+          var h = ($img.outerHeight() - $img.height()) / 2 - n;
+          pos = { left: o.left + w + 'px', top: o.top + h + 'px' };
+        }
 
         label
-          .css({
-            top: o.top + h + 'px',
-            left: o.left + w + 'px'
-          })
+          .css(pos)
           .fadeIn(150);
 
       };
@@ -1370,7 +1382,9 @@ dom.label = (function () {
 
       };
 
-      $img
+      var el = isRelative ? container : $img;
+
+      el
         .hover(fadeIn, fadeOut)
         .bind('touchstart', fadeIn)
         .bind('touchend', fadeOut);

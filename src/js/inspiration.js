@@ -39,7 +39,7 @@ require([
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
 
     minimap
-      .setOffset(navOffset.left, minimapOffset)
+      .setOffset(navOffset.left + 32, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter);
 
   }).trigger('resize');
@@ -73,7 +73,7 @@ require([
 
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
     minimap
-      .setOffset(navOffset.left, minimapOffset)
+      .setOffset(navOffset.left + 32, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
       .updateViewport(scrollTop - navHeight, windowHeight);
 
@@ -128,7 +128,8 @@ require([
             date: record.date,
             width: dimensions.x,
             height: dimensions.y,
-            title: record.title
+            title: record.title,
+            href: record.source
           });
 
           for (var i = 0, l = gallery.models.length; i < l; i++) {

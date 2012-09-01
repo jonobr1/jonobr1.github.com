@@ -77,10 +77,14 @@ define([
         .attr('model', model.id)
         .css({
           position: 'absolute',
-          // padding: 6 + 'px',
+          // padding: 3 + 'px',
           background: '#d1d1d1'
         })
         .appendTo(this.domElement);
+
+      if (model.href) {
+        $elem.html('<a href="' + model.href + '"></a>');
+      }
 
       // Bind the models properties to the display of this div.
       var updateDisplay = function() {

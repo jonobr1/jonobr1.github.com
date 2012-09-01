@@ -3,9 +3,10 @@ define([
 
   return {
 
-    add: function($img, container) {
+    add: function($img, container, relative) {
 
       var alt = $img.attr('alt');
+      var isRelative = !!relative;
 
       if (!alt || alt.length <= 0) {
         return;
@@ -14,18 +15,24 @@ define([
       var text = marked(alt);
       var label = $('<div class="label image" />').html(text).appendTo(container || document.body);
 
+      var parent = container = $(container || document.body);
+
       var fadeIn = function() {
 
-        var n = container.offset().top;
-        var o = $img.offset();
-        var w = ($img.outerWidth() - $img.width()) / 2;
-        var h = ($img.outerHeight() - $img.height()) / 2 - n;
+        var o, n, w, h, pos;
+
+        if (isRelative) {
+          pos = { left: 0, top: 0 };
+        } else {
+          var n = container.offset().top;
+          var o = $img.offset();
+          var w = ($img.outerWidth() - $img.width()) / 2;
+          var h = ($img.outerHeight() - $img.height()) / 2 - n;
+          pos = { left: o.left + w + 'px', top: o.top + h + 'px' };
+        }
 
         label
-          .css({
-            top: o.top + h + 'px',
-            left: o.left + w + 'px'
-          })
+          .css(pos)
           .fadeIn(150);
 
       };
@@ -42,7 +49,9 @@ define([
 
       };
 
-      $img
+      var el = isRelative ? container : $img;
+
+      el
         .hover(fadeIn, fadeOut)
         .bind('touchstart', fadeIn)
         .bind('touchend', fadeOut);
