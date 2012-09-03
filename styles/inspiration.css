@@ -40,3 +40,33 @@
     border-bottom: 2px solid #00ffc8;
     width: 100%;
     left: 0; }
+
+div.legend {
+  font-family: 'Lekton', 'Nuvo Pro', monospace;
+  position: absolute;
+  margin-top: 150px;
+  margin-left: -41.5px;
+  z-index: 9999; }
+  div.legend div.metric {
+    position: relative;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    width: 300px;
+    height: 0;
+    overflow: visible;
+    line-height: 0;
+    border-bottom: 1px solid #d1d1d1; }
+    div.legend div.metric p {
+      margin: 0 auto;
+      position: relative;
+      top: -5px;
+      line-height: 10px;
+      text-align: center;
+      border-left: 1px solid #d1d1d1;
+      border-right: 1px solid #d1d1d1; }
+      div.legend div.metric p span {
+        background: #efefef;
+        padding: 0 6px; }

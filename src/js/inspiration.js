@@ -25,6 +25,7 @@ require([
     max: 0
   };
   var scrollTop = 0;
+  var scrollLeft = 0;
   var windowHeight = $window.height();
   var navHeight = $navigation.outerHeight(true);
   var navOffset = $navigation.offset();
@@ -39,7 +40,7 @@ require([
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
 
     minimap
-      .setOffset(navOffset.left + 32, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter);
 
   }).trigger('resize');
@@ -56,6 +57,7 @@ require([
   $document.scroll(function() {
 
     var st = $document.scrollTop();
+    var sh = $document.scrollLeft();
 
     if (scrollTop < st) {
       // Scrolling down
@@ -69,11 +71,15 @@ require([
       }
     }
 
+    // Account for horizontal scrolling
+
+
+    scrollLeft = sh;
     scrollTop = st;
 
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
     minimap
-      .setOffset(navOffset.left + 32, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
       .updateViewport(scrollTop - navHeight, windowHeight);
 

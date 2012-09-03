@@ -2,7 +2,7 @@
 
   // Page Settings
 
-  // $debug = true;
+  $debug = true;
   $root = '../';
   $title = 'inspiration';
 
@@ -12,9 +12,16 @@
 
 <link rel="stylesheet" type="text/css" media="screen" href="<? echo $root; ?>styles/inspiration.css" />
 
-<!-- inspiration goes here -->
+<div class="legend">
+  <div class="metric">
+    <p>
+      <span>
+        5 minutes
+      </span>
+    </p>
+  </div>
+</div>
 
-<!-- Development environment -->
 <?
 
   if ($debug) {

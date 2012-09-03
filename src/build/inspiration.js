@@ -300,6 +300,7 @@ dom.grid = (function (_) {
     max: 0
   };
   var scrollTop = 0;
+  var scrollLeft = 0;
   var windowHeight = $window.height();
   var navHeight = $navigation.outerHeight(true);
   var navOffset = $navigation.offset();
@@ -314,7 +315,7 @@ dom.grid = (function (_) {
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
 
     minimap
-      .setOffset(navOffset.left + 32, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter);
 
   }).trigger('resize');
@@ -331,6 +332,7 @@ dom.grid = (function (_) {
   $document.scroll(function() {
 
     var st = $document.scrollTop();
+    var sh = $document.scrollLeft();
 
     if (scrollTop < st) {
       // Scrolling down
@@ -344,11 +346,15 @@ dom.grid = (function (_) {
       }
     }
 
+    // Account for horizontal scrolling
+
+
+    scrollLeft = sh;
     scrollTop = st;
 
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
     minimap
-      .setOffset(navOffset.left + 32, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
       .updateViewport(scrollTop - navHeight, windowHeight);
 

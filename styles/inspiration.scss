@@ -1,6 +1,8 @@
 @import 'bourbon/bourbon';
 @import 'shared';
 
+$dark_grey: #d1d1d1;
+
 #content {
 
   .stage {
@@ -20,7 +22,7 @@
 
 .minimap {
   position: fixed;
-  background: #d1d1d1;
+  background: $dark_grey;
   .loader {
     position: absolute;
     background: $white;
@@ -46,5 +48,35 @@
     border-bottom: 2px solid $green;
     width: 100%;
     left: 0;
+  }
+}
+
+div.legend {
+  font-family: 'Lekton', 'Nuvo Pro', monospace;
+  position: absolute;
+  margin-top: 150px;
+  margin-left: -$single_column / 2 - $line_height;
+  z-index: 9999;
+  div.metric {
+    position: relative;
+    @include transform(rotate(-90deg));
+    width: 300px;
+    height: 0;
+    overflow: visible;
+    line-height: 0;
+    border-bottom: 1px solid $dark_grey;
+    p {
+      margin: 0 auto;
+      position: relative;
+      top: - $line_height / 2;
+      line-height: $line_height;
+      text-align: center;
+      border-left: 1px solid $dark_grey;
+      border-right: 1px solid $dark_grey;
+      span {
+        background: $white;
+        padding: 0 $gutter / 2;
+      }
+    }
   }
 }
