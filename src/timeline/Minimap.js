@@ -1,8 +1,9 @@
 define([
   'dom/loader',
   'dom/grid',
+  'timeline/Clock',
   'common'
-], function(loader, grid, _) {
+], function(loader, grid, Clock, _) {
 
   var $document = $(document);
   var $window = $(window);
@@ -21,10 +22,12 @@ define([
     this.loader = loader;
 
     this.viewport = $('<div class="viewport" />')[0];
+    this.clock = new Clock(20, 20);
 
     this.domElement.appendChild(this.viewport);
     this.domElement.appendChild(this.canvas);
     this.domElement.appendChild(this.loader.domElement);
+    this.domElement.appendChild(this.clock.domElement);
 
     var onElementMouseDown = _.bind(function(e) {
       $document
@@ -91,12 +94,14 @@ define([
 
     },
 
-    setOffset: function(x, y) {
+    setOffset: function(x, y, scrollTop) {
 
       _.extend(this.domElement.style, {
         left: x + 'px',
         top: y + 'px'
       });
+
+      this.clock.setTimeByPosition(scrollTop);
 
       return this;
 

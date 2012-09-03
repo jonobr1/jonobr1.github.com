@@ -2,7 +2,7 @@
 
   // Page Settings
 
-  $debug = true;
+  // $debug = true;
   $root = '../';
   $title = 'inspiration';
 
@@ -36,7 +36,7 @@
 
     ?>
 
-    <script type="text/javascript" src="<? echo $root; ?>src/build/inspiration.min.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>src/build/inspiration.js"></script>
 
     <?
 

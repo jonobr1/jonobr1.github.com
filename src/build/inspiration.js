@@ -4,6 +4,7 @@ var js = js || {};
 var gimmebar = gimmebar || {};
 var timeline = timeline || {};
 var dom = dom || {};
+var svg = svg || {};
 var mvc = mvc || {};
 
 common = (function () {
@@ -163,12 +164,33 @@ common = (function () {
       return this.isArray(obj) ? obj.slice() : this.extend({}, obj);
     },
 
+    isElement: function(obj) {
+      return !!(obj && obj.nodeType == 1);
+    },
+
     isArray: nativeIsArray || function(obj) {
       return toString.call(obj) == '[object Array]';
     },
 
-    isElement: function(obj) {
-      return !!(obj && obj.nodeType == 1);
+    toArray: function(obj) {
+      if (!obj)                                        return [];
+      if (this.isArray(obj))                           return slice.call(obj);
+      if (this.isArguments(obj))                       return slice.call(obj);
+      if (obj.toArray && this.isFunction(obj.toArray)) return obj.toArray();
+      return this.values(obj);
+    },
+
+    values: function(obj) {
+      return _.map(obj, _.identity);
+    },
+
+    once: function(func) {
+      var ran = false, memo;
+      return function() {
+        if (ran) return memo;
+        ran = true;
+        return memo = func.apply(this, arguments);
+      };
     },
 
     isObject: function(obj) {
@@ -306,6 +328,12 @@ dom.grid = (function (_) {
   var navOffset = $navigation.offset();
   var minimapOffset;
 
+  var initialize = _.once(function() {
+
+    minimap.clock.setInitialTime(gallery.models[0].date);
+
+  });
+
   gimmebar.getAssetsForUser('jonobr1', receiveData);
 
   $window.resize(function() {
@@ -315,7 +343,7 @@ dom.grid = (function (_) {
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
 
     minimap
-      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop)
       .setHeight(windowHeight - minimapOffset - minimap.gutter);
 
   }).trigger('resize');
@@ -354,7 +382,7 @@ dom.grid = (function (_) {
 
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
     minimap
-      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
       .updateViewport(scrollTop - navHeight, windowHeight);
 
@@ -438,6 +466,8 @@ dom.grid = (function (_) {
       model.add({ placed: true });
       stage.place(model);
     }
+
+    initialize();
 
     updateDisplay();
     minimap.loader.hide();
@@ -771,7 +801,7 @@ timeline.Stage = (function (grid, _) {
 
 })(dom.grid,
 common),
-timeline.Minimap = (function (loader, grid, _) {
+timeline.Minimap = (function (loader, grid, Clock, _) {
 
   var $document = $(document);
   var $window = $(window);
@@ -790,10 +820,12 @@ timeline.Minimap = (function (loader, grid, _) {
     this.loader = loader;
 
     this.viewport = $('<div class="viewport" />')[0];
+    this.clock = new Clock(20, 20);
 
     this.domElement.appendChild(this.viewport);
     this.domElement.appendChild(this.canvas);
     this.domElement.appendChild(this.loader.domElement);
+    this.domElement.appendChild(this.clock.domElement);
 
     var onElementMouseDown = _.bind(function(e) {
       $document
@@ -860,12 +892,14 @@ timeline.Minimap = (function (loader, grid, _) {
 
     },
 
-    setOffset: function(x, y) {
+    setOffset: function(x, y, scrollTop) {
 
       _.extend(this.domElement.style, {
         left: x + 'px',
         top: y + 'px'
       });
+
+      this.clock.setTimeByPosition(scrollTop);
 
       return this;
 
@@ -1005,6 +1039,375 @@ timeline.Minimap = (function (loader, grid, _) {
 
 })(common),
 dom.grid,
+timeline.Clock = (function (svg, _, dateFormat) {
+
+  var DAY = 86400,
+    TWO_PI = Math.PI * 2.0;
+
+  var delimeter = '&middot;';
+  var timeouts = [];
+  var colors = {
+    day: {
+      r: 252,
+      g: 192,
+      b: 151
+    },
+    night: {
+      r: 201,
+      g: 192,
+      b: 255
+    }
+  };
+
+  var Clock = function(width, height) {
+
+    var _this = this;
+
+    this.width = (width || 20);
+    this.height = (height || 20);
+
+    var dimensions = {
+      width: this.width + 1,
+      height: this.height + 1
+    };
+
+    this.domElement = document.createElement('div');
+    this.container = svg.createElement('svg');
+    this.circle = svg.createElement('circle');
+    this.label = $('<p class="day" />');//.html('9&middot;2&middot;2012');
+
+    this.container.appendChild(this.circle);
+    this.domElement.appendChild(this.container);
+    this.domElement.appendChild(this.label[0]);
+
+    this.__fadeLabelOut = _.debounce(function() {
+      _this.label.fadeOut();
+    }, 2500);
+
+    svg
+      .addClass(this.domElement, 'clock')
+      .setAttributes(this.container, dimensions)
+      .setAttributes(this.circle, {
+        fill: '#fff',
+        cx: dimensions.width / 2,
+        cy: dimensions.height / 2,
+        r: this.width / 2
+      });
+
+  };
+
+  _.extend(Clock.prototype, {
+
+    changeDate: function(date) {
+
+      var text = dateFormat(date, 'mm/dd/yy').replace(/\//g, '&middot;');
+      var label = this.label.html(text);
+
+    },
+
+    getCurrentTime: function() {
+
+      return this.time - (this.offset || 0);
+
+    },
+
+    setInitialTime: function(t) {
+
+      this.time = t;
+      this.day = 0;
+      this.updateDisplay();
+
+      return this;
+
+    },
+
+    setTimeByPosition: function(ypos) {
+
+      // We know that ypos is in seconds.
+
+      this.offset = ypos;
+      this.updateDisplay();
+
+      return this;
+
+    },
+
+    updateDisplay: function() {
+
+      if (_.isUndefined(this.time)) {
+        return this;
+      }
+
+      var time = this.getCurrentTime();
+      var date = new Date(time * 1000);
+
+      svg.setAttributes(this.circle, {
+        fill: getColorFromTime(time % DAY)
+      });
+
+      var currentDay = date.toDateString();
+
+      if (currentDay !== this.day) {
+        this.day = currentDay;
+        this.changeDate(date);
+      }
+
+      var label = this.label;
+      if (label.css('display') == 'none') {
+        label.stop().fadeIn();
+      }
+
+      this.__fadeLabelOut();
+
+      return this;
+
+    }
+
+  });
+
+  function getColorFromTime(t) {
+
+    var normal = Math.sin((t / DAY) * TWO_PI);
+    var c = lerpColors(normal);
+
+    return 'rgb(' + c.r +',' + c.g +',' + c.b +')';
+
+  }
+
+  function lerpColors(t) {
+    return {
+      r: Math.floor(lerp(colors.day.r, colors.night.r, t)),
+      g: Math.floor(lerp(colors.day.g, colors.night.g, t)),
+      b: Math.floor(lerp(colors.day.b, colors.night.b, t))
+    };
+  }
+
+  function lerp(a, b, t) {
+    return (b - a) * t + a
+  }
+
+  return Clock;
+
+})(svg.utils = (function (_) {
+  return {
+
+    svgns: 'http://www.w3.org/2000/svg',
+    xlinkns: 'http://www.w3.org/1999/xlink',
+
+
+    createElement: function(nodeType, attr) {
+      var toReturn = document.createElementNS(this.svgns, nodeType);
+      if (attr) {
+        this.setAttributes(toReturn, attr);
+      }
+      return toReturn;
+    },
+
+    createImage: function(src) {
+      var img = this.createElement('image');
+      img.setAttributeNS(this.xlinkns, 'href', src);
+      return img;
+    },
+
+    createUse: function(id) {
+      var use = this.createElement('use');
+      use.setAttributeNS(this.xlinkns, 'href', '#' + id);
+      return use;
+    },
+
+    setClass: function(elem, className) {
+      if (elem.getAttribute('class') !== className)
+      elem.setAttribute('class', className);
+    },
+
+    addClass: function(elem, className) {
+      var classString = elem.getAttribute('class');
+      if (classString === null) {
+        elem.setAttribute('class', className);
+      } else if (classString !== className) {
+        var classes = classString.split(/ +/);
+        if (classes.indexOf(className) == -1) {
+          classes.push(className);
+          elem.setAttribute('class', classes.join(' '));
+        }
+      }
+      return this;
+    },
+
+    bezierString: function(x1, y1, cx1, cy1, cx2, cy2, x2, y2) {
+      return 'M' + x1.toFixed(10) + ',' + y1.toFixed(10) + ' C' +
+          cx1.toFixed(10) + ',' + cy1.toFixed(10) + ' ' + cx2.toFixed(10) + ',' +
+          cy2.toFixed(10) + ' ' + x2.toFixed(10) + ' ' + y2.toFixed(10);
+    },
+
+    removeClass: function(elem, className) {
+      var classString = elem.getAttribute('class');
+      if (classString === null) {
+        return;
+      } else if (classString === className) {
+        elem.setAttribute('class', '');
+      } else {
+        var classes = classString.split(/ +/);
+        var index = classes.indexOf(className);
+        if (index != -1) {
+          classes.splice(index, 1);
+          elem.setAttribute('class', classes.join(' '));
+        }
+      }
+      return this;
+    },
+
+    hasClass: function(elem, className) {
+      var classString = elem.getAttribute('class');
+      var patt = new RegExp(className);
+      return patt.test(classString);
+    },
+
+    setAttributes: function(elem, attributeMap) {
+      _.each(attributeMap, function(value, key) {
+        elem.setAttribute(key, value);
+      });
+      _.extend(elem, attributeMap);
+      return this;
+    },
+
+    setTransform: function() {
+//      console.log(arguments);
+      arguments[0].setAttribute('transform', this.transformString.apply(this, _.toArray(arguments).splice(1)));
+    },
+
+    transformString: function(commands) {
+      if (_.isArray(commands)) {
+        var s = [];
+        _.each(_.toArray(arguments), function(command) {
+          s.push(t(command[0], command.slice(1)));
+        });
+        return s.join(' ');
+      } else {
+        return t(arguments[0], _.toArray(arguments).slice(1));
+      }
+
+      function t(command, params) {
+        return command + '(' + params.join(' ') + ')';
+      }
+
+    }
+
+  };
+})(common),
+common,
+dateFormat = (function () {
+
+  var dateFormat = function () {
+    var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
+      timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
+      timezoneClip = /[^-+\dA-Z]/g,
+      pad = function (val, len) {
+        val = String(val);
+        len = len || 2;
+        while (val.length < len) val = "0" + val;
+        return val;
+      };
+
+    // Regexes and supporting functions are cached through closure
+    return function (date, mask, utc) {
+      var dF = dateFormat;
+
+      // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
+      if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
+        mask = date;
+        date = undefined;
+      }
+
+      // Passing date through Date applies Date.parse, if necessary
+      date = date ? new Date(date) : new Date;
+      if (isNaN(date)) throw SyntaxError("invalid date");
+
+      mask = String(dF.masks[mask] || mask || dF.masks["default"]);
+
+      // Allow setting the utc argument via the mask
+      if (mask.slice(0, 4) == "UTC:") {
+        mask = mask.slice(4);
+        utc = true;
+      }
+
+      var _ = utc ? "getUTC" : "get",
+        d = date[_ + "Date"](),
+        D = date[_ + "Day"](),
+        m = date[_ + "Month"](),
+        y = date[_ + "FullYear"](),
+        H = date[_ + "Hours"](),
+        M = date[_ + "Minutes"](),
+        s = date[_ + "Seconds"](),
+        L = date[_ + "Milliseconds"](),
+        o = utc ? 0 : date.getTimezoneOffset(),
+        flags = {
+          d:    d,
+          dd:   pad(d),
+          ddd:  dF.i18n.dayNames[D],
+          dddd: dF.i18n.dayNames[D + 7],
+          m:    m + 1,
+          mm:   pad(m + 1),
+          mmm:  dF.i18n.monthNames[m],
+          mmmm: dF.i18n.monthNames[m + 12],
+          yy:   String(y).slice(2),
+          yyyy: y,
+          h:    H % 12 || 12,
+          hh:   pad(H % 12 || 12),
+          H:    H,
+          HH:   pad(H),
+          M:    M,
+          MM:   pad(M),
+          s:    s,
+          ss:   pad(s),
+          l:    pad(L, 3),
+          L:    pad(L > 99 ? Math.round(L / 10) : L),
+          t:    H < 12 ? "a"  : "p",
+          tt:   H < 12 ? "am" : "pm",
+          T:    H < 12 ? "A"  : "P",
+          TT:   H < 12 ? "AM" : "PM",
+          Z:    utc ? "UTC" : (String(date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
+          o:    (o > 0 ? "-" : "+") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
+          S:    ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
+        };
+
+      return mask.replace(token, function ($0) {
+        return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
+      });
+    };
+  }();
+
+  // Some common format strings
+  dateFormat.masks = {
+    "default":      "ddd mmm dd yyyy HH:MM:ss",
+    shortDate:      "m/d/yy",
+    mediumDate:     "mmm d, yyyy",
+    longDate:       "mmmm d, yyyy",
+    fullDate:       "dddd, mmmm d, yyyy",
+    shortTime:      "h:MM TT",
+    mediumTime:     "h:MM:ss TT",
+    longTime:       "h:MM:ss TT Z",
+    isoDate:        "yyyy-mm-dd",
+    isoTime:        "HH:MM:ss",
+    isoDateTime:    "yyyy-mm-dd'T'HH:MM:ss",
+    isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
+  };
+
+  // Internationalization strings
+  dateFormat.i18n = {
+    dayNames: [
+      "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
+      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ],
+    monthNames: [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+      "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    ]
+  };
+
+  return dateFormat;
+
+})()),
 common),
 timeline.Gallery = (function (Model, grid, label, _) {
 

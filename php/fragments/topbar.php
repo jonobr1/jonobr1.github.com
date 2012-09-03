@@ -23,7 +23,8 @@
           'ParticleSystem': 'Physics/src/ParticleSystem',
           'requestAnimationFrame': '../third-party/requestAnimationFrame',
           'Spring': 'Physics/src/Spring',
-          'underscore': 'utils/empty'
+          'underscore': 'utils/empty',
+          'dateFormat': '../third-party/dateFormat'
         }
       });
 

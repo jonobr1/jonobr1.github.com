@@ -314,12 +314,33 @@ Vector = (function (_) {
       return this.isArray(obj) ? obj.slice() : this.extend({}, obj);
     },
 
+    isElement: function(obj) {
+      return !!(obj && obj.nodeType == 1);
+    },
+
     isArray: nativeIsArray || function(obj) {
       return toString.call(obj) == '[object Array]';
     },
 
-    isElement: function(obj) {
-      return !!(obj && obj.nodeType == 1);
+    toArray: function(obj) {
+      if (!obj)                                        return [];
+      if (this.isArray(obj))                           return slice.call(obj);
+      if (this.isArguments(obj))                       return slice.call(obj);
+      if (obj.toArray && this.isFunction(obj.toArray)) return obj.toArray();
+      return this.values(obj);
+    },
+
+    values: function(obj) {
+      return _.map(obj, _.identity);
+    },
+
+    once: function(func) {
+      var ran = false, memo;
+      return function() {
+        if (ran) return memo;
+        ran = true;
+        return memo = func.apply(this, arguments);
+      };
     },
 
     isObject: function(obj) {

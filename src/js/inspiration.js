@@ -31,6 +31,12 @@ require([
   var navOffset = $navigation.offset();
   var minimapOffset;
 
+  var initialize = _.once(function() {
+
+    minimap.clock.setInitialTime(gallery.models[0].date);
+
+  });
+
   gimmebar.getAssetsForUser('jonobr1', receiveData);
 
   $window.resize(function() {
@@ -40,7 +46,7 @@ require([
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
 
     minimap
-      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop)
       .setHeight(windowHeight - minimapOffset - minimap.gutter);
 
   }).trigger('resize');
@@ -79,7 +85,7 @@ require([
 
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
     minimap
-      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
       .updateViewport(scrollTop - navHeight, windowHeight);
 
@@ -163,6 +169,8 @@ require([
       model.add({ placed: true });
       stage.place(model);
     }
+
+    initialize();
 
     updateDisplay();
     minimap.loader.hide();

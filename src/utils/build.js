@@ -50,7 +50,8 @@ function compileInspiration() {
     "minify": false,
     "shortcut": "",
     "paths": {
-      "common": "utils/common"
+      "common": "utils/common",
+      "dateFormat": "../third-party/dateFormat"
     }
   };
 

@@ -8,6 +8,7 @@
   text-overflow: ellipsis; }
 
 .minimap {
+  z-index: 9999;
   position: fixed;
   background: #d1d1d1; }
   .minimap .loader {
@@ -40,13 +41,32 @@
     border-bottom: 2px solid #00ffc8;
     width: 100%;
     left: 0; }
+  .minimap .clock {
+    position: absolute;
+    top: 6px;
+    right: -63px;
+    width: 63px;
+    text-align: center; }
+    .minimap .clock > * {
+      display: -moz-inline-box;
+      -moz-box-orient: vertical;
+      display: inline-block;
+      vertical-align: baseline;
+      zoom: 1;
+      *display: inline;
+      *vertical-align: auto; }
+    .minimap .clock .day {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0; }
 
 div.legend {
   font-family: 'Lekton', 'Nuvo Pro', monospace;
   position: absolute;
-  margin-top: 150px;
+  margin-top: 182px;
   margin-left: -41.5px;
-  z-index: 9999; }
+  z-index: 1000; }
   div.legend div.metric {
     position: relative;
     -webkit-transform: rotate(-90deg);
