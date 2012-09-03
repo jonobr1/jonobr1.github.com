@@ -36,7 +36,7 @@
 
     ?>
 
-    <script type="text/javascript" src="<? echo $root; ?>src/build/inspiration.js"></script>
+    <script type="text/javascript" src="<? echo $root; ?>src/build/inspiration.min.js"></script>
 
     <?
 
