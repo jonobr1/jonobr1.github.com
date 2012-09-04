@@ -1,11 +1,12 @@
 require([
+  'mvc/Router',
   'gimmebar/api',
   'timeline/Stage',
   'timeline/Minimap',
   'timeline/Gallery',
   'dom/grid',
   'common'
-], function(gimmebar, Stage, Minimap, Gallery, grid, _) {
+], function(Router, gimmebar, Stage, Minimap, Gallery, grid, _) {
 
   var $window     = $(window);
   var $document   = $(document);
@@ -15,6 +16,11 @@ require([
   var stage   = new Stage().appendTo(content);
   var minimap = new Minimap().appendTo(document.body);
   var gallery = new Gallery();
+
+  var router = new Router();
+  var loading = false;
+
+  router.route('page/:page', 'page', getContent);
 
   stage.setGallery(gallery);
   minimap.setGallery(gallery).setStage(stage);
@@ -36,8 +42,6 @@ require([
     minimap.clock.setInitialTime(gallery.models[0].date);
 
   });
-
-  gimmebar.getAssetsForUser('jonobr1', receiveData);
 
   $window.resize(function() {
 
@@ -79,7 +83,6 @@ require([
 
     // Account for horizontal scrolling
 
-
     scrollLeft = sh;
     scrollTop = st;
 
@@ -93,22 +96,35 @@ require([
 
   });
 
+  /**
+   * setup the page
+   */
+
+  var routeExists = Router.history.start({
+    root: '/inspiration/' // Only for deving locally
+  });
+
+  if (!routeExists) {
+    loading = true;
+    router.navigate('\#page/' + gimmebar.cursor);
+  }
+
   function next() {
-    if (gimmebar.querying || (gimmebar.cursor === gimmebar.total_pages && gimmebar.total_pages !== 0)) {
+    if (loading || (gimmebar.cursor === gimmebar.total_pages && gimmebar.total_pages !== 0)) {
       return;
     }
-    minimap.loader.show();
-    gimmebar.cursor++;
-    gimmebar.getAssetsForUser('jonobr1', receiveData);
+    loading = true;
+    gimmebar.cursor = Math.min(parseInt(gimmebar.cursor) + 1, gimmebar.total_pages);
+    router.navigate('\#page/' + gimmebar.cursor);
   }
 
   function previous() {
-    if (gimmebar.querying || gimmebar.cursor === 0 || _.indexOf(gimmebar.loaded, 0) >= 0) {
-      return;
-    }
-    minimap.loader.show();
-    gimmebar.cursor--;
-    gimmebar.getAssetsForUser('jonobr1', receiveData);
+    // if (loading || gimmebar.cursor === 0 || _.indexOf(gimmebar.loaded, 0) >= 0) {
+    //   return;
+    // }
+    // loading = true;
+    // gimmebar.cursor = Math.max(parseInt(gimmebar.cursor) - 1, 0);
+    // router.navigate('\#page/' + gimmebar.cursor);
   }
 
   function receiveData(resp) {
@@ -177,6 +193,8 @@ require([
 
     $window.trigger('resize');
 
+    loading = false;
+
   }
 
   function updateDisplay() {
@@ -195,6 +213,29 @@ require([
 
     stage.update(offsetScroll, windowHeight);
     minimap.updateDisplay(offsetScroll, windowHeight);
+
+  }
+
+  function getContent(page) {
+
+    // Stay in the bounds
+    if (page < 0 || (gimmebar.total_pages && page > gimmebar.total_pages)) {
+      page = Math.min(Math.max(page, 0), gimmebar.total_pages);
+      Router.history.navigate('\#page/' + page, { silent: true });
+    }
+
+    // Make sure we're in sync
+    if (gimmebar.cursor !== page) {
+      gimmebar.cursor = page;
+    }
+
+    var successful = gimmebar.getAssetsForUser('jonobr1', receiveData);
+
+    if (successful) {
+      minimap.loader.show();
+    } else {
+      loading = false;
+    }
 
   }
 

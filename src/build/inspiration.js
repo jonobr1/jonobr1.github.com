@@ -1,11 +1,75 @@
 (function() {
 
 var js = js || {};
+var mvc = mvc || {};
 var gimmebar = gimmebar || {};
 var timeline = timeline || {};
 var dom = dom || {};
 var svg = svg || {};
-var mvc = mvc || {};
+
+mvc.Events = (function () {
+
+  return {
+
+      // Bind an event, specified by a string name, `ev`, to a `callback` function.
+      // Passing `"all"` will bind the callback to all events fired.
+      bind: function(ev, callback) {
+        var evs = ev.split(' ');
+        for (var i = 0, l = evs.length; i < l; i++) {
+          ev = evs[i];
+          var calls = this._callbacks || (this._callbacks = {});
+          var list = this._callbacks[ev] || (this._callbacks[ev] = []);
+          list.push(callback);
+        }
+        return this;
+      },
+
+      // Remove one or many callbacks. If `callback` is null, removes all
+      // callbacks for the event. If `ev` is null, removes all bound callbacks
+      // for all events.
+      unbind: function(ev, callback) {
+        var calls;
+        if (!ev) {
+          this._callbacks = {};
+        } else if (calls = this._callbacks) {
+          if (!callback) {
+            calls[ev] = [];
+          } else {
+            var list = calls[ev];
+            if (!list) return this;
+            for (var i = 0, l = list.length; i < l; i++) {
+              if (callback === list[i]) {
+                list.splice(i, 1);
+                break;
+              }
+            }
+          }
+        }
+        return this;
+      },
+
+      // Trigger an event, firing all bound callbacks. Callbacks are passed the
+      // same arguments as `trigger` is, apart from the event name.
+      // Listening for `"all"` passes the true event name as the first argument.
+      trigger: function(ev) {
+        var list, calls, i, l;
+        if (!(calls = this._callbacks)) return this;
+        if (list = calls[ev]) {
+          for (i = 0, l = list.length; i < l; i++) {
+            list[i].apply(this, Array.prototype.slice.call(arguments, 1));
+          }
+        }
+        if (list = calls['all']) {
+          for (i = 0, l = list.length; i < l; i++) {
+            list[i].apply(this, arguments);
+          }
+        }
+        return this;
+      }
+  };
+
+})();
+
 
 common = (function () {
 
@@ -25,6 +89,7 @@ common = (function () {
     nativeMap      = ArrayProto.map,
     nativeFilter   = ArrayProto.filter,
     nativeIsArray  = Array.isArray,
+    nativeSome     = ArrayProto.some,
     nativeBind     = Function.prototype.bind;
 
   var ctor = function(){};
@@ -102,6 +167,21 @@ common = (function () {
       };
     },
 
+    bindAll: function(obj) {
+      var funcs = slice.call(arguments, 1);
+      if (funcs.length == 0) funcs = this.functions(obj);
+      this.each(funcs, function(f) { obj[f] = this.bind(obj[f], obj); }, this);
+      return obj;
+    },
+
+    functions: function(obj) {
+      var names = [];
+      for (var key in obj) {
+        if (this.isFunction(obj[key])) names.push(key);
+      }
+      return names.sort();
+    },
+
     extend: function(obj) {
       each(slice.call(arguments, 1), function(source) {
         for (var prop in source) {
@@ -120,6 +200,17 @@ common = (function () {
       });
       if (obj.length === +obj.length) results.length = obj.length;
       return results;
+    },
+
+    any: function(obj, iterator, context) {
+      iterator || (iterator = this.identity);
+      var result = false;
+      if (obj == null) return result;
+      if (nativeSome && obj.some === nativeSome) return obj.some(iterator, context);
+      each(obj, function(value, index, list) {
+        if (result || (result = iterator.call(context, value, index, list))) return breaker;
+      });
+      return !!result;
     },
 
     indexOf: function(array, item, isSorted) {
@@ -181,7 +272,7 @@ common = (function () {
     },
 
     values: function(obj) {
-      return _.map(obj, _.identity);
+      return this.map(obj, this.identity);
     },
 
     once: function(func) {
@@ -211,6 +302,10 @@ common = (function () {
 
     isNull: function(obj) {
       return obj === null;
+    },
+
+    isRegExp: function(obj) {
+      return toString.call(obj) == '[object RegExp]';
     }
 
   };
@@ -302,7 +397,7 @@ dom.grid = (function (_) {
 })(common);
 
 
-(function (gimmebar, Stage, Minimap, Gallery, grid, _) {
+(function (Router, gimmebar, Stage, Minimap, Gallery, grid, _) {
 
   var $window     = $(window);
   var $document   = $(document);
@@ -312,6 +407,11 @@ dom.grid = (function (_) {
   var stage   = new Stage().appendTo(content);
   var minimap = new Minimap().appendTo(document.body);
   var gallery = new Gallery();
+
+  var router = new Router();
+  var loading = false;
+
+  router.route('page/:page', 'page', getContent);
 
   stage.setGallery(gallery);
   minimap.setGallery(gallery).setStage(stage);
@@ -333,8 +433,6 @@ dom.grid = (function (_) {
     minimap.clock.setInitialTime(gallery.models[0].date);
 
   });
-
-  gimmebar.getAssetsForUser('jonobr1', receiveData);
 
   $window.resize(function() {
 
@@ -376,7 +474,6 @@ dom.grid = (function (_) {
 
     // Account for horizontal scrolling
 
-
     scrollLeft = sh;
     scrollTop = st;
 
@@ -390,22 +487,35 @@ dom.grid = (function (_) {
 
   });
 
+  /**
+   * setup the page
+   */
+
+  var routeExists = Router.history.start({
+    // root: '/inspiration/' // Only for deving locally
+  });
+
+  if (!routeExists) {
+    loading = true;
+    router.navigate('\#page/' + gimmebar.cursor);
+  }
+
   function next() {
-    if (gimmebar.querying || (gimmebar.cursor === gimmebar.total_pages && gimmebar.total_pages !== 0)) {
+    if (loading || (gimmebar.cursor === gimmebar.total_pages && gimmebar.total_pages !== 0)) {
       return;
     }
-    minimap.loader.show();
-    gimmebar.cursor++;
-    gimmebar.getAssetsForUser('jonobr1', receiveData);
+    loading = true;
+    gimmebar.cursor = Math.min(parseInt(gimmebar.cursor) + 1, gimmebar.total_pages);
+    router.navigate('\#page/' + gimmebar.cursor);
   }
 
   function previous() {
-    if (gimmebar.querying || gimmebar.cursor === 0 || _.indexOf(gimmebar.loaded, 0) >= 0) {
-      return;
-    }
-    minimap.loader.show();
-    gimmebar.cursor--;
-    gimmebar.getAssetsForUser('jonobr1', receiveData);
+    // if (loading || gimmebar.cursor === 0 || _.indexOf(gimmebar.loaded, 0) >= 0) {
+    //   return;
+    // }
+    // loading = true;
+    // gimmebar.cursor = Math.max(parseInt(gimmebar.cursor) - 1, 0);
+    // router.navigate('\#page/' + gimmebar.cursor);
   }
 
   function receiveData(resp) {
@@ -474,6 +584,8 @@ dom.grid = (function (_) {
 
     $window.trigger('resize');
 
+    loading = false;
+
   }
 
   function updateDisplay() {
@@ -495,7 +607,314 @@ dom.grid = (function (_) {
 
   }
 
-})(gimmebar.api = (function (_) {
+  function getContent(page) {
+
+    // Stay in the bounds
+    if (page < 0 || (gimmebar.total_pages && page > gimmebar.total_pages)) {
+      page = Math.min(Math.max(page, 0), gimmebar.total_pages);
+      Router.history.navigate('\#page/' + page, { silent: true });
+    }
+
+    // Make sure we're in sync
+    if (gimmebar.cursor !== page) {
+      gimmebar.cursor = page;
+    }
+
+    var successful = gimmebar.getAssetsForUser('jonobr1', receiveData);
+
+    if (successful) {
+      minimap.loader.show();
+    } else {
+      loading = false;
+    }
+
+  }
+
+})(mvc.Router = (function (Events, history, _) {
+
+  // Backbone.Router
+  // -------------------
+
+  // Routers map faux-URLs to actions, and fire events when routes are
+  // matched. Creating a new one sets its `routes` hash, if not set statically.
+  var Router = function(options) {
+    options || (options = {});
+    if (options.routes) this.routes = options.routes;
+    this._bindRoutes();
+    this.initialize.apply(this, arguments);
+  };
+
+  Router.history = history;
+
+  // Cached regular expressions for matching named param parts and splatted
+  // parts of route strings.
+  var namedParam    = /:\w+/g;
+  var splatParam    = /\*\w+/g;
+  var escapeRegExp  = /[-[\]{}()+?.,\\^$|#\s]/g;
+
+  // Set up all inheritable **Backbone.Router** properties and methods.
+  _.extend(Router.prototype, Events, {
+
+    // Initialize is an empty function by default. Override it with your own
+    // initialization logic.
+    initialize: function(){},
+
+    // Manually bind a single named route to a callback. For example:
+    //
+    //     this.route('search/:query/p:num', 'search', function(query, num) {
+    //       ...
+    //     });
+    //
+    route: function(route, name, callback) {
+      history || (history = new History);
+      if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+      if (!callback) callback = this[name];
+      history.route(route, _.bind(function(fragment) {
+        var args = this._extractParameters(route, fragment);
+        callback && callback.apply(this, args);
+        this.trigger.apply(this, ['route:' + name].concat(args));
+        history.trigger('route', this, name, args);
+      }, this));
+      return this;
+    },
+
+    // Simple proxy to `Backbone.history` to save a fragment into the history.
+    navigate: function(fragment, options) {
+      history.navigate(fragment, options);
+    },
+
+    // Bind all defined routes to `Backbone.history`. We have to reverse the
+    // order of the routes here to support behavior where the most general
+    // routes can be defined at the bottom of the route map.
+    _bindRoutes: function() {
+      if (!this.routes) return;
+      var routes = [];
+      for (var route in this.routes) {
+        routes.unshift([route, this.routes[route]]);
+      }
+      for (var i = 0, l = routes.length; i < l; i++) {
+        this.route(routes[i][0], routes[i][1], this[routes[i][1]]);
+      }
+    },
+
+    // Convert a route string into a regular expression, suitable for matching
+    // against the current location hash.
+    _routeToRegExp: function(route) {
+      route = route.replace(escapeRegExp, '\\$&')
+                   .replace(namedParam, '([^\/]+)')
+                   .replace(splatParam, '(.*?)');
+      return new RegExp('^' + route + '$');
+    },
+
+    // Given a route, and a URL fragment that it matches, return the array of
+    // extracted parameters.
+    _extractParameters: function(route, fragment) {
+      return route.exec(fragment).slice(1);
+    }
+
+  });
+
+  return Router;
+
+})(mvc.Events,
+mvc.History = (function (Events, _) {
+
+  var History = function() {
+    this.handlers = [];
+    _.bindAll(this, 'checkUrl');
+  };
+
+  // Cached regex for cleaning leading hashes and slashes.
+  var routeStripper = /^[#\/]/;
+
+  // Cached regex for detecting MSIE.
+  var isExplorer = /msie [\w.]+/;
+
+  // Has the history handling already been started?
+  History.started = false;
+
+  // Set up all inheritable **Backbone.History** properties and methods.
+  _.extend(History.prototype, Events, {
+
+    // The default interval to poll for hash changes, if necessary, is
+    // twenty times a second.
+    interval: 50,
+
+    // Gets the true hash value. Cannot use location.hash directly due to bug
+    // in Firefox where location.hash will always be decoded.
+    getHash: function(windowOverride) {
+      var loc = windowOverride ? windowOverride.location : window.location;
+      var match = loc.href.match(/#(.*)$/);
+      return match ? match[1] : '';
+    },
+
+    // Get the cross-browser normalized URL fragment, either from the URL,
+    // the hash, or the override.
+    getFragment: function(fragment, forcePushState) {
+      if (fragment == null) {
+        if (this._hasPushState || forcePushState) {
+          fragment = window.location.pathname;
+          var search = window.location.search;
+          if (search) fragment += search;
+        } else {
+          fragment = this.getHash();
+        }
+      }
+      if (!fragment.indexOf(this.options.root)) fragment = fragment.substr(this.options.root.length);
+      return fragment.replace(routeStripper, '');
+    },
+
+    // Start the hash change handling, returning `true` if the current URL matches
+    // an existing route, and `false` otherwise.
+    start: function(options) {
+      if (History.started) throw new Error('history has already been started');
+      History.started = true;
+
+      // Figure out the initial configuration. Do we need an iframe?
+      // Is pushState desired ... is it available?
+      this.options          = _.extend({}, {root: '/'}, this.options, options);
+      this._wantsHashChange = this.options.hashChange !== false;
+      this._wantsPushState  = !!this.options.pushState;
+      this._hasPushState    = !!(this.options.pushState && window.history && window.history.pushState);
+      var fragment          = this.getFragment();
+      var docMode           = document.documentMode;
+      var oldIE             = (isExplorer.exec(navigator.userAgent.toLowerCase()) && (!docMode || docMode <= 7));
+
+      if (oldIE) {
+        this.iframe = $('<iframe src="javascript:0" tabindex="-1" />').hide().appendTo('body')[0].contentWindow;
+        this.navigate(fragment);
+      }
+
+      // Depending on whether we're using pushState or hashes, and whether
+      // 'onhashchange' is supported, determine how we check the URL state.
+      if (this._hasPushState) {
+        $(window).bind('popstate', this.checkUrl);
+      } else if (this._wantsHashChange && ('onhashchange' in window) && !oldIE) {
+        $(window).bind('hashchange', this.checkUrl);
+      } else if (this._wantsHashChange) {
+        this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
+      }
+
+      // Determine if we need to change the base url, for a pushState link
+      // opened by a non-pushState browser.
+      this.fragment = fragment;
+      var loc = window.location;
+      var atRoot  = loc.pathname == this.options.root;
+
+      // If we've started off with a route from a `pushState`-enabled browser,
+      // but we're currently in a browser that doesn't support it...
+      if (this._wantsHashChange && this._wantsPushState && !this._hasPushState && !atRoot) {
+        this.fragment = this.getFragment(null, true);
+        window.location.replace(this.options.root + '#' + this.fragment);
+        // Return immediately as browser will do redirect to new url
+        return true;
+
+      // Or if we've started out with a hash-based route, but we're currently
+      // in a browser where it could be `pushState`-based instead...
+      } else if (this._wantsPushState && this._hasPushState && atRoot && loc.hash) {
+        this.fragment = this.getHash().replace(routeStripper, '');
+        window.history.replaceState({}, document.title, loc.protocol + '//' + loc.host + this.options.root + this.fragment);
+      }
+
+      if (!this.options.silent) {
+        return this.loadUrl();
+      }
+    },
+
+    // Disable Backbone.history, perhaps temporarily. Not useful in a real app,
+    // but possibly useful for unit testing Routers.
+    stop: function() {
+      $(window).unbind('popstate', this.checkUrl).unbind('hashchange', this.checkUrl);
+      clearInterval(this._checkUrlInterval);
+      History.started = false;
+    },
+
+    // Add a route to be tested when the fragment changes. Routes added later
+    // may override previous routes.
+    route: function(route, callback) {
+      this.handlers.unshift({route: route, callback: callback});
+    },
+
+    // Checks the current URL to see if it has changed, and if it has,
+    // calls `loadUrl`, normalizing across the hidden iframe.
+    checkUrl: function(e) {
+      var current = this.getFragment();
+      if (current == this.fragment && this.iframe) current = this.getFragment(this.getHash(this.iframe));
+      if (current == this.fragment) return false;
+      if (this.iframe) this.navigate(current);
+      this.loadUrl() || this.loadUrl(this.getHash());
+    },
+
+    // Attempt to load the current URL fragment. If a route succeeds with a
+    // match, returns `true`. If no defined routes matches the fragment,
+    // returns `false`.
+    loadUrl: function(fragmentOverride) {
+      var fragment = this.fragment = this.getFragment(fragmentOverride);
+      var matched = _.any(this.handlers, function(handler) {
+        if (handler.route.test(fragment)) {
+          handler.callback(fragment);
+          return true;
+        }
+      });
+      return matched;
+    },
+
+    // Save a fragment into the hash history, or replace the URL state if the
+    // 'replace' option is passed. You are responsible for properly URL-encoding
+    // the fragment in advance.
+    //
+    // The options object can contain `silent: true` if you wish to have the
+    // route callback not be fired (not usually desirable), or `replace: true`, if
+    // you wish to modify the current URL without adding an entry to the history.
+    navigate: function(fragment, options) {
+      if (!History.started) return false;
+      if (!options || options === true) options = {};
+      var frag = (fragment || '').replace(routeStripper, '');
+      if (this.fragment == frag) return;
+
+      // If pushState is available, we use it to set the fragment as a real URL.
+      if (this._hasPushState) {
+        if (frag.indexOf(this.options.root) != 0) frag = this.options.root + frag;
+        this.fragment = frag;
+        window.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, frag);
+
+      // If hash changes haven't been explicitly disabled, update the hash
+      // fragment to store history.
+      } else if (this._wantsHashChange) {
+        this.fragment = frag;
+        this._updateHash(window.location, frag, options.replace);
+        if (this.iframe && (frag != this.getFragment(this.getHash(this.iframe)))) {
+          // Opening and closing the iframe tricks IE7 and earlier to push a history entry on hash-tag change.
+          // When replace is true, we don't want this.
+          if(!options.replace) this.iframe.document.open().close();
+          this._updateHash(this.iframe.location, frag, options.replace);
+        }
+
+      // If you've told us that you explicitly don't want fallback hashchange-
+      // based history, then `navigate` becomes a page refresh.
+      } else {
+        window.location.assign(this.options.root + fragment);
+      }
+      if (!options.silent) this.loadUrl(fragment);
+    },
+
+    // Update the hash location, either replacing the current entry, or adding
+    // a new one to the browser history.
+    _updateHash: function(location, fragment, replace) {
+      if (replace) {
+        location.replace(location.toString().replace(/(javascript:|#).*$/, '') + '#' + fragment);
+      } else {
+        location.hash = fragment;
+      }
+    }
+  });
+
+  return new History;
+
+})(mvc.Events,
+common),
+common),
+gimmebar.api = (function (_) {
 
   var proxy  = '../php/get.php?q=';
   var base   = 'https://gimmebar.com/api/v1';
@@ -530,7 +949,7 @@ dom.grid = (function (_) {
       var url = base + api + user + skip + limit;
 
       if (_.indexOf(loaded, this.cursor) >= 0) {
-        return;
+        return false;
       }
 
       $.get(proxy + url, function(resp) {
@@ -546,11 +965,12 @@ dom.grid = (function (_) {
         }
 
         loaded.push(gimmebar.cursor);
+        _callback(data);
         gimmebar.querying = false;
 
-        _callback(data);
-
       });
+
+      return true;
 
     }
 
@@ -1015,6 +1435,10 @@ timeline.Minimap = (function (loader, grid, Clock, _) {
 
     domElement: domElement,
 
+    isVisible: function() {
+      return !hidden;
+    },
+
     show: function(callback) {
       if (!hidden) {
         return this;
@@ -1154,7 +1578,7 @@ timeline.Clock = (function (svg, _, dateFormat) {
 
       var label = this.label;
       if (label.css('display') == 'none') {
-        label.stop().fadeIn();
+        label.stop().fadeIn(150);
       }
 
       this.__fadeLabelOut();
@@ -1677,68 +2101,7 @@ timeline.Gallery = (function (Model, grid, label, _) {
 
   return Model;
 
-})(mvc.Events = (function () {
-
-  return {
-
-      // Bind an event, specified by a string name, `ev`, to a `callback` function.
-      // Passing `"all"` will bind the callback to all events fired.
-      bind: function(ev, callback) {
-        var evs = ev.split(' ');
-        for (var i = 0, l = evs.length; i < l; i++) {
-          ev = evs[i];
-          var calls = this._callbacks || (this._callbacks = {});
-          var list = this._callbacks[ev] || (this._callbacks[ev] = []);
-          list.push(callback);
-        }
-        return this;
-      },
-
-      // Remove one or many callbacks. If `callback` is null, removes all
-      // callbacks for the event. If `ev` is null, removes all bound callbacks
-      // for all events.
-      unbind: function(ev, callback) {
-        var calls;
-        if (!ev) {
-          this._callbacks = {};
-        } else if (calls = this._callbacks) {
-          if (!callback) {
-            calls[ev] = [];
-          } else {
-            var list = calls[ev];
-            if (!list) return this;
-            for (var i = 0, l = list.length; i < l; i++) {
-              if (callback === list[i]) {
-                list.splice(i, 1);
-                break;
-              }
-            }
-          }
-        }
-        return this;
-      },
-
-      // Trigger an event, firing all bound callbacks. Callbacks are passed the
-      // same arguments as `trigger` is, apart from the event name.
-      // Listening for `"all"` passes the true event name as the first argument.
-      trigger: function(ev) {
-        var list, calls, i, l;
-        if (!(calls = this._callbacks)) return this;
-        if (list = calls[ev]) {
-          for (i = 0, l = list.length; i < l; i++) {
-            list[i].apply(this, Array.prototype.slice.call(arguments, 1));
-          }
-        }
-        if (list = calls['all']) {
-          for (i = 0, l = list.length; i < l; i++) {
-            list[i].apply(this, arguments);
-          }
-        }
-        return this;
-      }
-  };
-
-})(),
+})(mvc.Events,
 common),
 dom.grid,
 dom.label = (function () {

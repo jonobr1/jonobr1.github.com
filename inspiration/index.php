@@ -2,7 +2,7 @@
 
   // Page Settings
 
-  // $debug = true;
+  $debug = true;
   $root = '../';
   $title = 'inspiration';
 

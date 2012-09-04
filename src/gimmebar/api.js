@@ -35,7 +35,7 @@ define([
       var url = base + api + user + skip + limit;
 
       if (_.indexOf(loaded, this.cursor) >= 0) {
-        return;
+        return false;
       }
 
       $.get(proxy + url, function(resp) {
@@ -51,11 +51,12 @@ define([
         }
 
         loaded.push(gimmebar.cursor);
+        _callback(data);
         gimmebar.querying = false;
 
-        _callback(data);
-
       });
+
+      return true;
 
     }
 

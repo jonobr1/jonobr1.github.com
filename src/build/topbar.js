@@ -175,6 +175,7 @@ Vector = (function (_) {
     nativeMap      = ArrayProto.map,
     nativeFilter   = ArrayProto.filter,
     nativeIsArray  = Array.isArray,
+    nativeSome     = ArrayProto.some,
     nativeBind     = Function.prototype.bind;
 
   var ctor = function(){};
@@ -252,6 +253,21 @@ Vector = (function (_) {
       };
     },
 
+    bindAll: function(obj) {
+      var funcs = slice.call(arguments, 1);
+      if (funcs.length == 0) funcs = this.functions(obj);
+      this.each(funcs, function(f) { obj[f] = this.bind(obj[f], obj); }, this);
+      return obj;
+    },
+
+    functions: function(obj) {
+      var names = [];
+      for (var key in obj) {
+        if (this.isFunction(obj[key])) names.push(key);
+      }
+      return names.sort();
+    },
+
     extend: function(obj) {
       each(slice.call(arguments, 1), function(source) {
         for (var prop in source) {
@@ -270,6 +286,17 @@ Vector = (function (_) {
       });
       if (obj.length === +obj.length) results.length = obj.length;
       return results;
+    },
+
+    any: function(obj, iterator, context) {
+      iterator || (iterator = this.identity);
+      var result = false;
+      if (obj == null) return result;
+      if (nativeSome && obj.some === nativeSome) return obj.some(iterator, context);
+      each(obj, function(value, index, list) {
+        if (result || (result = iterator.call(context, value, index, list))) return breaker;
+      });
+      return !!result;
     },
 
     indexOf: function(array, item, isSorted) {
@@ -331,7 +358,7 @@ Vector = (function (_) {
     },
 
     values: function(obj) {
-      return _.map(obj, _.identity);
+      return this.map(obj, this.identity);
     },
 
     once: function(func) {
@@ -361,6 +388,10 @@ Vector = (function (_) {
 
     isNull: function(obj) {
       return obj === null;
+    },
+
+    isRegExp: function(obj) {
+      return toString.call(obj) == '[object RegExp]';
     }
 
   };

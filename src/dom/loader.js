@@ -14,6 +14,10 @@ define([
 
     domElement: domElement,
 
+    isVisible: function() {
+      return !hidden;
+    },
+
     show: function(callback) {
       if (!hidden) {
         return this;

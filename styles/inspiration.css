@@ -78,7 +78,8 @@ div.legend {
     height: 0;
     overflow: visible;
     line-height: 0;
-    border-bottom: 1px solid #d1d1d1; }
+    border-bottom: 1px solid #d1d1d1;
+    margin-left: -1px; }
     div.legend div.metric p {
       margin: 0 auto;
       position: relative;

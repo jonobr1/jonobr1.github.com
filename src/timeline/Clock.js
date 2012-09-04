@@ -117,7 +117,7 @@ define([
 
       var label = this.label;
       if (label.css('display') == 'none') {
-        label.stop().fadeIn();
+        label.stop().fadeIn(150);
       }
 
       this.__fadeLabelOut();
