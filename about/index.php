@@ -14,10 +14,10 @@
 <!-- <img src="../images/portrait.jpg" alt="__Diminishing Returns__ _2012_" /> -->
 <section>
   <p>
-    Jono Brandel (b. May 22, 1986) relies on the combination of two fundamental disciplines: <a href="http://en.wikipedia.org/wiki/Graphic_design">graphic design</a> and <a href="http://en.wikipedia.org/wiki/Computer_programming">computer programming</a>. The results of this mixture vary in form, but usually have a screen-based component. He aims to humanize digital aesthetics.
+    Jono Brandel (b. May 22, 1986) relies on the combination of two fundamental disciplines: <a href="http://en.wikipedia.org/wiki/Graphic_design">graphic design</a> and <a href="http://en.wikipedia.org/wiki/Computer_programming">computer programming</a>. The results of this mixture vary in form, but usually have a screen-based component. He explores procedural aesthetics.
   </p>
   <p>
-    Jono studied <a href="http://dma.ucla.edu/">Design | Media Arts</a> with a minor in <a href="http://classics.ucla.edu/">Latin</a> at UCLA. He went on to receive two artist grants one at <a href="http://chela.org.ar">cheLA</a> and the other at <a href="http://fabrica.it">Fabrica</a>. He is now part of the Data Arts Team in Google&rsquo;s Creative Lab. His work has been exhibited at the <a href="http://www.tate.org.uk/visit/tate-modern">Tate Modern</a>, <a href="http://offf.ws">OFFF</a>, and the <a href="http://hammer.ucla.edu/">HAMMER Museum</a>. He has also had the pleasure to perform alongside <a href="http://boysnoize.com/">Boys Noize</a>, <a href="http://deadmau5">Deadmau5</a>, <a href="http://http://crystalcastles.com/">Crystal Castles</a>, and many others accompanying their music with moving image.
+    Jono studied <a href="http://dma.ucla.edu/">Design | Media Arts</a> with a minor in <a href="http://classics.ucla.edu/">Latin</a> at UCLA. He went on to receive two artist grants one at <a href="http://chela.org.ar">cheLA</a> and the other at <a href="http://fabrica.it">Fabrica</a>. He is now part of the Data Arts Team in Google&rsquo;s Creative Lab. His work has been showcased at the <a href="http://www.tate.org.uk/visit/tate-modern">Tate Modern</a>, <a href="http://offf.ws">OFFF</a>, and <a href="http://hammer.ucla.edu/">HAMMER Museum</a>. He has also had the pleasure to perform alongside <a href="http://boysnoize.com/">Boys Noize</a>, <a href="http://deadmau5">Deadmau5</a>, <a href="http://http://crystalcastles.com/">Crystal Castles</a>, and many others accompanying their music with moving image.
   </p>
   <p>
     For a full list of performances, commercial work, or CV please email directly.
@@ -98,6 +98,9 @@
   </dt>
   <dt>
     <a href="http://cargocollective.com/jonobr1/following">Cargo</a>
+  </dt>
+  <dt>
+    <a href="http://gimmebar.com/loves/jonobr1">gimmebar</a>
   </dt>
 </dl>
 
