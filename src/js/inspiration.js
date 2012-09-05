@@ -59,9 +59,7 @@ require([
    * Place all events considered for triggering once scrolling has finished.
    */
   var onScrollEnd = _.debounce(function() {
-
     stage.update(scrollTop - navHeight, windowHeight);
-
   }, 750);
 
   $document.scroll(function() {
@@ -77,7 +75,7 @@ require([
     } else if (scrollTop > st) {
       // Scrolling up
       if (st < threshold.min) {
-        previous();
+        // previous();
       }
     }
 
@@ -100,14 +98,20 @@ require([
    * setup the page
    */
 
-  var routeExists = Router.history.start({
-    root: '/inspiration/' // Only for deving locally
-  });
+  gimmebar.getAssetsForUser('jonobr1', function(resp) {
 
-  if (!routeExists) {
-    loading = true;
-    router.navigate('\#page/' + gimmebar.cursor);
-  }
+    gimmebar.total_pages = Math.floor(resp.total_records / gimmebar.limit);
+
+    var routeExists = Router.history.start({
+      root: '/inspiration/' // Only for deving locally
+    });
+
+    if (!routeExists) {
+      loading = true;
+      router.navigate('#/page/' + (gimmebar.total_pages - gimmebar.cursor));
+    }
+
+  }, true);
 
   function next() {
     if (loading || (gimmebar.cursor === gimmebar.total_pages && gimmebar.total_pages !== 0)) {
@@ -115,16 +119,16 @@ require([
     }
     loading = true;
     gimmebar.cursor = Math.min(parseInt(gimmebar.cursor) + 1, gimmebar.total_pages);
-    router.navigate('\#page/' + gimmebar.cursor);
+    router.navigate('#/page/' + (gimmebar.total_pages - gimmebar.cursor));
   }
 
   function previous() {
-    // if (loading || gimmebar.cursor === 0 || _.indexOf(gimmebar.loaded, 0) >= 0) {
-    //   return;
-    // }
-    // loading = true;
-    // gimmebar.cursor = Math.max(parseInt(gimmebar.cursor) - 1, 0);
-    // router.navigate('\#page/' + gimmebar.cursor);
+    if (loading || gimmebar.cursor === 0 || _.indexOf(gimmebar.loaded, 0) >= 0) {
+      return;
+    }
+    loading = true;
+    gimmebar.cursor = Math.max(parseInt(gimmebar.cursor) - 1, 0);
+    router.navigate('#/page/' + (gimmebar.total_pages - gimmebar.cursor));
   }
 
   function receiveData(resp) {
@@ -216,12 +220,15 @@ require([
 
   }
 
-  function getContent(page) {
+  function getContent(p) {
+
+    var p = parseInt(p);
+    var page = gimmebar.total_pages - p;
 
     // Stay in the bounds
     if (page < 0 || (gimmebar.total_pages && page > gimmebar.total_pages)) {
       page = Math.min(Math.max(page, 0), gimmebar.total_pages);
-      Router.history.navigate('\#page/' + page, { silent: true });
+      Router.history.navigate('#/page/' + p, { silent: true });
     }
 
     // Make sure we're in sync

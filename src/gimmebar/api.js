@@ -24,7 +24,7 @@ define([
 
     total_pages: 0,
 
-    getAssetsForUser: function(_user, _callback) {
+    getAssetsForUser: function(_user, _callback, silent) {
 
       this.querying = true;
 
@@ -50,7 +50,9 @@ define([
           gimmebar.total_pages = Math.floor(gimmebar.total_records / gimmebar.limit);
         }
 
-        loaded.push(gimmebar.cursor);
+        if (!silent) {
+          loaded.push(gimmebar.cursor);
+        }
         _callback(data);
         gimmebar.querying = false;
 
