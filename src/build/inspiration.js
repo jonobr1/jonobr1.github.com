@@ -514,6 +514,7 @@ dom.grid = (function (_) {
   }
 
   function previous() {
+    return;
     if (loading || gimmebar.cursor === 0 || _.indexOf(gimmebar.loaded, 0) >= 0) {
       return;
     }

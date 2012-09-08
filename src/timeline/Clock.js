@@ -105,7 +105,7 @@ define([
       var date = new Date(time * 1000);
 
       svg.setAttributes(this.circle, {
-        fill: getColorFromTime(time % DAY)
+        fill: getColorFromTime(time)
       });
 
       var currentDay = date.toDateString();
