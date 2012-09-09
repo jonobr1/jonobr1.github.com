@@ -8,8 +8,11 @@
 
 ?>
 
+<h1>
+  Hey thanks!
+</h1>
 <p>
-  I look forward to emailing you in the future with all sorts of goodies. Check your inbox — our correspondence should have just begun.
+  I look forward to keeping in touch. Check your inbox — our correspondence should have just begun.
 </p>
 
 <?

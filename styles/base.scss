@@ -162,9 +162,7 @@ body {
     font-size: 1.3;
     letter-spacing: 0.2em;
     text-align: center;
-    margin: $line_height * 2 auto;
     padding: 0 0 $line_height * 2 0;
-    width: 75%;
     border-bottom: $border_width solid $border_color;
   }
   h3, h4, h5, h6 {
@@ -175,7 +173,7 @@ body {
       color: shade($border_color, 10%);
       content: '\2014';
     }
-    text-indent: -25px;
+    text-indent: -20px;
   }
 
   // General body  styles
@@ -191,6 +189,12 @@ body {
   }
   a:active {
     color: shade($text_color, 25%);
+  }
+
+  h2,
+  p.excerpt {
+    margin: $line_height * 2 auto;
+    width: 75%;
   }
 
   #content > ul,
