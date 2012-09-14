@@ -401,6 +401,8 @@ body {
   .project_thumb a {
     text-decoration: none; }
   .project_thumb div.cardimgcrop {
+    height: 106px;
+    width: 162px;
     border: 3px solid transparent; }
   .project_thumb:hover div.cardimgcrop {
     border: 3px solid rgba(0, 0, 0, 0.125); }

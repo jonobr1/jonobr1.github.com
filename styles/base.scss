@@ -401,6 +401,8 @@ body {
   }
 
   div.cardimgcrop {
+    height: 106px;
+    width: 162px;
     border: $border_width solid transparent;
   }
   &:hover div.cardimgcrop {
