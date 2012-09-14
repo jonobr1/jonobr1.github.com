@@ -1,7 +1,7 @@
 jonobr1 : Versioned Personal Identity
 =====================================
 
-These are all the process, template, and final src / built files to make all jonobr1.com properties.
+These are all the process, template, and final src / built files to make all http://jonobr1.com properties.
 
 *****
 
@@ -24,3 +24,6 @@ TODO:
 + ~~Add captions to `alt` attributes of `img` tags~~
 + ~~Add touch events to topbar.js~~
 + ~~Route domains~~
++ Create polyfill for css3 and JavaScript / canvas based stuff
++ Update loading gif to the squiggle (magenta?)
++ Make `script` tags all come from same `src` origin. GitHub, personal site, whatever, just choose one and make it consistent
