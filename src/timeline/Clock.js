@@ -70,7 +70,7 @@ define([
 
     getCurrentTime: function() {
 
-      return this.time - (this.offset || 0);
+      return this.time - (this.offset * 10 || 0);
 
     },
 

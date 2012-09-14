@@ -10,13 +10,14 @@
 
 ?>
 
+<link rel="alternate" type="application/rss+xml" title="rss" href="https://gimmebar.com/public/feed/user/jonobr1" />
 <link rel="stylesheet" type="text/css" media="screen" href="<? echo $root; ?>styles/inspiration.css" />
 
 <div class="legend">
   <div class="metric">
     <p>
       <span>
-        5 minutes
+        50 minutes
       </span>
     </p>
   </div>

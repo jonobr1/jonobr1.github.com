@@ -48,9 +48,10 @@ require([
     windowHeight = $window.height();
     navOffset = $navigation.offset();
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
+    var stageOffset = $(stage.domElement).offset().top;
 
     minimap
-      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop - stageOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter);
 
   }).trigger('resize');
@@ -66,6 +67,7 @@ require([
 
     var st = $document.scrollTop();
     var sh = $document.scrollLeft();
+    var stageOffset = $(stage.domElement).offset().top;
 
     if (scrollTop < st) {
       // Scrolling down
@@ -86,7 +88,7 @@ require([
 
     minimapOffset = Math.max(navHeight - scrollTop, minimap.gutter);
     minimap
-      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop)
+      .setOffset(navOffset.left + 32 - scrollLeft, minimapOffset, scrollTop - stageOffset)
       .setHeight(windowHeight - minimapOffset - minimap.gutter)
       .updateViewport(scrollTop - navHeight, windowHeight);
 
