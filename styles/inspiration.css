@@ -1,13 +1,21 @@
 #content .stage {
   position: relative;
   background-image: url(../images/background.gif);
-  background-repeat: repeat; }
+  background-repeat: repeat;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
   #content .stage .moment:hover {
     z-index: 9999; }
 #content div.label.image {
   text-overflow: ellipsis; }
 
 .minimap {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   z-index: 9999;
   position: fixed;
   background: #d1d1d1; }
@@ -62,7 +70,7 @@
       left: 0; }
 
 div.legend {
-  font-family: 'Lekton', 'Nuvo Pro', monospace;
+  font-family: 'Lekton', monospace;
   position: absolute;
   margin-top: 182px;
   margin-left: -41.5px;

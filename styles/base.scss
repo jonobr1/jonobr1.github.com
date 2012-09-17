@@ -10,7 +10,7 @@
 
 body {
 
-  font-family: 'Nuvo Pro', sans-serif;
+  font-family: $nuvo_pro;
   font-size: $font_size;
   line-height: $line_height * 2;
   background: $bg_color;
@@ -44,7 +44,7 @@ body {
     margin: ($line_height * 2) auto;
     padding-top: ($line_height * 2);
     padding-bottom: ($line_height * 2);
-    font-family: 'Lekton', 'Nuvo Pro', monospace;
+    font-family: 'Lekton', $nuvo_pro;
     font-size: $font_size * 1.125;
     border-bottom: $border_width solid #fff;
     text-transform: lowercase;
@@ -87,7 +87,7 @@ body {
             border: 0;
             border-left: $border_width solid transparent;
             background: transparent;
-            font-family: 'Lekton', 'Nuvo Pro', monospace;
+            font-family: 'Lekton', $nuvo_pro;
             font-size: $font_size * 1.125;
             outline: none;
             text-transform: lowercase;

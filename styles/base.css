@@ -69,7 +69,7 @@ li.L1, li.L3, li.L5, li.L7, li.L9 {
   padding: 0; }
 
 body {
-  font-family: 'Nuvo Pro', sans-serif;
+  font-family: "ff-nuvo-web-pro", "Nuvo Pro", sans-serif;
   font-size: 12px;
   line-height: 20px;
   background: #efefef;
@@ -96,7 +96,7 @@ body {
     margin: 20px auto;
     padding-top: 20px;
     padding-bottom: 20px;
-    font-family: 'Lekton', 'Nuvo Pro', monospace;
+    font-family: "Lekton", "ff-nuvo-web-pro", "Nuvo Pro", sans-serif;
     font-size: 13.5px;
     border-bottom: 3px solid white;
     text-transform: lowercase; }
@@ -149,7 +149,7 @@ body {
             border: 0;
             border-left: 3px solid transparent;
             background: transparent;
-            font-family: 'Lekton', 'Nuvo Pro', monospace;
+            font-family: "Lekton", "ff-nuvo-web-pro", "Nuvo Pro", sans-serif;
             font-size: 13.5px;
             outline: none;
             text-transform: lowercase; }

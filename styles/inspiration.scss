@@ -12,6 +12,7 @@ $dark_grey: #d1d1d1;
     .moment:hover {
       z-index: 9999;
     }
+    @include user-select(none);
   }
 
   div.label.image {
@@ -21,6 +22,7 @@ $dark_grey: #d1d1d1;
 }
 
 .minimap {
+  @include user-select(none);
   z-index: 9999;
   position: fixed;
   background: $dark_grey;
@@ -69,7 +71,7 @@ $dark_grey: #d1d1d1;
 }
 
 div.legend {
-  font-family: 'Lekton', 'Nuvo Pro', monospace;
+  font-family: 'Lekton', monospace;
   position: absolute;
   margin-top: 170px + $gutter;
   margin-left: - $single_column / 2 - $line_height;
