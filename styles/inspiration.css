@@ -50,6 +50,7 @@
     width: 100%;
     left: 0; }
   .minimap .clock {
+    font-family: 'Lekton', monospace;
     position: absolute;
     top: 6px;
     right: -63px;

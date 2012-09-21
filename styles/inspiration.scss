@@ -53,6 +53,7 @@ $dark_grey: #d1d1d1;
     left: 0;
   }
   .clock {
+    font-family: 'Lekton', monospace;
     position: absolute;
     top: $gutter / 2;
     right: - $single_column;
