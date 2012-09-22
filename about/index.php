@@ -94,10 +94,10 @@
     <a href="http://twitter.com/jonobr1">Twitter</a>
   </dt>
   <dt>
-    <a href="http://vimeo.com/jonobr1">vimeo</a>
+    <a href="http://cargocollective.com/jonobr1/following">Cargo</a>
   </dt>
   <dt>
-    <a href="http://cargocollective.com/jonobr1/following">Cargo</a>
+    <a href="http://behance.com/jonobr1">Behance</a>
   </dt>
   <dt>
     <a href="http://gimmebar.com/loves/jonobr1">gimmebar</a>
