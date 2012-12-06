@@ -579,7 +579,7 @@ Vector = (function (_) {
         var $child = $(child).addClass('animated');
         var w = $child.outerWidth(true);
 
-        console.log(w);
+        console.log($child, w);
 
         if (w <= 0) {
           $child.load(function() {
