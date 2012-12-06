@@ -558,6 +558,10 @@ Vector = (function (_) {
             marginLeft: offset + 'px'
           });
 
+          $('.label').each(function() {
+            $(this).fadeOut(150);
+          });
+
         });
 
       var callback = _.after(times, function() {
