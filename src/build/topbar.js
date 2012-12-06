@@ -561,6 +561,7 @@ Vector = (function (_) {
         });
 
       var callback = _.after(times, function() {
+        console.log(width, times);
         $elem
           .width(width + width / times)
           .fadeIn(function() {
