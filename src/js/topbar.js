@@ -198,6 +198,8 @@ require([
         var $child = $(child).addClass('animated');
         var w = $child.outerWidth(true);
 
+        console.log(w);
+
         if (w <= 0) {
           $child.load(function() {
             width += $child.outerWidth(true);
