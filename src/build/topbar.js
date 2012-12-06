@@ -561,7 +561,6 @@ Vector = (function (_) {
         });
 
       var callback = _.after(times, function() {
-        console.log(width, times);
         $elem
           .width(width + width / times)
           .fadeIn(function() {
@@ -579,12 +578,9 @@ Vector = (function (_) {
         var $child = $(child).addClass('animated');
         var w = $child.outerWidth(true);
 
-        // console.log($child, w);
-
         if (w <= 0) {
           $child.load(function() {
-            console.log('loaded', $child.outerWidth(true));
-            width += $child.outerWidth(true);
+            width += $child.outerWidth(true) || parseFloat($child.css('width'));
             callback();
           });
         } else {
