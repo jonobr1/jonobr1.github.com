@@ -558,6 +558,10 @@ Vector = (function (_) {
             marginLeft: offset + 'px'
           });
 
+          $('.label').each(function() {
+            $(this).fadeOut(150);
+          });
+
         });
 
       var callback = _.after(times, function() {
@@ -580,7 +584,7 @@ Vector = (function (_) {
 
         if (w <= 0) {
           $child.load(function() {
-            width += $child.outerWidth(true);
+            width += $child.outerWidth(true) || parseFloat($child.css('width'));
             callback();
           });
         } else {

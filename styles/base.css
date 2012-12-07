@@ -206,7 +206,7 @@ body {
     font-size: 1.3em;
     text-indent: -20px; }
     body h3:before, body h4:before, body h5:before, body h6:before {
-      color: rgba(0, 0, 0, 0.213);
+      color: rgba(0, 0, 0, 0.2125);
       content: '\2014'; }
   body a:link {
     color: black; }
@@ -404,7 +404,7 @@ body {
     height: 106px;
     width: 162px;
     border: 3px solid transparent; }
-  .project_thumb:hover div.cardimgcrop {
+  .project_thumb:hover div.cardimgcrop, .project_thumb.active div.cardimgcrop {
     border: 3px solid rgba(0, 0, 0, 0.125); }
 
 ::selection, input::selection {
