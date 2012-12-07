@@ -404,7 +404,7 @@ body {
     height: 106px;
     width: 162px;
     border: 3px solid transparent; }
-  .project_thumb:hover div.cardimgcrop {
+  .project_thumb:hover div.cardimgcrop, .project_thumb.active div.cardimgcrop {
     border: 3px solid rgba(0, 0, 0, 0.125); }
 
 ::selection, input::selection {

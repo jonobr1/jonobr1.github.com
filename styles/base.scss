@@ -405,7 +405,8 @@ body {
     width: 162px;
     border: $border_width solid transparent;
   }
-  &:hover div.cardimgcrop {
+  &:hover div.cardimgcrop,
+  &.active div.cardimgcrop {
     border: $border_width solid $border_color;
   }
 
