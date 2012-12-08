@@ -84,14 +84,6 @@ require([
       .find('input[type="submit"]');
 
     /**
-     * Image `alt` labeling
-     */
-
-    _.each($('img'), function(img) {
-      label.add($(img), container);
-    });
-
-    /**
      * Fire a custom event for Cargo ajax loading Project content
      * on slideshows.
      */
@@ -151,6 +143,14 @@ require([
   }
 
   function handleImages() {
+
+    /**
+     * Image `alt` labeling
+     */
+
+    _.each($('img'), function(img) {
+      label.add($(img), container);
+    });
 
     _.each($('.slideshow').not('.touched'), function(elem) {
 

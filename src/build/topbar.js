@@ -465,14 +465,6 @@ Vector = (function (_) {
       .find('input[type="submit"]');
 
     /**
-     * Image `alt` labeling
-     */
-
-    _.each($('img'), function(img) {
-      label.add($(img), container);
-    });
-
-    /**
      * Fire a custom event for Cargo ajax loading Project content
      * on slideshows.
      */
@@ -532,6 +524,14 @@ Vector = (function (_) {
   }
 
   function handleImages() {
+
+    /**
+     * Image `alt` labeling
+     */
+
+    _.each($('img'), function(img) {
+      label.add($(img), container);
+    });
 
     _.each($('.slideshow').not('.touched'), function(elem) {
 
@@ -1613,7 +1613,7 @@ dom.label = (function () {
       var alt = $img.attr('alt');
       var isRelative = !!relative;
 
-      if (!alt || alt.length <= 0) {
+      if (!alt || alt.length <= 0 || $img.hasClass('has-label')) {
         return;
       }
 
@@ -1655,6 +1655,8 @@ dom.label = (function () {
       };
 
       var el = isRelative ? container : $img;
+
+      $img.addClass('has-label')
 
       el
         .hover(fadeIn, fadeOut)
