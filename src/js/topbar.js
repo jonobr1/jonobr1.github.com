@@ -209,7 +209,7 @@ require([
         var $child = $(child).addClass('animated');
         var w = $child.outerWidth(true);
 
-        console.log('surmising image', child.src);
+        console.log('surmising image', w, child);
 
         if (w <= 0) {
           $child.load(function() {
