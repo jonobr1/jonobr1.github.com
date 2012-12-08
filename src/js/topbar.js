@@ -159,51 +159,11 @@ require([
       var $elem = $(elem).addClass('touched');
       var elemWidth = $elem.width();
 
-      // Make a callback after all the images have been calculated.
-
-      var callback = _.after(times, function() {
-        console.log('fading in slideshow', elem, width, times);
-        $elem
-          .width(width + width / times)
-          .fadeIn(function() {
-            $elem.css({
-              marginLeft: (elemWidth - $(elem.children[0]).outerWidth(true)) / 2
-            });
-          })
-          .addClass('animated');
-      });
-
-      // Load and calculate widths for each image.
-
-      $elem.find(':first-child').addClass('selected');
-
-      _.each(elem.children, function(child) {
-
-        var $child = $(child).addClass('animated');
-        var w = $child.outerWidth(true);
-
-        console.log('surmising image', w, child);
-
-        if (w <= 0) {
-          $child.load(function() {
-            width += $child.outerWidth(true) || parseFloat($child.css('width'));
-            console.log('loaded image');
-            callback();
-          });
-          return;
-        }
-
-        console.log('loaded image');
-        width += w;
-        callback();
-
-      });
-
       // Click through the slideshow
 
       $elem
         .css({
-          display: 'none' // Prep
+          opacity: 0 // Prep
         })
         .bind('click', function(e) {
 
@@ -229,6 +189,41 @@ require([
           });
 
         });
+
+      // Make a callback after all the images have been calculated.
+
+      var callback = _.after(times, function() {
+        $elem
+          .width(width + width / times)
+          .fadeIn(function() {
+            $elem.css({
+              marginLeft: (elemWidth - $(elem.children[0]).outerWidth(true)) / 2
+            });
+          })
+          .addClass('animated');
+      });
+
+      // Load and calculate widths for each image.
+
+      $elem.find(':first-child').addClass('selected');
+
+      _.each(elem.children, function(child) {
+
+        var $child = $(child).addClass('animated');
+        var w = $child.outerWidth(true);
+
+        if (w <= 0) {
+          $child.load(function() {
+            width += $child.outerWidth(true) || parseFloat($child.css('width'));
+            callback();
+          });
+          return;
+        }
+
+        width += w;
+        callback();
+
+      });
 
     });
 
