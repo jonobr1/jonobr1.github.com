@@ -8,7 +8,7 @@
   if (!$root && $debug) {
     $root = './';
   } else if (!$debug) {
-    $root = 'https://raw.github.com/jonobr1/jonobr1.github.com/master/';
+    $root = 'http://jonobr1.com/';
   }
 
 ?>
