@@ -544,7 +544,7 @@ Vector = (function (_) {
 
       $elem
         .css({
-          opacity: 0 // Prep
+          // opacity: 0 // Prep
         })
         .bind('click', function(e) {
 
