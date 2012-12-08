@@ -96,9 +96,7 @@ require([
      * on slideshows.
      */
 
-     _.each($('.project_thumb a'), function(a) {
-       $(a).click(handleImages);
-     });
+     $(document).bind('update-slideshow', handleImages);
 
   }
 

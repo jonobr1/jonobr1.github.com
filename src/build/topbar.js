@@ -477,9 +477,7 @@ Vector = (function (_) {
      * on slideshows.
      */
 
-     _.each($('.project_thumb a'), function(a) {
-       $(a).click(handleImages);
-     });
+     $(document).bind('update-slideshow', handleImages);
 
   }
 
