@@ -330,8 +330,6 @@ body {
       font-weight: bold; }
     body dl:not(:first-child) {
       margin-left: 12px; }
-    body dl:not(:last-child) {
-      margin-right: 12px; }
     body dl dt:not(:first-child) {
       margin-top: 10px; }
     body dl dd:not(:first-child) {

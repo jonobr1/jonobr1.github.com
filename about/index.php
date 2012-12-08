@@ -26,86 +26,90 @@
 
 <h2 style="height: 0; line-height: 0; padding: 0;">&nbsp;</h2>
 
-<dl>
-  <dt>
-    Experience
-  </dt>
-  <dt>
-    <a href="http://google.com">Google, Inc.</a> <i>2010&mdash;Present</i>
-  </dt>
-  <dd>
-    Design / Development
-  </dd>
-  <dt>
-    <a href="http://fabrica.it">Fabrica</a> <i>2010</i>
-  </dt>
-  <dd>
-    Grant Holder
-  </dd>
-  <dt>
-    <a href="http://prologue.com">Prologue Films</a> <i>2010</i>
-  </dt>
-  <dd>
-    Design
-  </dd>
-  <dt>
-    <a href="http://chela.org.ar">cheLA</a> <i>2008&mdash;2009</i>
-  </dt>
-  <dd>
-    Artist in Residence
-  </dd>
-</dl>
+<div>
 
-<dl>
-  <dt>
-    Affiliation
-  </dt>
-  <dt>
-    <a href="http://www.gaffta.org/">Gray Area Foundation for the Arts</a> <i>2012</i>
-  </dt>
-  <dd>
-    Guest Performance
-  </dd>
-  <dt>
-    <a href="http://www.thecreatorsproject.com/">Creator&apos;s Project</a> <i>2011&mdash;2012</i>
-  </dt>
-  <dd>
-    Guest Lectures
-  </dd>
-  <dt>
-    <a href="http://eyebeam.org/">Eyebeam</a> <i>2011</i>
-  </dt>
-  <dd>
-    Guest Lectures
-  </dd>
-  <dt>
-    <a href="http://hardfest.com/">Hardfest</a> <i>2008&mdash;2009</i>
-  </dt>
-  <dd>
-    Resident Performances
-  </dd>
-</dl>
+  <dl>
+    <dt>
+      Experience
+    </dt>
+    <dt>
+      <a href="http://google.com">Google, Inc.</a> <i>2010&mdash;Present</i>
+    </dt>
+    <dd>
+      Design / Development
+    </dd>
+    <dt>
+      <a href="http://fabrica.it">Fabrica</a> <i>2010</i>
+    </dt>
+    <dd>
+      Grant Holder
+    </dd>
+    <dt>
+      <a href="http://prologue.com">Prologue Films</a> <i>2010</i>
+    </dt>
+    <dd>
+      Design
+    </dd>
+    <dt>
+      <a href="http://chela.org.ar">cheLA</a> <i>2008&mdash;2009</i>
+    </dt>
+    <dd>
+      Artist in Residence
+    </dd>
+  </dl>
 
-<dl>
-  <dt>
-    Network
-  </dt>
-  <dt>
-    <a href="http://twitter.com/jonobr1">Twitter</a>
-  </dt>
-  <dt>
-    <a href="http://cargocollective.com/jonobr1/following">Cargo</a>
-  </dt>
-  <dt>
-    <a href="http://behance.com/jonobr1">Behance</a>
-  </dt>
-  <dt>
-    <a href="http://gimmebar.com/loves/jonobr1">gimmebar</a>
-  </dt>
-  <dt>
-    <a href="http://github.com/jonobr1">github</a>
-  </dt>
-</dl>
+  <dl>
+    <dt>
+      Affiliation
+    </dt>
+    <dt>
+      <a href="http://www.gaffta.org/">Gray Area Foundation for the Arts</a> <i>2012</i>
+    </dt>
+    <dd>
+      Guest Performance
+    </dd>
+    <dt>
+      <a href="http://www.thecreatorsproject.com/">Creator&apos;s Project</a> <i>2011&mdash;2012</i>
+    </dt>
+    <dd>
+      Guest Lectures
+    </dd>
+    <dt>
+      <a href="http://eyebeam.org/">Eyebeam</a> <i>2011</i>
+    </dt>
+    <dd>
+      Guest Lectures
+    </dd>
+    <dt>
+      <a href="http://hardfest.com/">Hardfest</a> <i>2008&mdash;2009</i>
+    </dt>
+    <dd>
+      Resident Performances
+    </dd>
+  </dl>
+
+  <dl>
+    <dt>
+      Network
+    </dt>
+    <dt>
+      <a href="http://twitter.com/jonobr1">Twitter</a>
+    </dt>
+    <dt>
+      <a href="http://cargocollective.com/jonobr1/following">Cargo</a>
+    </dt>
+    <dt>
+      <a href="http://behance.com/jonobr1">Behance</a>
+    </dt>
+    <dt>
+      <a href="http://gimmebar.com/loves/jonobr1">gimmebar</a>
+    </dt>
+    <dt>
+      <a href="http://github.com/jonobr1">github</a>
+    </dt>
+  </dl>
+
+</div>
 
 <section></section>
 

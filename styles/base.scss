@@ -342,9 +342,6 @@ body {
     &:not(:first-child) {
       margin-left: $gutter;
     }
-    &:not(:last-child) {
-      margin-right: $gutter;
-    }
 
     dt:not(:first-child) {
       margin-top: $line_height;
