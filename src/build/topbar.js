@@ -477,10 +477,7 @@ Vector = (function (_) {
      * on slideshows.
      */
 
-     $(document).bind('update-slideshow', function() {
-       console.log('update-slideshow');
-       handleImages();
-     });
+     $(document).bind('update-slideshow', handleImages);
 
   }
 
@@ -538,8 +535,6 @@ Vector = (function (_) {
 
     _.each($('.slideshow').not('.touched'), function(elem) {
 
-      console.log('updating this slideshow', elem);
-
       var width = 0;
       var times = elem.children.length;
       var $elem = $(elem).addClass('touched');
@@ -577,6 +572,7 @@ Vector = (function (_) {
         });
 
       var callback = _.after(times, function() {
+        console.log('fading in slideshow', elem, width, times);
         $elem
           .width(width + width / times)
           .fadeIn(function() {
@@ -597,12 +593,15 @@ Vector = (function (_) {
         if (w <= 0) {
           $child.load(function() {
             width += $child.outerWidth(true) || parseFloat($child.css('width'));
+            console.log('loaded image');
             callback();
           });
-        } else {
-          width += w;
-          callback();
+          return;
         }
+
+        console.log('loaded image');
+        width += w;
+        callback();
 
       });
 
