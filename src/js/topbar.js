@@ -91,6 +91,15 @@ require([
       label.add($(img), container);
     });
 
+    /**
+     * Fire a custom event for Cargo ajax loading Project content
+     * on slideshows.
+     */
+
+     _.each($('.project_thumb a'), function(a) {
+       $(a).click(handleImages);
+     });
+
   }
 
   function isVisible() {
@@ -145,7 +154,7 @@ require([
 
   function handleImages() {
 
-    _.each($('.slideshow'), function(elem) {
+    _.each($('.slideshow:not(.animated)'), function(elem) {
 
       var width = 0;
       var times = elem.children.length;
