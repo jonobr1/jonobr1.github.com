@@ -542,6 +542,8 @@ Vector = (function (_) {
 
       // Click through the slideshow
 
+      console.log('updating slideshow', elem);
+
       $elem
         .css({
           display: 'none' // Prep
