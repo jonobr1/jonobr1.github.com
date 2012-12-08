@@ -465,12 +465,11 @@ Vector = (function (_) {
       .find('input[type="submit"]');
 
     /**
-     * Image `alt` labeling
+     * Fire a custom event for Cargo ajax loading Project content
+     * on slideshows.
      */
 
-    _.each($('img'), function(img) {
-      label.add($(img), container);
-    });
+     $(document).bind('update-slideshow', handleImages);
 
   }
 
@@ -526,18 +525,26 @@ Vector = (function (_) {
 
   function handleImages() {
 
-    _.each($('.slideshow'), function(elem) {
+    /**
+     * Image `alt` labeling
+     */
+
+    _.each($('img'), function(img) {
+      label.add($(img), container);
+    });
+
+    _.each($('.slideshow').not('.touched'), function(elem) {
 
       var width = 0;
       var times = elem.children.length;
-      var $elem = $(elem);
+      var $elem = $(elem).addClass('touched');
       var elemWidth = $elem.width();
 
       // Click through the slideshow
 
       $elem
         .css({
-          display: 'none' // Prep
+          // opacity: 0 // Prep
         })
         .bind('click', function(e) {
 
@@ -564,6 +571,8 @@ Vector = (function (_) {
 
         });
 
+      // Make a callback after all the images have been calculated.
+
       var callback = _.after(times, function() {
         $elem
           .width(width + width / times)
@@ -574,6 +583,8 @@ Vector = (function (_) {
           })
           .addClass('animated');
       });
+
+      // Load and calculate widths for each image.
 
       $elem.find(':first-child').addClass('selected');
 
@@ -587,10 +598,11 @@ Vector = (function (_) {
             width += $child.outerWidth(true) || parseFloat($child.css('width'));
             callback();
           });
-        } else {
-          width += w;
-          callback();
+          return;
         }
+
+        width += w;
+        callback();
 
       });
 
@@ -1601,7 +1613,7 @@ dom.label = (function () {
       var alt = $img.attr('alt');
       var isRelative = !!relative;
 
-      if (!alt || alt.length <= 0) {
+      if (!alt || alt.length <= 0 || $img.hasClass('has-label')) {
         return;
       }
 
@@ -1643,6 +1655,8 @@ dom.label = (function () {
       };
 
       var el = isRelative ? container : $img;
+
+      $img.addClass('has-label')
 
       el
         .hover(fadeIn, fadeOut)

@@ -2125,7 +2125,7 @@ dom.label = (function () {
       var alt = $img.attr('alt');
       var isRelative = !!relative;
 
-      if (!alt || alt.length <= 0) {
+      if (!alt || alt.length <= 0 || $img.hasClass('has-label')) {
         return;
       }
 
@@ -2167,6 +2167,8 @@ dom.label = (function () {
       };
 
       var el = isRelative ? container : $img;
+
+      $img.addClass('has-label')
 
       el
         .hover(fadeIn, fadeOut)

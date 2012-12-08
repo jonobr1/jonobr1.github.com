@@ -84,12 +84,11 @@ require([
       .find('input[type="submit"]');
 
     /**
-     * Image `alt` labeling
+     * Fire a custom event for Cargo ajax loading Project content
+     * on slideshows.
      */
 
-    _.each($('img'), function(img) {
-      label.add($(img), container);
-    });
+     $(document).bind('update-slideshow', handleImages);
 
   }
 
@@ -145,18 +144,26 @@ require([
 
   function handleImages() {
 
-    _.each($('.slideshow'), function(elem) {
+    /**
+     * Image `alt` labeling
+     */
+
+    _.each($('img'), function(img) {
+      label.add($(img), container);
+    });
+
+    _.each($('.slideshow').not('.touched'), function(elem) {
 
       var width = 0;
       var times = elem.children.length;
-      var $elem = $(elem);
+      var $elem = $(elem).addClass('touched');
       var elemWidth = $elem.width();
 
       // Click through the slideshow
 
       $elem
         .css({
-          display: 'none' // Prep
+          // opacity: 0 // Prep
         })
         .bind('click', function(e) {
 
@@ -183,6 +190,8 @@ require([
 
         });
 
+      // Make a callback after all the images have been calculated.
+
       var callback = _.after(times, function() {
         $elem
           .width(width + width / times)
@@ -193,6 +202,8 @@ require([
           })
           .addClass('animated');
       });
+
+      // Load and calculate widths for each image.
 
       $elem.find(':first-child').addClass('selected');
 
@@ -206,10 +217,11 @@ require([
             width += $child.outerWidth(true) || parseFloat($child.css('width'));
             callback();
           });
-        } else {
-          width += w;
-          callback();
+          return;
         }
+
+        width += w;
+        callback();
 
       });
 
