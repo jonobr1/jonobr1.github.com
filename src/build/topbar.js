@@ -536,13 +536,13 @@ Vector = (function (_) {
 
   function handleImages() {
 
-    _.each($('.slideshow').not('.animated'), function(elem) {
+    _.each($('.slideshow').not('.touched'), function(elem) {
 
       console.log('updating this slideshow', elem);
 
       var width = 0;
       var times = elem.children.length;
-      var $elem = $(elem);
+      var $elem = $(elem).addClass('touched');
       var elemWidth = $elem.width();
 
       // Click through the slideshow
