@@ -161,8 +161,6 @@ require([
 
       // Click through the slideshow
 
-      console.log('updating slideshow', elem);
-
       $elem
         .css({
           display: 'none' // Prep
@@ -210,6 +208,8 @@ require([
 
         var $child = $(child).addClass('animated');
         var w = $child.outerWidth(true);
+
+        console.log('surmising image', child.src);
 
         if (w <= 0) {
           $child.load(function() {

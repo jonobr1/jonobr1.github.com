@@ -542,8 +542,6 @@ Vector = (function (_) {
 
       // Click through the slideshow
 
-      console.log('updating slideshow', elem);
-
       $elem
         .css({
           display: 'none' // Prep
@@ -591,6 +589,8 @@ Vector = (function (_) {
 
         var $child = $(child).addClass('animated');
         var w = $child.outerWidth(true);
+
+        console.log('surmising image', child.src);
 
         if (w <= 0) {
           $child.load(function() {
