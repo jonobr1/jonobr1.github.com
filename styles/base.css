@@ -335,6 +335,9 @@ body {
     body dl dd:not(:first-child) {
       margin-bottom: 10px; }
 
+sup, sub {
+  line-height: 75%; }
+
 .animated {
   -webkit-transition-property: all;
   -moz-transition-property: all;

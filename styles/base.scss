@@ -353,6 +353,10 @@ body {
 
 }
 
+sup, sub {
+  line-height: 75%;
+}
+
 .animated {
   @include transition(all, 350ms, $ease-in-out-circ);
 }
