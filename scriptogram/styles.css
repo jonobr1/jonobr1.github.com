@@ -69,18 +69,26 @@ li.L1, li.L3, li.L5, li.L7, li.L9 {
   padding: 0; }
 
 body {
-  font-family: 'Nuvo Pro', sans-serif;
+  font-family: "ff-nuvo-web-pro", "Nuvo Pro", sans-serif;
   font-size: 12px;
   line-height: 20px;
   background: #efefef;
   color: black;
   text-shadow: 1px 1px rgba(255, 255, 255, 0.75); }
-  body #container {
+  body #container,
+  body #content_container {
     width: 100%;
     min-width: 940px;
-    overflow-x: hidden; }
+    overflow-x: hidden;
+    position: relative; }
   body nav,
-  body #content {
+  body #content,
+  body #maincontainer,
+  body #page_1,
+  body #page_2,
+  body #page_3,
+  body #page_4,
+  body #page_5 {
     width: 900px;
     padding: 0 20px;
     margin: 0 auto; }
@@ -88,7 +96,7 @@ body {
     margin: 20px auto;
     padding-top: 20px;
     padding-bottom: 20px;
-    font-family: 'Lekton', 'Nuvo Pro', monospace;
+    font-family: "Lekton", "ff-nuvo-web-pro", "Nuvo Pro", sans-serif;
     font-size: 13.5px;
     border-bottom: 3px solid white;
     text-transform: lowercase; }
@@ -141,7 +149,7 @@ body {
             border: 0;
             border-left: 3px solid transparent;
             background: transparent;
-            font-family: 'Lekton', 'Nuvo Pro', monospace;
+            font-family: "Lekton", "ff-nuvo-web-pro", "Nuvo Pro", sans-serif;
             font-size: 13.5px;
             outline: none;
             text-transform: lowercase; }
@@ -156,11 +164,28 @@ body {
             border-color: transparent; }
           body nav ul li:not(.first) a:hover, body nav ul li:not(.first) a:active, body nav ul li:not(.first) input:not([type="submit"]):hover {
             border-left-color: rgba(0, 0, 0, 0.125); }
+          body nav ul li:not(.first) input {
+            -webkit-appearance: caret;
+            -moz-appearance: caret;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            -ms-border-radius: 0;
+            -o-border-radius: 0;
+            border-radius: 0; }
           body nav ul li:not(.first) form {
             width: 438px; }
         body nav ul li #logo {
           cursor: pointer;
           text-align: center; }
+  body div.image.label {
+    display: none;
+    position: absolute;
+    margin: 6px 6px;
+    padding: 3px 6px;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background: #efefef; }
   body h1, body h2, body h3, body h4, body h5, body h6 {
     font-weight: bold;
     color: #3f3f3f; }
@@ -173,17 +198,15 @@ body {
     font-size: 1.3;
     letter-spacing: 0.2em;
     text-align: center;
-    margin: 20px auto;
     padding: 0 0 20px 0;
-    width: 75%;
     border-bottom: 3px solid rgba(0, 0, 0, 0.125); }
   body h3, body h4, body h5, body h6 {
     text-transform: uppercase;
     letter-spacing: 0.2em;
     font-size: 1.3em;
-    text-indent: -25px; }
+    text-indent: -20px; }
     body h3:before, body h4:before, body h5:before, body h6:before {
-      color: rgba(0, 0, 0, 0.213);
+      color: rgba(0, 0, 0, 0.2125);
       content: '\2014'; }
   body a:link {
     color: black; }
@@ -193,8 +216,14 @@ body {
     text-decoration: none; }
   body a:active {
     color: black; }
+  body h2,
+  body p.excerpt {
+    margin: 20px auto;
+    width: 75%; }
   body #content > ul,
-  body #content > ol {
+  body #content > ol,
+  body #maincontainer > ul,
+  body #maincontainer > ol {
     font-size: 1.5em;
     line-height: 1.5em;
     color: #3f3f3f;
@@ -203,14 +232,20 @@ body {
     margin-left: auto;
     margin-right: auto; }
     body #content > ul a,
-    body #content > ol a {
+    body #content > ol a,
+    body #maincontainer > ul a,
+    body #maincontainer > ol a {
       color: #3f3f3f; }
     body #content > ul li:not(:last-child),
-    body #content > ol li:not(:last-child) {
+    body #content > ol li:not(:last-child),
+    body #maincontainer > ul li:not(:last-child),
+    body #maincontainer > ol li:not(:last-child) {
       margin-bottom: 10px; }
-  body #content > ul {
+  body #content > ul,
+  body #maincontainer > ul {
     list-style: circle; }
-  body #content > img {
+  body #content > img,
+  body #maincontainer > img {
     margin: 20px 0 14px;
     border: 6px solid rgba(0, 0, 0, 0.125);
     width: 100%;
@@ -281,6 +316,27 @@ body {
   body strong {
     color: #000;
     font-weight: 700; }
+  body dl {
+    display: -moz-inline-box;
+    -moz-box-orient: vertical;
+    display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    *display: inline;
+    *vertical-align: auto;
+    vertical-align: top;
+    width: 288px; }
+    body dl > *:first-child {
+      font-weight: bold; }
+    body dl:not(:first-child) {
+      margin-left: 12px; }
+    body dl dt:not(:first-child) {
+      margin-top: 10px; }
+    body dl dd:not(:first-child) {
+      margin-bottom: 10px; }
+
+sup, sub {
+  line-height: 75%; }
 
 .animated {
   -webkit-transition-property: all;
@@ -303,6 +359,56 @@ body {
   -ms-transition-delay: 0;
   -o-transition-delay: 0;
   transition-delay: 0; }
+
+#nav_loadspin,
+#toolset {
+  top: 6px;
+  right: 6px;
+  position: absolute; }
+
+#nav_loadspin,
+.loader_holder,
+.loader {
+  display: none; }
+  #nav_loadspin,
+  #nav_loadspin img,
+  .loader_holder,
+  .loader_holder img,
+  .loader,
+  .loader img {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff; }
+
+.project_thumb {
+  width: 168px;
+  position: relative;
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: baseline;
+  zoom: 1;
+  *display: inline;
+  *vertical-align: auto;
+  text-align: center; }
+  .project_thumb:not(:first-child) {
+    margin-left: 12px; }
+  .project_thumb .loader_holder {
+    position: absolute;
+    top: 46px;
+    left: 74px; }
+  .project_thumb a {
+    text-decoration: none; }
+  .project_thumb div.cardimgcrop {
+    height: 106px;
+    width: 162px;
+    border: 3px solid transparent; }
+  .project_thumb:hover div.cardimgcrop, .project_thumb.active div.cardimgcrop {
+    border: 3px solid rgba(0, 0, 0, 0.125); }
 
 ::selection, input::selection {
   background: #3fffd5; }

@@ -336,7 +336,8 @@ body {
       margin-bottom: 10px; }
 
 sup, sub {
-  line-height: 75%; }
+  font-size: 83.3333%;
+  line-height: 83.3333%; }
 
 .animated {
   -webkit-transition-property: all;
