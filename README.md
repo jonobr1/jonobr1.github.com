@@ -18,12 +18,13 @@ TODO:
 + __Inspiration__: ~~Permalinks~~ There, but could be better.
 + __Inspiration__: ~~Byline or description at the top.~~ _Won't Fix_
 + ~~Bring designs to [cargo](http://cargocollective.com/) for http://works.jonobr1.com/~~
-+ __Works__: Make actual project pages
-+ Design emails
++ __Works__: ~~Make actual project pages~~
++ ~~Design emails~~
 + ~~Design custom loading gif~~
 + ~~Add captions to `alt` attributes of `img` tags~~
 + ~~Add touch events to topbar.js~~
 + ~~Route domains~~
 + Create polyfill for css3 and JavaScript / canvas based stuff
++ Create HDPI versions of all major assets
 + Update loading gif to the squiggle (magenta?)
-+ Make `script` tags all come from same `src` origin. GitHub, personal site, whatever, just choose one and make it consistent
++ ~~Make `script` tags all come from same `src` origin. GitHub, personal site, whatever, just choose one and make it consistent~~
