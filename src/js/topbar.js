@@ -148,7 +148,7 @@ require([
      * Image `alt` labeling
      */
 
-    _.each($('img'), function(img) {
+    _.each($('[alt]'), function(img) {
       label.add($(img), container);
     });
 
