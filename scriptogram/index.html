@@ -3,15 +3,8 @@
 <head>
 
   <title>{{author}} : process</title>
-
-  <meta name="description" content="{{author}} : process" />
-  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0;">
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="ROBOTS" content="INDEX,FOLLOW">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta charset="utf-8">
-  <meta name="description" content="{{blog_title}}">
+  <meta name="description" content="{{author}} : process">
   <meta property="og:url" content="{{home_link}}">
   <meta property="og:site_name" content="{{author}} : process">
 
@@ -23,6 +16,27 @@
   <script type="text/javascript" src="http://jonobr1.com/third-party/prettify/prettify.js"></script>
   <script type="text/javascript" src="http://jonobr1.com/third-party/marked.js"></script>
 
+  <script type="text/javascript">    
+    // Set the Google Analytics account
+    var AnalyticsID = 'UA-5927630-14'; // change this variable to your site's ID
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', AnalyticsID]);
+    _gaq.push(['_trackPageview']);
+
+    // Activate the Google page tracking code
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();  
+
+    if (console && console.log) {
+      console.log('Like coding? Check out my github page for more stuff: http://github.com/jonobr1/');
+    }
+    
+</script>
+  
 </head>
 <body>
 
@@ -55,7 +69,7 @@
       <li>
         <form id="subscribe" action="http://freelancerepublic.createsend.com/t/r/s/xdhdhj/" method="post">
           <input id="xdhdhj-xdhdhj" name="cm-xdhdhj-xdhdhj" type="text" value="" placeholder="mailing list" tabindex="1" autocomplete="off" />
-          <input type="submit" value="&crarr;" tabindex="2" />
+          <input type="submit" value="↵" tabindex="2" />
         </form>
       </li>
       <br class="clear" />
@@ -92,14 +106,12 @@
           <!-- Posts -->
 
           <h1>{{title}}</h1>
-          <section>
             {{content}}
             {{#date}}
             <p class="date">
               {{prettydate}}
             </p>
             {{/date}}
-          </section>
 
         {{/is_post}}
 
@@ -132,4 +144,4 @@
   <script type="text/javascript" src="http://jonobr1.com/src/build/topbar.min.js"></script>
 
 </body>
-</html>
+</html>                                                  
