@@ -8,7 +8,7 @@
   <meta property="og:url" content="{{home_link}}">
   <meta property="og:site_name" content="{{author}} : process">
 
-  <link rel="shortcut icon" type="image/png" href="http://dl.dropbox.com/u/1595444/identity/images/favicon.png" />
+  <link rel="shortcut icon" type="image/ico" href="http://dl.dropbox.com/u/1595444/identity/images/favicon.ico" />
   <link rel="alternate" type="application/rss+xml" title="RSS" href="{{base_url}}/feed" />
   <link rel="stylesheet" type="text/css" href="http://jonobr1.com/styles/base.css" />
 
@@ -16,7 +16,7 @@
   <script type="text/javascript" src="http://jonobr1.com/third-party/prettify/prettify.js"></script>
   <script type="text/javascript" src="http://jonobr1.com/third-party/marked.js"></script>
 
-  <script type="text/javascript">    
+  <script type="text/javascript">
     // Set the Google Analytics account
     var AnalyticsID = 'UA-5927630-14'; // change this variable to your site's ID
 
@@ -106,12 +106,14 @@
           <!-- Posts -->
 
           <h1>{{title}}</h1>
-            {{content}}
+          {{content}}
+          <section>
             {{#date}}
             <p class="date">
               {{prettydate}}
             </p>
             {{/date}}
+          </section>
 
         {{/is_post}}
 
@@ -139,6 +141,7 @@
 
   </div>
 
+  <br />
   <section></section>
 
   <script type="text/javascript" src="http://jonobr1.com/src/build/topbar.min.js"></script>
