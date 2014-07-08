@@ -37,7 +37,7 @@ function compile(code, next) {
           output_format: 'json',
           output_info: 'compiled_code'
         }),
-        client = http.createClient(80, host).on('error', next),
+        client = http.request(80, host).on('error', next),
         req = client.request('POST', '/compile', {
           'Host': host,
           'Content-Length': body.length,

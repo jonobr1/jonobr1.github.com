@@ -152,8 +152,12 @@ require([
           var width = stashHas ? stash.dims.w : displayHas ? display.dims.w : 0;
           var height = stashHas ? stash.dims.h : displayHas ? display.dims.h : 0;
 
-          if (width === 0 || height === 0) {
-            break;
+          if (width === 0 && record.content && record.content.dimensions) {
+            width = record.content.dimensions.w;
+          }
+
+          if (height === 0 && record.content && record.content.dimensions) {
+            height = record.content.dimensions.h;
           }
 
           var dimensions = grid.snapWidth(parseInt(width / 2), parseInt(height / 2));
