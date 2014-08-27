@@ -101,26 +101,26 @@ body {
     border-bottom: 3px solid white;
     text-transform: lowercase; }
     body nav input[type="submit"] {
-      -webkit-transition-property: opacity;
-      -moz-transition-property: opacity;
-      -ms-transition-property: opacity;
-      -o-transition-property: opacity;
-      transition-property: opacity;
-      -webkit-transition-duration: 350ms;
-      -moz-transition-duration: 350ms;
-      -ms-transition-duration: 350ms;
-      -o-transition-duration: 350ms;
-      transition-duration: 350ms;
-      -webkit-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-      -moz-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-      -ms-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-      -o-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-      transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-      -webkit-transition-delay: 0;
-      -moz-transition-delay: 0;
-      -ms-transition-delay: 0;
-      -o-transition-delay: 0;
-      transition-delay: 0;
+      -webkit-transition-property: compact(opacity, false, false, false, false, false, false, false, false);
+      -moz-transition-property: compact(opacity, false, false, false, false, false, false, false, false);
+      -ms-transition-property: compact(opacity, false, false, false, false, false, false, false, false);
+      -o-transition-property: compact(opacity, false, false, false, false, false, false, false, false);
+      transition-property: compact(opacity, false, false, false, false, false, false, false, false);
+      -webkit-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+      -moz-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+      -ms-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+      -o-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+      transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+      -webkit-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+      -moz-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+      -ms-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+      -o-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+      transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+      -webkit-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+      -moz-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+      -ms-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+      -o-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+      transition-delay: compact(0, false, false, false, false, false, false, false, false);
       padding: 0 4px 0 0 !important;
       -webkit-border-radius: 3px;
       -moz-border-radius: 3px;
@@ -340,26 +340,26 @@ sup, sub {
   line-height: 83.3333%; }
 
 .animated {
-  -webkit-transition-property: all;
-  -moz-transition-property: all;
-  -ms-transition-property: all;
-  -o-transition-property: all;
-  transition-property: all;
-  -webkit-transition-duration: 350ms;
-  -moz-transition-duration: 350ms;
-  -ms-transition-duration: 350ms;
-  -o-transition-duration: 350ms;
-  transition-duration: 350ms;
-  -webkit-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-  -moz-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-  -ms-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-  -o-transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-  transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-  -webkit-transition-delay: 0;
-  -moz-transition-delay: 0;
-  -ms-transition-delay: 0;
-  -o-transition-delay: 0;
-  transition-delay: 0; }
+  -webkit-transition-property: compact(all, false, false, false, false, false, false, false, false);
+  -moz-transition-property: compact(all, false, false, false, false, false, false, false, false);
+  -ms-transition-property: compact(all, false, false, false, false, false, false, false, false);
+  -o-transition-property: compact(all, false, false, false, false, false, false, false, false);
+  transition-property: compact(all, false, false, false, false, false, false, false, false);
+  -webkit-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+  -moz-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+  -ms-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+  -o-transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+  transition-duration: compact(350ms, false, false, false, false, false, false, false, false);
+  -webkit-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+  -moz-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+  -ms-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+  -o-transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+  transition-timing-function: compact(cubic-bezier(0.785, 0.135, 0.15, 0.86), false, false, false, false, false, false, false, false);
+  -webkit-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+  -moz-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+  -ms-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+  -o-transition-delay: compact(0, false, false, false, false, false, false, false, false);
+  transition-delay: compact(0, false, false, false, false, false, false, false, false); }
 
 #nav_loadspin,
 #toolset {
