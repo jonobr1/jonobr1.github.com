@@ -63,7 +63,13 @@
       Affiliation
     </dt>
     <dt>
-      <a href="http://www.gaffta.org/">Gray Area Foundation for the Arts</a> <i>2012</i>
+      <a href="http://adcglobal.org/">Art Directors Club</a> <i>2014</i>
+    </dt>
+    <dd>
+      <a href="http://adcyoungguns.org/">Young Gun 12</a>
+    </dd>
+    <dt>
+      <a href="http://www.gaffta.org/">Gray Area</a> <i>2012</i>
     </dt>
     <dd>
       Guest Performance
