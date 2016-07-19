@@ -11,16 +11,15 @@
 
 ?>
 
-<!-- <img src="../images/portrait.jpg" alt="__Diminishing Returns__ _2012_" /> -->
 <section>
   <p>
-    Jono Brandel (b. May 22, 1986) relies on the combination of two fundamental disciplines: <a href="http://en.wikipedia.org/wiki/Graphic_design">graphic design</a> and <a href="http://en.wikipedia.org/wiki/Computer_programming">computer programming</a>. The results of this mixture vary in form, but usually have a screen-based component. He explores procedural aesthetics.
+    Jono Brandel (b. May 22, 1986) relies on the combination of two fundamental disciplines: <a href="http://en.wikipedia.org/wiki/Graphic_design" target="_blank">graphic design</a> and <a href="http://en.wikipedia.org/wiki/Computer_programming" target="_blank">computer programming</a>. The results of this mixture vary in form, but usually have a screen-based component. He explores procedural aesthetics.
   </p>
   <p>
-    Jono studied <a href="http://dma.ucla.edu/">Design | Media Arts</a> with a minor in <a href="http://classics.ucla.edu/">Latin</a> at <a href="http://ucla.edu">UCLA</a>. He went on to receive two artist grants one at <a href="http://chela.org.ar">cheLA</a> and the other at <a href="http://fabrica.it">Fabrica</a>. He is now part of the Data Arts Team in Google&rsquo;s Creative Lab. His work has been showcased at the <a href="http://www.tate.org.uk/visit/tate-modern">Tate Modern</a>, <a href="http://siggraph.org/">Siggraph</a>, <a href="http://fitc.ca/">FITC</a>, and <a href="http://j-mediaarts.jp/">Japan Media Arts Festival</a>.
+    Jono studied <a href="http://dma.ucla.edu/" target="_blank">Design | Media Arts</a> with a minor in <a href="http://classics.ucla.edu/" target="_blank">Latin</a> at <a href="http://ucla.edu" target="_blank">UCLA</a>. He went on to receive artist grants at <a href="http://chela.org.ar/" target="_blank">cheLA</a> and <a href="http://fabrica.it" target="_blank">Fabrica</a>. He is now a member of <a href="http://with.in/" target="_blank">Within</a>. His work has been showcased at the <a href="http://www.tate.org.uk/visit/tate-modern">Tate Modern</a>, <a href="http://www.siggraph.org/" target="_blank">Siggraph</a>, <a href="http://fitc.ca/" target="_blank">FITC</a>, and the <a href="http://j-mediaarts.jp/" target="_blank">Japan Media Arts Festival</a> as well as featured in publications like <a href="http://www.newyorker.com/" target="_blank">The New Yorker</a> and <a href="http://www.wired.com/" target="_blank">Wired Magazine</a>.
   </p>
   <p>
-     He has also had the pleasure to perform alongside <a href="http://boysnoize.com/">Boys Noize</a>, <a href="http://deadmau5">Deadmau5</a>, <a href="http://http://crystalcastles.com/">Crystal Castles</a>, and many others accompanying their music with moving image.
+     He has also had the pleasure to create work alongside <a href="http://www.kimbramusic.com/" target="_blank">Kimbra</a>, <a href="http://plaid.co.uk" target="_blank">Plaid</a>, <a href="http://www.arcadefire.com/" target="_blank">the Arcade Fire</a>, and many others accompanying their music with moving images.
   </p>
   <p>
     For a full list of performances, commercial work, or CV please email directly.
@@ -36,7 +35,13 @@
       Experience
     </dt>
     <dt>
-      <a href="http://google.com">Google, Inc.</a> <i>2010&mdash;Present</i>
+      <a href="http://with.in">Within Unlimited, Inc.</a> <i>2015&mdash;Present</i>
+    </dt>
+    <dd>
+      Design / Development
+    </dd>
+    <dt>
+      <a href="http://google.com">Google, Inc.</a> <i>2010&mdash;2015</i>
     </dt>
     <dd>
       Design / Development
@@ -65,6 +70,12 @@
     <dt>
       Affiliation
     </dt>
+    <dt>
+      &Eacute;cole de Curiosit&eacute; <i>2016</i>
+    </dt>
+    <dd>
+      Board Member
+    </dd>
     <dt>
       <a href="http://adcglobal.org/">Art Directors Club</a> <i>2014</i>
     </dt>
@@ -102,6 +113,12 @@
       Network
     </dt>
     <dt>
+      <a href="http://facebook.com/jono.brandel">Facebook</a>
+    </dt>
+    <dt>
+      <a href="http://instagram.com/jonobr1">Instagram</a>
+    </dt>
+    <dt>
       <a href="http://twitter.com/jonobr1">Twitter</a>
     </dt>
     <dt>
@@ -115,6 +132,9 @@
     </dt>
     <dt>
       <a href="http://github.com/jonobr1">github</a>
+    </dt>
+    <dt>
+      <a href="http://medium.com/@jonobr1">Medium</a>
     </dt>
   </dl>
 
