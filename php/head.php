@@ -69,7 +69,7 @@
           <a href="http://about.jonobr1.com/">about</a>
         </li>
         <li>
-          <a href="http://process.jonobr1.com/">process</a>
+          <!-- <a href="http://process.jonobr1.com/">process</a> -->
           <a href="http://inspiration.jonobr1.com/">inspiration</a>
         </li>
         <li>
