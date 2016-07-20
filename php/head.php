@@ -19,7 +19,7 @@
 
     <title>jonobr1 : <? echo $title; ?></title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="ROBOTS" content="INDEX,FOLLOW">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -56,7 +56,7 @@
                 <path fill="#333333" d="M40,3c20.402,0,37,16.598,37,37c0,20.402-16.598,37-37,37C19.598,77,3,60.402,3,40C3,19.598,19.598,3,40,3
                    M40,0C17.909,0,0,17.909,0,40c0,22.092,17.909,40,40,40c22.092,0,40-17.908,40-40C80,17.909,62.092,0,40,0L40,0z"/>
                 <!-- 1 -->
-                <polyline fill="none" stroke="#333332" stroke-width="4" stroke-linejoin="round" stroke-miterlimit="10" points="62.121,31.732 
+                <polyline fill="none" stroke="#333332" stroke-width="4" stroke-linejoin="round" stroke-miterlimit="10" points="62.121,31.732
                   62.121,23.372 59.572,26.521 "/>
                 <!-- Outer circle -->
                 <path fill="none" stroke="#333333" stroke-width="4" stroke-miterlimit="10" d="M17.23,44.615c0.631-0.766,4.511-7.198,10.152-8.902c5.643-1.704,9.605-0.266,11.008,5.266s-0.564,13.702-6.426,14.666s-7.045-4.89-5.484-8.373c1.562-3.482,4.615-4.228,7.962-3.854c2.341,0.26,4.782,2.372,7.553,1.253s2.753-4.586,2.753-4.586l6.487-2.048c0,3.93,1.292,9.755,5.243,11.334c3.953,1.577,5.685-1.687,5.685-3.83 M19.034,26.49c-0.458,7.256,0.502,22.597,1.991,31.188"/>
