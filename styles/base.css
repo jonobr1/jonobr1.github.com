@@ -4,7 +4,7 @@ code, pre {
 pre {
   font-size: 12px;
   line-height: 20px;
-  color: black;
+  color: #000;
   margin: 24px 0;
   display: block;
   background-color: #dedede; }
@@ -20,7 +20,7 @@ pre .kwd {
   color: #480d7f; }
 
 pre .com {
-  color: #3f3f3f;
+  color: #404040;
   font-style: italic; }
 
 pre .typ {
@@ -30,10 +30,10 @@ pre .lit {
   color: #0e648c; }
 
 pre .pun {
-  color: black; }
+  color: #000; }
 
 pre .pln {
-  color: black; }
+  color: #000; }
 
 pre .tag {
   color: #482c00; }
@@ -73,7 +73,7 @@ body {
   font-size: 12px;
   line-height: 20px;
   background: #efefef;
-  color: black;
+  color: #000;
   text-shadow: 1px 1px rgba(255, 255, 255, 0.75); }
   body #container,
   body #content_container {
@@ -98,7 +98,7 @@ body {
     padding-bottom: 20px;
     font-family: "Lekton", "ff-nuvo-web-pro", "Nuvo Pro", sans-serif;
     font-size: 13.5px;
-    border-bottom: 3px solid white;
+    border-bottom: 3px solid #fff;
     text-transform: lowercase; }
     body nav input[type="submit"] {
       -webkit-transition-property: compact(opacity, false, false, false, false, false, false, false, false);
@@ -188,7 +188,7 @@ body {
     background: #efefef; }
   body h1, body h2, body h3, body h4, body h5, body h6 {
     font-weight: bold;
-    color: #3f3f3f; }
+    color: #404040; }
   body h1 {
     font-size: 40px;
     line-height: 50px;
@@ -209,7 +209,7 @@ body {
       color: rgba(0, 0, 0, 0.2125);
       content: '\2014'; }
   body a:link {
-    color: black; }
+    color: #000; }
   body a:visited {
     color: black; }
   body a:hover {
@@ -226,7 +226,7 @@ body {
   body #maincontainer > ol {
     font-size: 1.5em;
     line-height: 1.5em;
-    color: #3f3f3f;
+    color: #404040;
     font-weight: 100;
     width: 66%;
     margin-left: auto;
@@ -235,7 +235,7 @@ body {
     body #content > ol a,
     body #maincontainer > ul a,
     body #maincontainer > ol a {
-      color: #3f3f3f; }
+      color: #404040; }
     body #content > ul li:not(:last-child),
     body #content > ol li:not(:last-child),
     body #maincontainer > ul li:not(:last-child),
@@ -412,7 +412,12 @@ sup, sub {
     border: 3px solid rgba(0, 0, 0, 0.125); }
 
 ::selection, input::selection {
-  background: #3fffd5; }
+  background: #40ffd6; }
 
 ::-moz-selection, input::-moz-selection {
-  background: #3fffd5; }
+  background: #40ffd6; }
+
+#item_469785 {
+  margin-left: 0; }
+
+/*# sourceMappingURL=base.css.map */

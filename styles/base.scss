@@ -222,7 +222,7 @@ body {
 
   #content > ol,
   #maincontainer > ol {
-    
+
   }
   #content > ul,
   #maincontainer > ul {
@@ -422,4 +422,8 @@ sup, sub {
 }
 ::-moz-selection, input::-moz-selection {
   background: $highlight;
+}
+
+#item_469785 {
+  margin-left: 0;
 }
