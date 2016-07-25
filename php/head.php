@@ -19,7 +19,6 @@
 
     <title>jonobr1 : <? echo $title; ?></title>
 
-    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="ROBOTS" content="INDEX,FOLLOW">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
