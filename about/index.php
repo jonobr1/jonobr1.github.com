@@ -71,7 +71,7 @@
       Affiliation
     </dt>
     <dt>
-      &Eacute;cole de Curiosit&eacute; <i>2016</i>
+      &Eacute;cole de Curiosit&eacute;s <i>2016</i>
     </dt>
     <dd>
       Board Member
