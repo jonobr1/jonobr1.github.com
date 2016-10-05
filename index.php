@@ -69,7 +69,7 @@
       Affiliation
     </dt>
     <dt>
-      &Eacute;cole de Curiosit&eacute; <i>2016</i>
+      <a href="http://ecoledecuriosites.com/">&Eacute;cole de Curiosit&eacute;s</a> <i>2016</i>
     </dt>
     <dd>
       Board Member
