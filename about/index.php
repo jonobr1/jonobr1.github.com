@@ -38,7 +38,7 @@
       <a href="http://with.in">Within Unlimited, Inc.</a> <i>2015&mdash;Present</i>
     </dt>
     <dd>
-      Design / Development
+      Product Lead: Web Platform
     </dd>
     <dt>
       <a href="http://google.com">Google, Inc.</a> <i>2010&mdash;2015</i>
