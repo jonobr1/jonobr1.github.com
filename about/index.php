@@ -113,6 +113,18 @@
       Network
     </dt>
     <dt>
+      <a href="https://www.are.na/jono-brandel/">Arena</a>
+    </dt>
+    <dt>
+      <a href="http://behance.com/jonobr1">Behance</a>
+    </dt>
+    <dt>
+      <a href="http://cargocollective.com/jonobr1/following">Cargo</a>
+    </dt>
+    <dt>
+      <a href="http://github.com/jonobr1">github</a>
+    </dt>
+    <dt>
       <a href="http://facebook.com/jono.brandel">Facebook</a>
     </dt>
     <dt>
@@ -120,21 +132,6 @@
     </dt>
     <dt>
       <a href="http://twitter.com/jonobr1">Twitter</a>
-    </dt>
-    <dt>
-      <a href="http://cargocollective.com/jonobr1/following">Cargo</a>
-    </dt>
-    <dt>
-      <a href="http://behance.com/jonobr1">Behance</a>
-    </dt>
-    <dt>
-      <a href="http://gimmebar.com/loves/jonobr1">gimmebar</a>
-    </dt>
-    <dt>
-      <a href="http://github.com/jonobr1">github</a>
-    </dt>
-    <dt>
-      <a href="http://medium.com/@jonobr1">Medium</a>
     </dt>
   </dl>
 
